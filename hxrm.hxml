@@ -1,0 +1,5 @@
+-cp src
+-swf bin/hxrm.swf
+-swf-header 800:600:30:FFFFFF
+-swf-version 10
+-main Main
