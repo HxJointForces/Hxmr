@@ -1,4 +1,4 @@
-package hxrm.writer;
+package hxrm.writer.macro;
 import haxe.macro.Expr;
 import hxrm.parser.Node;
 
@@ -15,7 +15,12 @@ class TypeDefenitionWriter
 	}
 	
 	public function write(n:Node):TypeDefinition {
+		
 		return null;
+	}
+	
+	public function cleanCache():Void {
+		
 	}
 	
 }
