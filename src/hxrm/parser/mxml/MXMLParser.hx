@@ -17,33 +17,23 @@ class MXMLParser implements IParser
 	
 	// TODO Should it realy be a field?
 	var xml:Xml;
-	var path:String;
-	var node:Node;
 	
-	var pos:FilePos;
-	
-	public function parse(data:String, ?path:String):Null<Node> {
+	public function parse(data:String):Null<Node> {
 		
-		node = null;
-		pos = { file:path };
 		try {
 			xml = Xml.parse(data);
 		} catch (e:Dynamic) {
-			throw new ParserError(UNKNOWN_FILE_FORMAT, pos);
+			throw new ParserError(UNKNOWN_FILE_FORMAT, { pos : { to : 0 , from : 0 } });
 		}
 		
-		this.path = path;
-		
-		node = parseRootNode(xml); // haxe.xml.Fast ?
-		
-		return node;
+		return parseRootNode(xml); // haxe.xml.Fast ?
 	}
 	
 	function parseRootNode(node : Xml) {
 		var firstElement = node.firstElement();
 		
 		if (firstElement == null) {
-			throw new ParserError(EMPTY_FILE, pos);
+			throw new ParserError(EMPTY_FILE, { pos : { to : 0 , from : 0 } });
 		}
 		
 		return parseNode(firstElement);

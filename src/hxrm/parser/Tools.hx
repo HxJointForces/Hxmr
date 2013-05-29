@@ -12,8 +12,8 @@ package hxrm.parser;
 // нужно придумать как из xml брать номер символа в котором ошибка и по который. 
 // Позволит генерировать удобные ерроры открывающиеся прямо в нужном месте
 typedef FilePos = {
-	var file:String;
-	@:optional var pos:{from:Int, to:Int};
+	@:optional var file:String;
+	var pos:{from:Int, to:Int};
 }
 
 class FilePosUtils {

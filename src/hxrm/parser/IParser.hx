@@ -7,7 +7,7 @@ package hxrm.parser;
 interface IParser
 {
 
-	public function parse(data:String, ?path:String):Null<Node>;
+	public function parse(data:String):Null<Node>;
 	
 	public function cleanCache():Void;
 	

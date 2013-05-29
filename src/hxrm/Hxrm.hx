@@ -106,7 +106,8 @@ class Hxrm
 		var node = null;
 		
 		try {
-			node = parser.parse(File.getContent(path), path);
+			// We should not pass file to parser because parser can parse Strings instead of files
+			node = parser.parse(File.getContent(path));
 		} catch (e:ParserError) {
 			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition()));
 		} catch (e:Dynamic) {
