@@ -7,13 +7,13 @@ package hxrm.parser;
  * 
  * @author deep <system.grand@gmail.com>
  */
+import hxrm.parser.mxml.QName;
 class Node
 {
-	public var name:String;
-	public var namespace:Null<String>;  // null если не задан
+	public var name:QName;
 	public var namespaces:Map<String, String>;
 	
-	public var values:Map<String, String>;
+	public var values:Map<QName, String>;
 	
 	public var children:Array<Node>;
 	
@@ -25,19 +25,40 @@ class Node
 	}
 	
 	public function toString() {
-		return "\n" + toStringTabs();
+		return toStringTabs(0);
 	}
 	
-	function toStringTabs(tabs = "") {
-		return '$tabs[$namespace:$name:\n' +
-			'${tabs}Namespaces:\n' +
-			[for (k in namespaces.keys()) '${tabs}\t$k : ${namespaces.get(k)}'].join("\n") + 
-			'\n${tabs}Values:\n' +
-			[for (k in values.keys()) '${tabs}\t$k : ${values.get(k)}'].join("\n") + 
-			'\n${tabs}Children:\n' +
-			[for (c in children) c.toStringTabs(tabs + "\t")].join("\n--------------\n") +
-			'\n$tabs]';
+	function toStringTabs(indentLevel = 0) {
+		var result : String = indent(indentLevel) + 'Node(name="$name")[\n';
 		
+		result += indent(indentLevel+1) + 'Namespaces:\n';
+		for(namespaceName in namespaces.keys())
+		{
+			result +=  indent(indentLevel+2) + '$namespaceName : ${namespaces.get(namespaceName)}\n';
+		}
+
+		result += indent(indentLevel+1) + 'Values:\n';
+
+		for(valueQName in values.keys())
+		{
+			result +=  indent(indentLevel+2) + '$valueQName : ${values.get(valueQName)}\n';
+		}
+		
+		result += indent(indentLevel+1) + 'Children:\n';
+		
+		for (childNode in children)
+		{
+			result += indent(indentLevel+2) + childNode.toStringTabs(indentLevel + 3) + "\n";
+			result += indent(indentLevel+2) + ("--------------\n");
+		}
+		result += indent(indentLevel) + "]";
+		
+		return result;
+	}
+
+	function indent(indentLevel : Int) {
+		var empty : String = "";
+		return [while(indentLevel-- >= 0) empty].join("\t");
 	}
 	
 }

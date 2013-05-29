@@ -116,7 +116,7 @@ class Hxrm
 		
 		if (node != null) {
 			
-			trace(node);
+			trace("\n" + node);
 			var td = tdWriter.write(node);
 			#if debug  
 			// TODO: сделать принт в файлы по требованию из девайнов

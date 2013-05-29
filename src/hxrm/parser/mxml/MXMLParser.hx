@@ -48,9 +48,7 @@ class MXMLParser implements IParser
 		
 		parseAttributes(x, n);
 		
-		var name = parseId(x.nodeName);
-		n.namespace = name.prefix == null ? "*" : name.prefix;
-		n.name = name.name;
+		n.name = QName.fromString(x.nodeName);
 		
 		for (c in x.elements()) {
 			n.children.push(doParse(c));
@@ -61,27 +59,21 @@ class MXMLParser implements IParser
 	
 	function parseAttributes(x:Xml, n:Node) {
 		
-		for (a in x.attributes()) {
+		for (attributeName in x.attributes()) {
 			
-			var aName = parseId(a);
-			var value = x.get(a);
+			var attributeQName = QName.fromString(attributeName);
+			var value = x.get(attributeName);
 			
 			// TODO: вынести парсеры особых атрибутов отдельно, может сделать плагины с правилами
-			if (aName.prefix == null && aName.name == "xmlns") {
-				n.namespaces["*"] = value; 
+			if (attributeQName.namespace == "*" && attributeQName.localPart == "xmlns") {
+				n.namespaces["*"] = value;
 			}
-			else if (aName.prefix == "xmlns") {
-				n.namespaces[aName.name] = value;
+			else if (attributeQName.namespace == "xmlns") {
+				n.namespaces[attributeQName.localPart] = value;
 			}
 			else
-				n.values.set(a, value);
+				n.values.set(attributeQName, value);
 		}
-	}
-	
-	function parseId(s:String): { prefix:String, name:String } {
-		var a = s.split(":");
-		if (a.length == 1) return { prefix:null, name:s };
-		else return { prefix:a[0], name:a[1] };
 	}
 	
 	public function cleanCache():Void {
