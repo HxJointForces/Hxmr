@@ -66,11 +66,11 @@ class MXMLParser implements IParser
 			var aName = parseId(a);
 			var value = x.get(a);
 			
-			// TODO: вынести парсеры особых атрибутов в отдель, может сделать плагины с правилами
-			if (aName.prefix == null && aName.name == "mxmlns") {
+			// TODO: вынести парсеры особых атрибутов отдельно, может сделать плагины с правилами
+			if (aName.prefix == null && aName.name == "xmlns") {
 				n.namespaces["*"] = value; 
 			}
-			else if (aName.prefix == "mxmlns") {
+			else if (aName.prefix == "xmlns") {
 				n.namespaces[aName.name] = value;
 			}
 			else

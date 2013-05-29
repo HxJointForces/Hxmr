@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<A aString="1" mxmlns="flash.display" mxmlns:as="*" />
+<A aString="1" xmlns="flash.display" xmlns:as="*" />
