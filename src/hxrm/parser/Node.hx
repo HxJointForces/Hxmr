@@ -56,9 +56,8 @@ class Node
 		return result;
 	}
 
-	function indent(indentLevel : Int) {
-		var empty : String = "";
-		return [while(indentLevel-- >= 0) empty].join("\t");
+	inline function indent(indentLevel : Int) {
+		return StringTools.rpad("", "\t", indentLevel);
 	}
 	
 }
