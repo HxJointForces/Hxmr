@@ -71,11 +71,11 @@ class MXMLParser implements IParser
 			var attributeQName = QName.fromString(attributeName);
 			var value = x.get(attributeName);
 			
+			//TODO support for external matchers
 			var matchers : Array<IAttributeMatcher> = [new NamespaceAttributeMatcher()];
 			var matchersIterator : Iterator<IAttributeMatcher> = matchers.iterator();
 
-			if(!matchersIterator.hasNext() || !matchersIterator.next().matchAttribute(attributeQName, value, n, matchersIterator))
-			{
+			if(!matchersIterator.hasNext() || !matchersIterator.next().matchAttribute(attributeQName, value, n, matchersIterator)) {
 				n.values.set(attributeQName, value);
 			}
 		}
@@ -87,13 +87,11 @@ class MXMLParser implements IParser
 	
 }
 
-interface IAttributeMatcher
-{
+interface IAttributeMatcher {
 	function matchAttribute(attributeQName : QName, value : String, n : Node, iterator : Iterator<IAttributeMatcher>) : Bool;
 }
 
-class NamespaceAttributeMatcher implements IAttributeMatcher
-{
+class NamespaceAttributeMatcher implements IAttributeMatcher {
 	public function new() {
 	}
 
@@ -102,9 +100,11 @@ class NamespaceAttributeMatcher implements IAttributeMatcher
 			case [ "*", "xmlns" ]:
 				n.namespaces["*"] = value;
 				return true;
+			
 			case [ "xmlns", _ ]:
 				n.namespaces[attributeQName.localPart] = value;
 				return true;
+			
 			case _:
 				if(!iterator.hasNext()){
 					return false;
