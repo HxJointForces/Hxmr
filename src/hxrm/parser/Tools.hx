@@ -39,8 +39,8 @@ class FilePosUtils {
 
 // константы типов ошибок
 enum ParserErrorType {
-	UNKNOWN_FILE_FORMAT;
-	EMPTY_FILE;
+	UNKNOWN_DATA_FORMAT;
+	EMPTY_DATA;
 }
 
 // тип ошибок. класс чтобы ловить кетчем
@@ -57,8 +57,8 @@ class ParserError {
 	public function toString() {
 		return FilePosUtils.toString(filePos) + " - " +
 			switch (type) {
-				case UNKNOWN_FILE_FORMAT: "unknown file format or incorrect content";
-				case EMPTY_FILE: "file is empty";
+				case UNKNOWN_DATA_FORMAT: "unknown data format or incorrect content";
+				case EMPTY_DATA: "data is empty";
 			}
 	}
 }

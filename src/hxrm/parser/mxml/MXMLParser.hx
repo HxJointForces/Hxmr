@@ -23,7 +23,7 @@ class MXMLParser implements IParser
 		try {
 			xml = Xml.parse(data);
 		} catch (e:Dynamic) {
-			throw new ParserError(UNKNOWN_FILE_FORMAT, { pos : { to : 0 , from : 0 } });
+			throw new ParserError(UNKNOWN_DATA_FORMAT, { pos : { to : 0 , from : 0 } });
 		}
 		
 		return parseRootNode(xml); // haxe.xml.Fast ?
@@ -33,7 +33,7 @@ class MXMLParser implements IParser
 		var firstElement = node.firstElement();
 		
 		if (firstElement == null) {
-			throw new ParserError(EMPTY_FILE, { pos : { to : 0 , from : 0 } });
+			throw new ParserError(EMPTY_DATA, { pos : { to : 0 , from : 0 } });
 		}
 		
 		return parseNode(firstElement);
