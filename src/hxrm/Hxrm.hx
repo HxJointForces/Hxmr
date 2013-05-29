@@ -65,6 +65,7 @@ class Hxrm
 		
 		if (t.startsWith("haxe")) return null;
 		var path = t.replace(".", "/") + ".xml";
+		path = Context.resolvePath(path);
 		return typeDefinitionFactory.createTypeDefinition(path);
 	}
 	#end
