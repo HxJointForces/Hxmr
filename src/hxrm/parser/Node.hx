@@ -57,7 +57,8 @@ class Node
 	}
 
 	inline function indent(indentLevel : Int) {
-		return StringTools.rpad("", "\t", indentLevel);
+		var glue : String = "   ";
+		return StringTools.rpad("", glue, indentLevel * glue.length);
 	}
 	
 }
