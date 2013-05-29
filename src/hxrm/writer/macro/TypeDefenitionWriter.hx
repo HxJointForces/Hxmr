@@ -1,6 +1,6 @@
 package hxrm.writer.macro;
 import haxe.macro.Expr;
-import hxrm.parser.Node;
+import hxrm.parser.mxml.MXMLNode;
 
 /**
  * ...
@@ -14,7 +14,7 @@ class TypeDefenitionWriter
 		
 	}
 	
-	public function write(n:Node):TypeDefinition {
+	public function write(n:MXMLNode):TypeDefinition {
 		
 		return null;
 	}

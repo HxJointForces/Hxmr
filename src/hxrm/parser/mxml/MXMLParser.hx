@@ -3,7 +3,6 @@ package hxrm.parser.mxml;
 import hxrm.parser.mxml.attributes.NamespaceAttributeMatcher;
 import hxrm.parser.mxml.attributes.IAttributeMatcher;
 import hxrm.parser.Tools;
-import hxrm.parser.Node;
 
 using StringTools;
 /**
@@ -19,7 +18,7 @@ class MXMLParser
 	// TODO Should it realy be a field?
 	var xml:Xml;
 	
-	public function parse(data:String):Null<Node> {
+	public function parse(data:String):Null<MXMLNode> {
 		
 		try {
 			xml = Xml.parse(data);
@@ -30,7 +29,7 @@ class MXMLParser
 		return parseRootNode(xml); // haxe.xml.Fast ?
 	}
 	
-	function parseRootNode(node : Xml) {
+	function parseRootNode(node : Xml):Null<MXMLNode>  {
 		var firstElement = node.firstElement();
 		
 		if (firstElement == null) {
@@ -41,10 +40,11 @@ class MXMLParser
 	}
 
 	// root - первый нод в xml
-	function parseNode(xmlNode : Xml) {
+	function parseNode(xmlNode : Xml):Null<MXMLNode>  {
 	
 		// do magic here
-		var n = new Node(QName.fromString(xmlNode.nodeName));
+		var n = new MXMLNode();
+		n.name = QName.fromString(xmlNode.nodeName);
 
 		parseAttributes(xmlNode, n);
 		parseChildren(xmlNode, n);
@@ -52,14 +52,14 @@ class MXMLParser
 		return n;
 	}
 	
-	function parseChildren(xmlNode:Xml, n:Node) {
+	function parseChildren(xmlNode:Xml, n:MXMLNode) {
 		//TODO inner property setters
 		for (c in xmlNode.elements()) {
 			n.children.push(parseNode(c));
 		}
 	}
 	
-	function parseAttributes(xmlNode:Xml, n:Node) {
+	function parseAttributes(xmlNode:Xml, n:MXMLNode) {
 		for (attributeName in xmlNode.attributes()) {
 			
 			var attributeQName = QName.fromString(attributeName);

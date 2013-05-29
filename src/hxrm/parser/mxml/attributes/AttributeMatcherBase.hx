@@ -3,7 +3,7 @@ class AttributeMatcherBase implements IAttributeMatcher {
 	public function new() {
 	}
 
-	public function matchAttribute(attributeQName : QName, value : String, n : Node, iterator : Iterator<IAttributeMatcher>) : Bool {
+	public function matchAttribute(attributeQName : QName, value : String, n : MXMLNode, iterator : Iterator<IAttributeMatcher>) : Bool {
 		if(!iterator.hasNext()){
 			return false;
 		}

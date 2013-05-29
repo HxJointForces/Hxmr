@@ -1,4 +1,4 @@
-package hxrm.parser;
+package hxrm.parser.mxml;
 
 /**
  * нодVO
@@ -7,19 +7,19 @@ package hxrm.parser;
  * 
  * @author deep <system.grand@gmail.com>
  */
-import hxrm.parser.mxml.QName;
-class Node
+class MXMLNode
 {
 	public var name:QName;
 	public var namespaces:Map<String, String>;
 	
 	public var values:Map<QName, String>;
 	
-	public var children:Array<Node>;
+	public var children:Array<MXMLNode>;
 	
-	public function new(name : QName) 
+	public var parentNode : MXMLNode;
+	
+	public function new() 
 	{
-		this.name = name;
 		values = new Map();
 		namespaces = new Map();
 		children = [];
@@ -30,7 +30,7 @@ class Node
 	}
 	
 	function toStringTabs(indentLevel = 0) {
-		var result : String = indent(indentLevel) + 'Node(name="$name")[\n';
+		var result : String = indent(indentLevel) + 'MXMLNode(name="$name")[\n';
 		
 		result += indent(indentLevel+1) + 'Namespaces:\n';
 		for(namespaceName in namespaces.keys())

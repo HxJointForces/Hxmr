@@ -1,4 +1,4 @@
-package hxrm.parser.mxml;
+package hxrm.parser;
 class QName {
 	public var namespace : String;
 	public var localPart : String;
@@ -14,7 +14,7 @@ class QName {
 	}
 	
 	public function new(namespace : String, localPart : String) {
-		this.namespace = namespace;
+		this.namespace = namespace == null ? "*" : namespace;
 		this.localPart = localPart;
 	}
 
