@@ -74,15 +74,16 @@ class MXMLParser implements IParser
 			var value = x.get(attributeName);
 			
 			// TODO: вынести парсеры особых атрибутов отдельно, может сделать плагины с правилами
-			switch [attributeQName.namespace, attributeQName.localPart] {
-				case [ "*", "xmlns" ]:
+			switch (attributeQName) {
+				case { namespace : "*", localPart : "xmlns" }:
 					n.namespaces["*"] = value;
-				case [ "xmlns", _ ]:
+
+				case { namespace : "xmlns" }:
 					n.namespaces[attributeQName.localPart] = value;
+
 				case _:
 					n.values.set(attributeQName, value);
 			}
-				
 		}
 	}
 	
