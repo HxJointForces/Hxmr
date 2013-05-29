@@ -49,7 +49,7 @@ class Node
 		
 		for (childNode in children)
 		{
-			result += childNode.toStringTabs(indentLevel + 3) + "\n";
+			result += childNode.toStringTabs(indentLevel + 2) + "\n";
 		}
 		result += indent(indentLevel) + "]";
 		
