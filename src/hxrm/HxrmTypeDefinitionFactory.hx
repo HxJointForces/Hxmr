@@ -4,7 +4,6 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import hxrm.parser.mxml.MXMLParser;
 import hxrm.parser.Tools;
-import hxrm.writer.haxe.HaxeWriter;
 import hxrm.writer.macro.TypeDefenitionWriter;
 import neko.Lib;
 import sys.FileSystem;
@@ -19,7 +18,7 @@ class HxrmTypeDefinitionFactory {
 	var tdWriter:TypeDefenitionWriter;
 	
 	#if debug
-	var haxeWriter:HaxeWriter;
+	var p:Printer;
 	#end
 	
 	public function new() {
@@ -27,17 +26,13 @@ class HxrmTypeDefinitionFactory {
 		tdWriter = new TypeDefenitionWriter();
 		
 		#if debug
-		haxeWriter = new HaxeWriter();
+		p = new Printer();
 		#end
 	}
 	
 	public function reset() {
 		parser.cleanCache(); // может стоит просто пересоздавать парсер
 		tdWriter.cleanCache();
-		
-		#if debug
-		haxeWriter.cleanCache();
-		#end
 	}
 	
 	public function createTypeDefinition(path : String) : TypeDefinition
@@ -70,7 +65,7 @@ class HxrmTypeDefinitionFactory {
 			
 			#if debug  
 			// TODO: сделать принт в файлы по требованию из девайнов
-			trace(haxeWriter.write(typeDefinition));
+			trace(p.printTypeDefinition(typeDefinition, true));
 			#end
 		}
 		
