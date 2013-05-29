@@ -17,8 +17,9 @@ class Node
 	
 	public var children:Array<Node>;
 	
-	public function new() 
+	public function new(name : QName) 
 	{
+		this.name = name;
 		values = new Map();
 		namespaces = new Map();
 		children = [];

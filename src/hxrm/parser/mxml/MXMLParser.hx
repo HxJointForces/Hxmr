@@ -11,11 +11,11 @@ using StringTools;
  */
 class MXMLParser implements IParser
 {
-
 	public function new() 
 	{
 	}
 	
+	// TODO Should it realy be a field?
 	var xml:Xml;
 	var path:String;
 	var node:Node;
@@ -34,30 +34,39 @@ class MXMLParser implements IParser
 		
 		this.path = path;
 		
-		node = doParse(xml.firstElement(), true); // haxe.xml.Fast ?
+		node = parseRootNode(xml); // haxe.xml.Fast ?
 		
 		return node;
 	}
 	
-	// root - первый нод в xml
-	function doParse(x:Xml, root = false) {
-		// do magic here
-		if (x == null) throw new ParserError(EMPTY_FILE, pos);
+	function parseRootNode(node : Xml) {
+		var firstElement = node.firstElement();
 		
-		var n = new Node();
-		
-		parseAttributes(x, n);
-		
-		n.name = QName.fromString(x.nodeName);
-		
-		for (c in x.elements()) {
-			n.children.push(doParse(c));
+		if (firstElement == null) {
+			throw new ParserError(EMPTY_FILE, pos);
 		}
 		
+		return parseNode(firstElement);
+	}
+
+	// root - первый нод в xml
+	function parseNode(xmlNode : Xml) {
+	
+		// do magic here
+		var n = new Node(QName.fromString(xmlNode.nodeName));
+
+		parseAttributes(xmlNode, n);
+
+		//TODO inner property setters
+		for (c in xmlNode.elements()) {
+			n.children.push(parseNode(c));
+		}
+
 		return n;
 	}
 	
 	function parseAttributes(x:Xml, n:Node) {
+	
 		
 		for (attributeName in x.attributes()) {
 			
@@ -65,14 +74,15 @@ class MXMLParser implements IParser
 			var value = x.get(attributeName);
 			
 			// TODO: вынести парсеры особых атрибутов отдельно, может сделать плагины с правилами
-			if (attributeQName.namespace == "*" && attributeQName.localPart == "xmlns") {
-				n.namespaces["*"] = value;
+			switch [attributeQName.namespace, attributeQName.localPart] {
+				case [ "*", "xmlns" ]:
+					n.namespaces["*"] = value;
+				case [ "xmlns", _ ]:
+					n.namespaces[attributeQName.localPart] = value;
+				case _:
+					n.values.set(attributeQName, value);
 			}
-			else if (attributeQName.namespace == "xmlns") {
-				n.namespaces[attributeQName.localPart] = value;
-			}
-			else
-				n.values.set(attributeQName, value);
+				
 		}
 	}
 	
