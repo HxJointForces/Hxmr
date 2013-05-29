@@ -4,6 +4,7 @@ import hxrm.parser.IParser;
 import hxrm.parser.Tools;
 import hxrm.parser.Node;
 
+using StringTools;
 /**
  * ...
  * @author deep <system.grand@gmail.com>
@@ -33,26 +34,54 @@ class MXMLParser implements IParser
 		
 		this.path = path;
 		
-		node = doParse(xml.firstElement()); // haxe.xml.Fast ?
+		node = doParse(xml.firstElement(), true); // haxe.xml.Fast ?
 		
 		return node;
 	}
 	
-	function doParse(x:Xml) {
+	// root - первый нод в xml
+	function doParse(x:Xml, root = false) {
 		// do magic here
 		if (x == null) throw new ParserError(EMPTY_FILE, pos);
 		
 		var n = new Node();
 		
-		n.name = x.nodeName;
-		for (a in x.attributes()) {
-			n.values.set(a, x.get(a));
-		}
+		parseAttributes(x, n);
+		
+		var name = parseId(x.nodeName);
+		n.namespace = name.prefix == null ? "*" : name.prefix;
+		n.name = name.name;
 		
 		for (c in x.elements()) {
 			n.children.push(doParse(c));
 		}
+		
 		return n;
+	}
+	
+	function parseAttributes(x:Xml, n:Node) {
+		
+		for (a in x.attributes()) {
+			
+			var aName = parseId(a);
+			var value = x.get(a);
+			
+			// TODO: вынести парсеры особых атрибутов в отдель, может сделать плагины с правилами
+			if (aName.prefix == null && aName.name == "mxmlns") {
+				n.namespaces["*"] = value; 
+			}
+			else if (aName.prefix == "mxmlns") {
+				n.namespaces[aName.name] = value;
+			}
+			else
+				n.values.set(a, value);
+		}
+	}
+	
+	function parseId(s:String): { prefix:String, name:String } {
+		var a = s.split(":");
+		if (a.length == 1) return { prefix:null, name:s };
+		else return { prefix:a[0], name:a[1] };
 	}
 	
 	public function cleanCache():Void {

@@ -10,6 +10,9 @@ package hxrm.parser;
 class Node
 {
 	public var name:String;
+	public var namespace:Null<String>;  // null если не задан
+	public var namespaces:Map<String, String>;
+	
 	public var values:Map<String, String>;
 	
 	public var children:Array<Node>;
@@ -17,6 +20,7 @@ class Node
 	public function new() 
 	{
 		values = new Map();
+		namespaces = new Map();
 		children = [];
 	}
 	
@@ -25,8 +29,12 @@ class Node
 	}
 	
 	function toStringTabs(tabs = "") {
-		return '$tabs[$name:\n' +
+		return '$tabs[$namespace:$name:\n' +
+			'${tabs}Namespaces:\n' +
+			[for (k in namespaces.keys()) '${tabs}\t$k : ${namespaces.get(k)}'].join("\n") + 
+			'\n${tabs}Values:\n' +
 			[for (k in values.keys()) '${tabs}\t$k : ${values.get(k)}'].join("\n") + 
+			'\n${tabs}Children:\n' +
 			[for (c in children) c.toStringTabs(tabs + "\t")].join("\n--------------\n") +
 			'\n$tabs]';
 		
