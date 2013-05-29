@@ -2,7 +2,6 @@ package hxrm;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import hxrm.parser.IParser;
 import hxrm.parser.mxml.MXMLParser;
 import hxrm.parser.Tools;
 import hxrm.writer.haxe.HaxeWriter;
@@ -16,7 +15,7 @@ using hxrm.parser.Tools.FilePosUtils;
 
 class HxrmTypeDefinitionFactory {
 
-	var parser:IParser;
+	var parser:MXMLParser;
 	var tdWriter:TypeDefenitionWriter;
 	
 	#if debug

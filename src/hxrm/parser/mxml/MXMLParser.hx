@@ -1,6 +1,5 @@
 package hxrm.parser.mxml;
 
-import hxrm.parser.IParser;
 import hxrm.parser.Tools;
 import hxrm.parser.Node;
 
@@ -9,7 +8,7 @@ using StringTools;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class MXMLParser implements IParser
+class MXMLParser
 {
 	public function new() 
 	{
