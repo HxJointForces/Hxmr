@@ -56,20 +56,23 @@ class MXMLParser implements IParser
 		var n = new Node(QName.fromString(xmlNode.nodeName));
 
 		parseAttributes(xmlNode, n);
-
-		//TODO inner property setters
-		for (c in xmlNode.elements()) {
-			n.children.push(parseNode(c));
-		}
+		parseChildren(xmlNode, n);
 
 		return n;
 	}
 	
-	function parseAttributes(x:Xml, n:Node) {
-		for (attributeName in x.attributes()) {
+	function parseChildren(xmlNode:Xml, n:Node) {
+		//TODO inner property setters
+		for (c in xmlNode.elements()) {
+			n.children.push(parseNode(c));
+		}
+	}
+	
+	function parseAttributes(xmlNode:Xml, n:Node) {
+		for (attributeName in xmlNode.attributes()) {
 			
 			var attributeQName = QName.fromString(attributeName);
-			var value = x.get(attributeName);
+			var value = xmlNode.get(attributeName);
 			
 			//TODO support for external matchers
 			var matchers : Array<IAttributeMatcher> = [new NamespaceAttributeMatcher()];
