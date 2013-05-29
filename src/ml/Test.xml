@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <A aString="1" xmlns="flash.display" xmlns:as="*">
-	<B xmlns="*" test="123"/>
+	<B xmlns="*" test="123" as:prop="asValue"/>
 </A>
