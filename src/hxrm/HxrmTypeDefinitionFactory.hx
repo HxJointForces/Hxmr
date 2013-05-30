@@ -71,7 +71,7 @@ class HxrmTypeDefinitionFactory {
 		if (scope != null) {
 
 			trace("\n" + node);
-			typeDefinition = tdWriter.write(scope, type, path);
+			typeDefinition = tdWriter.write(analyzer, scope, type, path);
 			
 			#if debug  
 			// TODO: сделать принт в файлы по требованию из девайнов

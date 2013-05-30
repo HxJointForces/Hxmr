@@ -1,5 +1,6 @@
 package hxrm.generator.macro;
 
+import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -20,7 +21,7 @@ class TypeDefenitionGenerator
 	{
 	}
 	
-	public function write(scope:NodeScope, type:String, file:String):TypeDefinition {
+	public function write(analyzer : NodeAnalyzer, scope:NodeScope, type:String, file:String):TypeDefinition {
 
 		trace('write:$type');
 		trace(scope);
@@ -30,7 +31,7 @@ class TypeDefenitionGenerator
 		
 		var superTypeParams = [];
 		for (tp in scope.typeParams) {
-			superTypeParams.push(getTypePath(scope.getType(tp)));
+			superTypeParams.push(getTypePath(analyzer.getType(tp)));
 		}
 		trace(superTypeParams);
 		var superClass:TypePath = getTypePath(scope.type);
