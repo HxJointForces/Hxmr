@@ -2,6 +2,8 @@ package hxrm.analyzer;
 import hxrm.utils.QNameUtils;
 import hxrm.parser.QName;
 import hxrm.parser.mxml.MXMLNode;
+import haxe.macro.Context;
+import haxe.macro.Type;
 
 class NodeAnalyzer {
 	public function new() {
@@ -20,8 +22,8 @@ class NodeAnalyzer {
 			result.namespaces[nsName] = QNameUtils.splitNamespace(n.namespaces[nsName]);
 		}
 
-		var resolvedQName : QName = result.resolveClassPath(n.name);
-		result.type = result.getType(resolvedQName);
+		var resolvedQName : QName = resolveClassPath(n.name, result.namespaces);
+		result.type = getType(resolvedQName);
 		switch (result.type) {
 			case TInst(t, params):
 				if (params.length != n.typeParams.length) {
@@ -50,5 +52,29 @@ class NodeAnalyzer {
 		result.statics = result.classType.statics.get();
 		
 		return result;
+	}
+
+	public function getType(typeQName:QName):Type {
+		var type = null;
+		try {
+			type = Context.getType(typeQName.toHaxeTypeId());
+		} catch (e:Dynamic) {
+			trace(e);
+			throw "can't find type: " + typeQName;
+		}
+		return type;
+	}
+
+	public function resolveClassPath(q:QName, namespaces : Map<String, Array<String>>):QName {
+
+		if (!namespaces.exists(q.namespace)) throw "unknow namespace";
+		var resolvedNamespaceParts : Array<String> = namespaces[q.namespace];
+
+		// <flash.display.Sprite /> support
+		var localQName : QName = QNameUtils.fromHaxeTypeId(q.localPart);
+
+		resolvedNamespaceParts.concat(QNameUtils.splitNamespace(localQName.namespace));
+
+		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.localPart);
 	}
 }
