@@ -4,7 +4,7 @@ import hxrm.parser.QName;
 
 class NamespaceAttributeMatcher extends AttributeMatcherBase {
 
-	override public function matchAttribute(attributeQName : QName, value : String, n : MXMLNode, iterator : Iterator<IAttributeMatcher>) : Bool {
+	override public function matchAttribute(attributeQName : QName, value : String, n : MXMLNode) : Bool {
 		return switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "*", "xmlns" ]:
 				n.namespaces["*"] = value;
@@ -15,7 +15,7 @@ class NamespaceAttributeMatcher extends AttributeMatcherBase {
 				true;
 
 			case _:
-				super.matchAttribute(attributeQName, value, n, iterator);
+				super.matchAttribute(attributeQName, value, n);
 		}
 	}
 }

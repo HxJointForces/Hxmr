@@ -18,7 +18,6 @@ class NodeScope {
 	public var classType:ClassType;
 
 	public var fields:Array<ClassField>;
-	public var statics:Array<ClassField>;
 
 	public var parentScope:NodeScope;
 

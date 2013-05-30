@@ -50,7 +50,6 @@ class NodeAnalyzer {
 		trace(result.classType);
 
 		result.fields = result.classType.fields.get();
-		result.statics = result.classType.statics.get();
 		
 		return result;
 	}

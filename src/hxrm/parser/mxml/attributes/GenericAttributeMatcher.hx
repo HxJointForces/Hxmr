@@ -16,14 +16,14 @@ class GenericAttributeMatcher extends AttributeMatcherBase implements IAttribute
 		super();
 	}
 	
-	override public function matchAttribute(attributeQName:QName, value:String, n:MXMLNode, iterator:Iterator<IAttributeMatcher>):Bool {
+	override public function matchAttribute(attributeQName:QName, value:String, n:MXMLNode):Bool {
 		return switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "generic", "type" ]:
 				n.typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
 				true;
 
 			case _:
-				super.matchAttribute(attributeQName, value, n, iterator);
+				super.matchAttribute(attributeQName, value, n);
 		}
 	}
 	

@@ -68,19 +68,12 @@ class MXMLParser
 			var attributeQName = QNameUtils.fromQualifiedString(attributeName);
 			var value = xmlNode.get(attributeName);
 			
-			var matchersIterator : Iterator<IAttributeMatcher> = matchers.iterator();
+			var matched = false;
+			for(attributeMatcher in matchers) {
+			  matched = attributeMatcher.matchAttribute(attributeQName, value, n);
+			}
 			
-			/*
-				var matched = false;
-				while (matchersIterator.hasNext() && !matched) {
-				  matched = am.matchAttribute(....);
-				}
-				if (!matched) n.values.set(attributeQName, value);
-				
-				VS
-				
-			 */
-			if(!matchersIterator.hasNext() || !matchersIterator.next().matchAttribute(attributeQName, value, n, matchersIterator)) {
+			if (!matched) {
 				n.values.set(attributeQName, value);
 			}
 		}
