@@ -2,6 +2,7 @@ package hxrm;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
+import haxe.macro.Printer;
 import hxrm.parser.mxml.MXMLParser;
 import hxrm.parser.Tools;
 import hxrm.writer.macro.TypeDefenitionWriter;
@@ -12,6 +13,9 @@ import sys.io.File;
 using StringTools;
 using hxrm.parser.Tools.FilePosUtils;
 
+/**
+ * java developer был тут ))
+ */
 class HxrmTypeDefinitionFactory {
 
 	var parser:MXMLParser;
@@ -48,10 +52,9 @@ class HxrmTypeDefinitionFactory {
 		var node = null;
 
 		try {
-			// We should not pass file to parser because parser can parse Strings instead of files
 			node = parser.parse(File.getContent(path));
 		} catch (e:ParserError) {
-			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition()));
+			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition(path)));
 		} catch (e:Dynamic) {
 			//Lib.rethrow(e); // Interp.Runtime(_)
 			trace(e);

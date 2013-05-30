@@ -11,29 +11,22 @@ package hxrm.parser;
  
 // нужно придумать как из xml брать номер символа в котором ошибка и по который. 
 // Позволит генерировать удобные ерроры открывающиеся прямо в нужном месте
-typedef FilePos = {
-	@:optional var file:String;
-	var pos:{from:Int, to:Int};
-}
+typedef FilePos = { ?from:Int, ?to:Int }
 
 class FilePosUtils {
 	
-	public static function toString(p:FilePos) {
-		var res = p.file;
-		if (p.pos != null)
-			res += ": " + p.pos.from + "-" + p.pos.to;
+	public static function toString(p:FilePos, ?file:String) {
+		var res = file != null ? file : "";
+		if (p.from != null) res += ": " + p.from + "-" + p.to;
 			
 		return res;
 	}
 	
-	static public function toMacroPosition(p:FilePos) {
-		var min = 0;
-		var max = 0;
-		if (p.pos != null) {
-			min = p.pos.from;
-			max = p.pos.to;
-		}
-		return { file:p.file, min:min, max:max };
+	static public function toMacroPosition(p:FilePos, file:String) {
+		var min = if (p.from != null) p.from; else 0;
+		var max = if (p.to != null) p.to; else min;
+		
+		return { file:file, min:min, max:max };
 	}
 }
 
