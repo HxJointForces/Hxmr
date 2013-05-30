@@ -26,5 +26,6 @@ class NodeScope {
 	}
 
 	public function copyFrom(s:NodeScope):Void {
+		//TODO
 	}
 }
