@@ -11,6 +11,9 @@ using StringTools;
 
 class MXMLParser
 {
+	//TODO support for external matchers - KISS
+	public var matchers : Array<IAttributeMatcher>;
+
 	public function new() 
 	{
 		matchers = [new NamespaceAttributeMatcher(), new GenericAttributeMatcher()];
@@ -58,9 +61,6 @@ class MXMLParser
 			n.children.push(child);
 		}
 	}
-	
-	//TODO support for external matchers - KISS
-	public var matchers : Array<IAttributeMatcher>;
 	
 	function parseAttributes(xmlNode:Xml, n:MXMLNode) {
 		for (attributeName in xmlNode.attributes()) {
