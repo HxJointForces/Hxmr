@@ -19,9 +19,6 @@
                 <version>1.0-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
-	            <!-- targets>
-	               <target>neko</target>
- 		    </targets -->
                     <swfVersion>10</swfVersion>
                     <main>Main</main>
                 </configuration>
@@ -42,5 +39,41 @@
             </plugin>
         </plugins>
     </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>yelbota-dropbox-repo</id>
+            <url>http://dl.dropbox.com/u/36020926/maven/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-oss-public</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <repositories>
+        <repository>
+            <id>yelbota-dropbox-repo</id>
+            <url>http://dl.dropbox.com/u/36020926/maven/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 
 </project>
