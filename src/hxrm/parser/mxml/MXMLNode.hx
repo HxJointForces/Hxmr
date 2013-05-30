@@ -1,14 +1,8 @@
 package hxrm.parser.mxml;
 
-/**
- * нодVO
- * TODO: как хранить просто свойста и свойства с неймспейсами? 
- * 		 или тут они уже все должны быть приведены в общий вид
- * 
- * @author deep <system.grand@gmail.com>
- */
 class MXMLNode
 {
+	// нужно везде вписать FilePos, как только мы сможем получать эту информацию
 	public var name:QName;
 	public var namespaces:Map<String, String>;
 	
@@ -30,28 +24,31 @@ class MXMLNode
 	}
 	
 	function toStringTabs(indentLevel = 0) {
-		var result : String = indent(indentLevel) + 'MXMLNode(name="$name")[\n';
+		var i0 = indent(indentLevel);
+		var i1 = indent(indentLevel+1);
+		var i2 = indent(indentLevel+2);
+		var result : String = i0 + 'MXMLNode(name="$name")[\n';
 		
-		result += indent(indentLevel+1) + 'Namespaces:\n';
+		result += i1 + "Namespaces:\n";
 		for(namespaceName in namespaces.keys())
 		{
-			result +=  indent(indentLevel+2) + '$namespaceName : ${namespaces.get(namespaceName)}\n';
+			result +=  i2 + '$namespaceName : ${namespaces.get(namespaceName)}\n';
 		}
 
-		result += indent(indentLevel+1) + 'Values:\n';
+		result += i1 + "Values:\n";
 
 		for(valueQName in values.keys())
 		{
-			result +=  indent(indentLevel+2) + '$valueQName : ${values.get(valueQName)}\n';
+			result +=  i2 + '$valueQName : ${values.get(valueQName)}\n';
 		}
 		
-		result += indent(indentLevel+1) + 'Children:\n';
+		result += i1 + "Children:\n";
 		
 		for (childNode in children)
 		{
 			result += childNode.toStringTabs(indentLevel + 2) + "\n";
 		}
-		result += indent(indentLevel) + "]";
+		result += i0 + "]";
 		
 		return result;
 	}
