@@ -1,6 +1,9 @@
 package hxrm.parser;
 class QName {
-	
+
+	public static inline var HAXE_ID_GLUE : String = ".";
+	public static inline var QUALIFIED_ID_GLUE : String = ":";
+
 	public var namespace : String;
 	public var localPart : String;
 	

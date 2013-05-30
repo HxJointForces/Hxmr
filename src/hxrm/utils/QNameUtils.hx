@@ -1,9 +1,10 @@
 package hxrm.utils;
 import hxrm.parser.QName;
+import hxrm.parser.QName;
 class QNameUtils {
 
 	public static function fromQualifiedString(s: String) : QName {
-		var parts = s.split(":");
+		var parts = s.split(QName.QUALIFIED_ID_GLUE);
 		return if (parts.length == 1) {
 			new QName("*", parts[0]);
 		} else {
@@ -19,11 +20,11 @@ class QNameUtils {
 
 	public static function joinNamespaceParts(parts : Array<String>) : String {
 		return if(parts.length == 0) "*";
-			else parts.join(".");
+			else parts.join(QName.HAXE_ID_GLUE);
 	}
 
 	public static function splitNamespace(namespace : String) : Array<String> {
-		return namespace.split(".");
+		return namespace.split(QName.HAXE_ID_GLUE);
 	}
 
 }
