@@ -21,4 +21,14 @@ class QName {
 		return if(namespace == ASTERISK) localPart;
 				else '$namespace.$localPart';
 	}
+
+	public function hashCode() : Int {
+		var haxeTypeId : String = toHaxeTypeId();
+		
+		var hash = 5381;
+		for( i in 0...haxeTypeId.length) {
+			hash = ((hash<<5)+hash)+haxeTypeId.charCodeAt(i);
+		}
+		return hash;
+	}
 }
