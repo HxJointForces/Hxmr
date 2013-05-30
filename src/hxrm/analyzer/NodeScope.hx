@@ -29,11 +29,10 @@ class NodeScope {
 		if (parentScope != null) copyFrom(parentScope);
 
 		for (nsName in n.namespaces.keys()) {
-			namespaces[nsName] = parseNamespace(n.namespaces[nsName]);
+			namespaces[nsName] = QNameUtils.splitNamespace(n.namespaces[nsName]);
 		}
 
 		var resolvedQName : QName = resolveClassPath(n.name);
-		//var cp = resolveClassPath(n.name);
 		type = getType(resolvedQName);
 		switch (type) {
 			case TInst(t, params):
@@ -85,15 +84,6 @@ class NodeScope {
 		resolvedNamespaceParts.concat(QNameUtils.splitNamespace(localQName.namespace));
 		
 		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), q.localPart);
-	}
-
-	function parseNamespace(value:String):Array<String> {
-
-		return
-			if (value == "*") [];
-			else if (value.endsWith(".*"))
-				value.substr(0, value.length - 2).split(".");
-			else value.split(".");
 	}
 
 	public function copyFrom(s:NodeScope):Void {

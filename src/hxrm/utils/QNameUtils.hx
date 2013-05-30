@@ -6,7 +6,7 @@ class QNameUtils {
 	public static function fromQualifiedString(s: String) : QName {
 		var parts = s.split(QName.QUALIFIED_ID_GLUE);
 		return if (parts.length == 1) {
-			new QName("*", parts[0]);
+			new QName(QName.ASTERISK, parts[0]);
 		} else {
 			new QName(parts[0], parts[1]);
 		}
@@ -19,7 +19,7 @@ class QNameUtils {
 	}
 
 	public static function joinNamespaceParts(parts : Array<String>) : String {
-		return if(parts.length == 0) "*";
+		return if(parts.length == 0) QName.ASTERISK;
 			else parts.join(QName.HAXE_ID_GLUE);
 	}
 
