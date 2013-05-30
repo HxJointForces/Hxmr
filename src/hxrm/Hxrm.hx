@@ -4,7 +4,7 @@ package hxrm;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import hxrm.parser.Tools;
-import hxrm.writer.macro.TypeDefenitionWriter;
+import hxrm.generatortor.macro.TypeDefenitionWriter;
 import neko.Lib;
 import sys.FileSystem;
 import sys.io.File;

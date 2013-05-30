@@ -6,7 +6,7 @@ import haxe.macro.Expr;
 import haxe.macro.Printer;
 import hxrm.parser.mxml.MXMLParser;
 import hxrm.parser.Tools;
-import hxrm.writer.macro.TypeDefenitionWriter;
+import hxrm.writer.macro.TypeDefenitionGenerator;
 import neko.Lib;
 import sys.FileSystem;
 import sys.io.File;
@@ -20,7 +20,7 @@ using hxrm.parser.Tools.FilePosUtils;
 class HxrmTypeDefinitionFactory {
 
 	var parser:MXMLParser;
-	var tdWriter:TypeDefenitionWriter;
+	var tdWriter:TypeDefenitionGenerator;
 	
 	#if debug
 	var p:Printer;
@@ -28,7 +28,7 @@ class HxrmTypeDefinitionFactory {
 	
 	public function new() {
 		parser = new MXMLParser();
-		tdWriter = new TypeDefenitionWriter();
+		tdWriter = new TypeDefenitionGenerator();
 		
 		#if debug
 		p = new Printer();

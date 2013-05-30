@@ -12,7 +12,7 @@ using haxe.macro.Tools;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class TypeDefenitionWriter
+class TypeDefenitionGenerator
 {
 	
 	public function new() 
