@@ -28,6 +28,13 @@ class TypeDefenitionWriter
 		var pack = type.split(".");
 		var name = pack.pop();
 		
+		var superTypeParams = [];
+		for (tp in n.typeParams) {
+			superTypeParams.push(s.getTypePath(s.getType(tp)));
+		}
+		trace(superTypeParams);
+		var superClass:TypePath = s.getTypePath(s.type);
+		trace(superClass);
 		var params = [];
 		var fields = [];
 		
@@ -38,7 +45,7 @@ class TypeDefenitionWriter
 			meta: [],
 			params: params,
 			isExtern: false,
-			kind: TDClass(null, null, false),
+			kind: TDClass(superClass, null, false),
 			fields:fields
 		}
 	}
@@ -101,10 +108,17 @@ class NodeScope {
 		statics = classType.statics.get();
 	}
 	
-	function getGenericTypes(types:Array<String>):Array<Type> {
-		var res = [];
-		for (t in types) res.push(getType(t));
-		return res;
+	public function getTypePath(t:Type):TypePath {
+		var ct = Context.toComplexType(t);
+		trace(ct);
+		if (ct == null) {
+			trace("can't get CT of " + t); // TODO:
+			return null;
+		}
+		switch (ct) {
+			case TPath(p): return p;
+			case _: trace(ct);  return null;
+		}
 	}
 	
 	public function getType(s:String):Type {
