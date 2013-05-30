@@ -4,6 +4,7 @@ class MXMLNode
 {
 	// нужно везде вписать FilePos, как только мы сможем получать эту информацию
 	public var name:QName;
+	public var typeParams:Array<String>;
 	public var namespaces:Map<String, String>;
 	
 	public var values:Map<QName, String>;
@@ -16,6 +17,7 @@ class MXMLNode
 	{
 		values = new Map();
 		namespaces = new Map();
+		typeParams = [];
 		children = [];
 	}
 	
@@ -27,7 +29,11 @@ class MXMLNode
 		var i0 = indent(indentLevel);
 		var i1 = indent(indentLevel+1);
 		var i2 = indent(indentLevel+2);
-		var result : String = i0 + 'MXMLNode(name="$name")[\n';
+		var result : String = i0 + 'MXMLNode(name="$name")';
+		
+		if (typeParams.length > 0) result += " <" + typeParams.join(", ") + "> ";
+		
+		result += "[\n";
 		
 		result += i1 + "Namespaces:\n";
 		for(namespaceName in namespaces.keys())

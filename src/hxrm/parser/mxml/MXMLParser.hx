@@ -1,5 +1,6 @@
 package hxrm.parser.mxml;
 
+import hxrm.parser.mxml.attributes.GenericAttributeMatcher;
 import hxrm.parser.mxml.attributes.NamespaceAttributeMatcher;
 import hxrm.parser.mxml.attributes.IAttributeMatcher;
 import hxrm.parser.QName;
@@ -11,7 +12,7 @@ class MXMLParser
 {
 	public function new() 
 	{
-		matchers = [new NamespaceAttributeMatcher()];
+		matchers = [new NamespaceAttributeMatcher(), new GenericAttributeMatcher()];
 	}
 	
 	public function parse(data:String):Null<MXMLNode> {

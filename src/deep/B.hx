@@ -1,10 +1,10 @@
-package ;
+package deep;
 
 /**
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class A<T>
+class B<T>
 {
 
 	public function new() 
@@ -12,8 +12,9 @@ class A<T>
 		
 	}
 	
-	public var a:T;
+	public var t:T;
 	
-	public var aString:String;
+	public var test:Int;
+	public var prop:String;
 	
 }

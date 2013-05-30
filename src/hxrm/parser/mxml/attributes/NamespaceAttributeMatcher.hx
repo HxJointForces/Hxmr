@@ -1,4 +1,6 @@
 package hxrm.parser.mxml.attributes;
+import hxrm.parser.mxml.MXMLNode;
+import hxrm.parser.QName;
 
 class NamespaceAttributeMatcher extends AttributeMatcherBase {
 

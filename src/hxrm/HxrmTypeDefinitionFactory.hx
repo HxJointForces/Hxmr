@@ -1,5 +1,6 @@
 package hxrm;
 
+import haxe.io.Path;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Printer;
@@ -39,7 +40,7 @@ class HxrmTypeDefinitionFactory {
 		tdWriter.cleanCache();
 	}
 	
-	public function createTypeDefinition(path : String) : TypeDefinition
+	public function createTypeDefinition(path : String, type : String) : TypeDefinition
 	{
 		if (!FileSystem.exists(path)) {
 			trace('xml file not found: $path'); // пока трейс. лучше убрать. пусть компилятор делает все сам
@@ -64,7 +65,7 @@ class HxrmTypeDefinitionFactory {
 		if (node != null) {
 
 			trace("\n" + node);
-			typeDefinition = tdWriter.write(node);
+			typeDefinition = tdWriter.write(node, type, path);
 			
 			#if debug  
 			// TODO: сделать принт в файлы по требованию из девайнов
@@ -74,4 +75,5 @@ class HxrmTypeDefinitionFactory {
 		
 		return typeDefinition;
 	}
+	
 }

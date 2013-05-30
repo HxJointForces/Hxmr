@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<A aString="1" xmlns="flash.display" xmlns:as="asNamespace">
-	<as:B xmlns:bnamespace="*" test="123" as:prop="asValue"/>
+<A generic:type="haxe.Timer" aString="1" xmlns="*" xmlns:deep="deep.*">
+	<deep:B generic:type="haxe.Utf8" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
 </A>
