@@ -24,45 +24,7 @@ class NodeScope {
 
 	public var parentScope:NodeScope;
 
-	public function new(n:MXMLNode, ?parent:NodeScope) {
-
-		typeParams = n.typeParams;
-		namespaces = new Map();
-		parentScope = parent;
-		if (parentScope != null) copyFrom(parentScope);
-
-		for (nsName in n.namespaces.keys()) {
-			namespaces[nsName] = QNameUtils.splitNamespace(n.namespaces[nsName]);
-		}
-
-		var resolvedQName : QName = resolveClassPath(n.name);
-		type = getType(resolvedQName);
-		switch (type) {
-			case TInst(t, params):
-				if (params.length != n.typeParams.length) {
-					trace("incorect type params count");
-					throw "incorect type params count";
-				}
-				classType = t.get();
-			case _:
-				trace("unsupported type: " + type);
-				throw "unsupported type: " + type;
-		}
-
-		if (classType.isInterface) {
-			trace("can't instantiate interface " + resolvedQName);
-			throw "";
-		}
-
-		if (classType.isPrivate) {
-			trace("can't instantiate private class " + resolvedQName);
-			throw "";
-		}
-
-		trace(classType);
-
-		fields = classType.fields.get();
-		statics = classType.statics.get();
+	public function new() {
 	}
 
 	public function getType(typeQName:QName):Type {
@@ -76,7 +38,7 @@ class NodeScope {
 		return type;
 	}
 
-	function resolveClassPath(q:QName):QName {
+	public function resolveClassPath(q:QName):QName {
 
 		if (!namespaces.exists(q.namespace)) throw "unknow namespace";
 		var resolvedNamespaceParts : Array<String> = namespaces[q.namespace];
