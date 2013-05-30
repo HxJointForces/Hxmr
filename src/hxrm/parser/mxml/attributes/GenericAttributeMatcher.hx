@@ -1,5 +1,6 @@
 package hxrm.parser.mxml.attributes;
 
+import hxrm.utils.QNameUtils;
 import hxrm.parser.mxml.attributes.IAttributeMatcher;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.QName;
@@ -18,7 +19,7 @@ class GenericAttributeMatcher extends AttributeMatcherBase implements IAttribute
 	override public function matchAttribute(attributeQName:QName, value:String, n:MXMLNode, iterator:Iterator<IAttributeMatcher>):Bool {
 		return switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "generic", "type" ]:
-				n.typeParams = value.split(",").map(function (s) return s.trim());
+				n.typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
 				true;
 
 			case _:

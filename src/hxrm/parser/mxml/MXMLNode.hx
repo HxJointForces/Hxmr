@@ -4,7 +4,7 @@ class MXMLNode
 {
 	// нужно везде вписать FilePos, как только мы сможем получать эту информацию
 	public var name:QName;
-	public var typeParams:Array<String>;
+	public var typeParams:Array<QName>;
 	public var namespaces:Map<String, String>;
 	
 	public var values:Map<QName, String>;

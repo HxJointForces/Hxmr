@@ -1,5 +1,6 @@
 package hxrm.parser.mxml;
 
+import hxrm.utils.QNameUtils;
 import hxrm.parser.mxml.attributes.GenericAttributeMatcher;
 import hxrm.parser.mxml.attributes.NamespaceAttributeMatcher;
 import hxrm.parser.mxml.attributes.IAttributeMatcher;
@@ -40,7 +41,7 @@ class MXMLParser
 	function parseNode(xmlNode : Xml):Null<MXMLNode>  {
 	
 		var n = new MXMLNode();
-		n.name = QName.fromString(xmlNode.nodeName);
+		n.name = QNameUtils.fromQualifiedString(xmlNode.nodeName);
 
 		parseAttributes(xmlNode, n);
 		parseChildren(xmlNode, n);
@@ -64,7 +65,7 @@ class MXMLParser
 	function parseAttributes(xmlNode:Xml, n:MXMLNode) {
 		for (attributeName in xmlNode.attributes()) {
 			
-			var attributeQName = QName.fromString(attributeName);
+			var attributeQName = QNameUtils.fromQualifiedString(attributeName);
 			var value = xmlNode.get(attributeName);
 			
 			var matchersIterator : Iterator<IAttributeMatcher> = matchers.iterator();

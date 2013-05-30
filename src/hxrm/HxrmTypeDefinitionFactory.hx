@@ -1,12 +1,12 @@
 package hxrm;
 
+import hxrm.generator.macro.TypeDefenitionGenerator;
 import haxe.io.Path;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Printer;
 import hxrm.parser.mxml.MXMLParser;
 import hxrm.parser.Tools;
-import hxrm.writer.macro.TypeDefenitionGenerator;
 import neko.Lib;
 import sys.FileSystem;
 import sys.io.File;
