@@ -9,31 +9,32 @@ class NodeAnalyzer {
 	public function new() {
 	}
 
-	public function analyze(n : MXMLNode, ?parent:NodeScope) : NodeScope
+	public function analyze(node : MXMLNode, ?parent:NodeScope) : NodeScope
 	{
 		var result : NodeScope = new NodeScope();
+		
+		var namespaces : Map < String, Array<String> > = new Map();
 
-		result.typeParams = n.typeParams;
-		result.namespaces = new Map();
+		result.typeParams = node.typeParams;
 		result.parentScope = parent;
 		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
-		for (nsName in n.namespaces.keys()) {
-			result.namespaces[nsName] = QNameUtils.splitNamespace(n.namespaces[nsName]);
+		for (nsName in node.namespaces.keys()) {
+			namespaces[nsName] = QNameUtils.splitNamespace(node.namespaces[nsName]);
 		}
 
-		var resolvedQName : QName = resolveClassPath(n.name, result.namespaces);
+		var resolvedQName : QName = resolveClassPath(node.name, namespaces);
 		result.type = getType(resolvedQName);
+		result.classType = getClassType(result.type);
+
+		// Checks
 		switch (result.type) {
 			case TInst(t, params):
-				if (params.length != n.typeParams.length) {
+				if (params.length != node.typeParams.length) {
 					trace("incorect type params count");
 					throw "incorect type params count";
 				}
-				result.classType = t.get();
 			case _:
-				trace("unsupported type: " + result.type);
-				throw "unsupported type: " + result.type;
 		}
 
 		if (result.classType.isInterface) {
@@ -45,13 +46,23 @@ class NodeAnalyzer {
 			trace("can't instantiate private class " + resolvedQName);
 			throw "";
 		}
-
+		
 		trace(result.classType);
 
 		result.fields = result.classType.fields.get();
 		result.statics = result.classType.statics.get();
 		
 		return result;
+	}
+	
+	public inline function getClassType(type : Type) : ClassType {
+		return switch (type) {
+			case TInst(t, params):
+				t.get();
+			case _:
+				trace("unsupported type: " + type);
+				throw "unsupported type: " + type;
+		}
 	}
 
 	public function getType(typeQName:QName):Type {

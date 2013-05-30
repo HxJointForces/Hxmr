@@ -12,8 +12,6 @@ using haxe.macro.Tools;
 
 class NodeScope {
 
-	public var namespaces:Map < String, Array<String> > ;
-
 	public var typeParams:Array<QName>;
 
 	public var type:Type;
@@ -28,8 +26,5 @@ class NodeScope {
 	}
 
 	public function copyFrom(s:NodeScope):Void {
-		for (nsName in s.namespaces.keys()) {
-			namespaces[nsName] = s.namespaces[nsName];
-		}
 	}
 }
