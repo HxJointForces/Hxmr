@@ -1,5 +1,7 @@
 package hxrm;
 
+import hxrm.analyzer.NodeAnalyzer;
+import hxrm.analyzer.NodeScope;
 import hxrm.generator.macro.TypeDefenitionGenerator;
 import haxe.io.Path;
 import haxe.macro.Context;
@@ -20,6 +22,7 @@ using hxrm.parser.Tools.FilePosUtils;
 class HxrmTypeDefinitionFactory {
 
 	var parser:MXMLParser;
+	var analyzer:NodeAnalyzer;
 	var tdWriter:TypeDefenitionGenerator;
 	
 	#if debug
@@ -28,6 +31,7 @@ class HxrmTypeDefinitionFactory {
 	
 	public function new() {
 		parser = new MXMLParser();
+		analyzer = new NodeAnalyzer();
 		tdWriter = new TypeDefenitionGenerator();
 		
 		#if debug
@@ -60,12 +64,14 @@ class HxrmTypeDefinitionFactory {
 			//Lib.rethrow(e); // Interp.Runtime(_)
 			trace(e);
 		}
+		
+		var scope : NodeScope = analyzer.analyze(node);
 
 		var typeDefinition : TypeDefinition = null;
-		if (node != null) {
+		if (scope != null) {
 
 			trace("\n" + node);
-			typeDefinition = tdWriter.write(node, type, path);
+			typeDefinition = tdWriter.write(scope, type, path);
 			
 			#if debug  
 			// TODO: сделать принт в файлы по требованию из девайнов

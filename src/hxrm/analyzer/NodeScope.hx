@@ -14,6 +14,8 @@ class NodeScope {
 
 	public var namespaces:Map < String, Array<String> > ;
 
+	public var typeParams:Array<QName>;
+
 	public var type:Type;
 	public var classType:ClassType;
 
@@ -24,6 +26,7 @@ class NodeScope {
 
 	public function new(n:MXMLNode, ?parent:NodeScope) {
 
+		typeParams = n.typeParams;
 		namespaces = new Map();
 		parentScope = parent;
 		if (parentScope != null) copyFrom(parentScope);

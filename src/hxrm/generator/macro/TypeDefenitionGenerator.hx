@@ -20,21 +20,20 @@ class TypeDefenitionGenerator
 	{
 	}
 	
-	public function write(n:MXMLNode, type:String, file:String):TypeDefinition {
+	public function write(scope:NodeScope, type:String, file:String):TypeDefinition {
 
 		trace('write:$type');
-		var s = new NodeScope(n);
-		trace(s);
+		trace(scope);
 		
 		var pack = type.split(".");
 		var name = pack.pop();
 		
 		var superTypeParams = [];
-		for (tp in n.typeParams) {
-			superTypeParams.push(getTypePath(s.getType(tp)));
+		for (tp in scope.typeParams) {
+			superTypeParams.push(getTypePath(scope.getType(tp)));
 		}
 		trace(superTypeParams);
-		var superClass:TypePath = getTypePath(s.type);
+		var superClass:TypePath = getTypePath(scope.type);
 		trace(superClass);
 		var params = [];
 		var fields = [];
