@@ -13,6 +13,12 @@ class NodeAnalyzer {
 	{
 		var result : NodeScope = new NodeScope();
 		
+		// namespaces тоже надо в скопе держать, т.к. у вложенных нодов их нужно 
+		// объединять с текущими неймспейсами
+		// <A xmlns:a="a">  // namespaces = [a=>a];
+		//    <B xmlns:b="b"/>  // namespaces = [a=>a, b=>b]
+		// </A>
+		// т.е. я предполагал делать новый скоп для каждого дочернего нода
 		var namespaces : Map < String, Array<String> > = new Map();
 
 		result.typeParams = node.typeParams;
@@ -83,7 +89,8 @@ class NodeAnalyzer {
 		// <flash.display.Sprite /> support
 		var localQName : QName = QNameUtils.fromHaxeTypeId(q.localPart);
 
-		resolvedNamespaceParts.concat(QNameUtils.splitNamespace(localQName.namespace));
+		// concat return new array
+		resolvedNamespaceParts = resolvedNamespaceParts.concat(QNameUtils.splitNamespace(localQName.namespace));
 
 		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.localPart);
 	}

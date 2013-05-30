@@ -65,7 +65,15 @@ class HxrmTypeDefinitionFactory {
 			trace(e);
 		}
 		
-		var scope : NodeScope = analyzer.analyze(node);
+		var scope : NodeScope = null;
+		try {
+			scope = analyzer.analyze(node);
+		} /*catch (e:ParserError) {
+			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition(path)));
+		} */catch (e:Dynamic) {
+			//Lib.rethrow(e); // Interp.Runtime(_)
+			trace(e);
+		}
 
 		var typeDefinition : TypeDefinition = null;
 		if (scope != null) {
