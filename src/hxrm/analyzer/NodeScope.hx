@@ -83,7 +83,7 @@ class NodeScope {
 		
 		resolvedNamespaceParts.concat(QNameUtils.splitNamespace(localQName.namespace));
 		
-		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), q.localPart);
+		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.localPart);
 	}
 
 	public function copyFrom(s:NodeScope):Void {
