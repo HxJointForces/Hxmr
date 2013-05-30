@@ -1,15 +1,15 @@
 package hxrm.parser;
 class QName {
+	
 	public var namespace : String;
 	public var localPart : String;
 	
 	public static function fromString(s: String) : QName {
 		var parts = s.split(":");
-		if (parts.length == 1) {
-		return new QName("*", parts[0]);
-		}
-		else {
-			return new QName(parts[0], parts[1]);
+		return if (parts.length == 1) {
+			new QName("*", parts[0]);
+		} else {
+			new QName(parts[0], parts[1]);
 		}
 	}
 	
@@ -18,8 +18,7 @@ class QName {
 		this.localPart = localPart;
 	}
 
-	public function toString() : String
-	{
-		return namespace + ":" + localPart;
+	public function toString() : String {
+		return '$namespace:$localPart';
 	}
 }
