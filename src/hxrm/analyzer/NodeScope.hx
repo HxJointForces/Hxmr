@@ -11,18 +11,21 @@ using haxe.macro.Tools;
 
 class NodeScope {
 
-	public var typeParams:Array<QName> = [];
+	public var typeParams:Array<QName>;
 
 	public var type:Type;
 	public var classType:ClassType;
 
-	public var fields:Array<ClassField> = [];
+	public var fields:Array<ClassField>;
 
 	public var parentScope:NodeScope;
 	
-	public var initializers : HashMap<QName, String> = [];
+	public var initializers : HashMap<QName, String>;
 
 	public function new() {
+		typeParams = [];
+		fields = [];
+		initializers = new HashMap();
 	}
 
 	public function copyFrom(s:NodeScope):Void {
