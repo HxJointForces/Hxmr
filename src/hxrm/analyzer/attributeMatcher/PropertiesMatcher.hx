@@ -1,6 +1,7 @@
 package hxrm.analyzer.attributeMatcher;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
+
 class PropertiesMatcher extends AttributeMatcherBase {
 	public function new() {
 		super();
@@ -17,6 +18,4 @@ class PropertiesMatcher extends AttributeMatcherBase {
 			super.matchAttribute(attributeQName, value, context, scope);
 		}
 	}
-
-
 }

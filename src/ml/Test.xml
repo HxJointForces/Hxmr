@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<A generic:type="haxe.Timer" aString="1" xmlns="*" xmlns:deep="deep.*">
+<ans:A generic:type="haxe.Timer" ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*">
 	<deep:B generic:type="haxe.Utf8" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
-</A>
+</ans:A>
