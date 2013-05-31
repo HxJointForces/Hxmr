@@ -4,7 +4,7 @@ package deep;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class B
+class B<T>
 {
 
 	public function new() 
