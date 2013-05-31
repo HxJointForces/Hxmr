@@ -44,8 +44,15 @@ class MXMLParser
 	
 	function parseChildren(xmlNode:Xml, n:MXMLNode) {
 		for (c in xmlNode.elements()) {
-			var child = parseNode(c);
+			var child : MXMLNode = parseNode(c);
 			child.parentNode = n;
+			
+			for(key in n.namespaces.keys()) {
+				if(!child.namespaces.exists(key)) {
+					child.namespaces.set(key, n.namespaces.get(key));
+				}
+			}
+			
 			n.children.push(child);
 		}
 	}

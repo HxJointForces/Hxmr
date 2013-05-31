@@ -1,4 +1,5 @@
 package hxrm.analyzer;
+import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 import haxe.macro.Type.ClassType;
@@ -34,10 +35,10 @@ class AnalyzerContext {
 		return type;
 	}
 
-	public function resolveClassPath(node:MXMLQName, namespaces : Map<String, String>):QName {
+	public function resolveQName(mxmlQName : MXMLQName, node : MXMLNode):QName {
 
-		if (!namespaces.exists(node.namespace)) throw "unknow namespace";
-		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(namespaces[node.namespace]);
+		if (!node.namespaces.exists(mxmlQName.namespace)) throw "unknow namespace";
+		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(node.namespaces[mxmlQName.namespace]);
 
 		if(resolvedPackageNameParts != null && resolvedPackageNameParts.length > 0) {
 			if(resolvedPackageNameParts[resolvedPackageNameParts.length - 1] == MXMLQName.ASTERISK) {
@@ -45,11 +46,11 @@ class AnalyzerContext {
 			}
 		}
 
-// <flash.display.Sprite /> support
-		var localQName : QName = QNameUtils.fromHaxeTypeId(node.localPart);
+		// <flash.display.Sprite /> support
+		var localQName : QName = QNameUtils.fromHaxeTypeId(mxmlQName.localPart);
 
-// concat return new array
-//TODO Namespace.isNotEmpty method
+		// concat return new array
+		//TODO Namespace.isNotEmpty method
 		if(QNameUtils.packageNameIsEmpty(localQName.packageNameParts)) {
 			resolvedPackageNameParts = resolvedPackageNameParts.concat(localQName.packageNameParts);
 		}

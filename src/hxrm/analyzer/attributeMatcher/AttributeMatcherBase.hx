@@ -6,6 +6,6 @@ class AttributeMatcherBase implements IAttributeMatcher {
 	public function new() {
 	}
 
-	public function matchAttribute(attributeQName : MXMLQName, value : String, context : AnalyzerContext, scope : NodeScope) : Void {
+	public function match(scope : NodeScope, attributeQName : MXMLQName, value : String) : Void {
 	}
 }

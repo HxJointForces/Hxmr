@@ -7,15 +7,20 @@ class PropertiesMatcher extends AttributeMatcherBase {
 		super();
 	}
 
-	override public function matchAttribute(attributeQName:MXMLQName, value:String, context : AnalyzerContext, scope:NodeScope):Void {
+	override public function match(scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
 	
-		if(attributeQName.namespace == context.node.name.namespace) {
+		if(attributeQName.namespace == scope.context.node.name.namespace) {
 			trace('${attributeQName.localPart} = $value');
+			
+			if(scope.initializers.exists(attributeQName.localPart)) {
+				trace("duplicate property assign!");
+				throw "duplicate property assign!";
+			}
 			
 			scope.initializers.set(attributeQName.localPart, value);
 		}
 		else {
-			super.matchAttribute(attributeQName, value, context, scope);
+			super.match(scope, attributeQName, value);
 		}
 	}
 }

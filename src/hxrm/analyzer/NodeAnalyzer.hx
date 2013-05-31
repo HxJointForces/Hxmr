@@ -1,4 +1,7 @@
 package hxrm.analyzer;
+
+import hxrm.analyzer.childrenMatcher.ScriptBlockChildrenMatcher;
+import hxrm.analyzer.childrenMatcher.IChildrenMatcher;
 import hxrm.analyzer.attributeMatcher.PropertiesMatcher;
 import hxrm.parser.mxml.MXMLQName;
 import StringTools;
@@ -10,10 +13,12 @@ import haxe.macro.Type;
 
 class NodeAnalyzer {
 
-	private var matchers : Array<IAttributeMatcher>;
+	private var attributeMatchers : Array<IAttributeMatcher>;
+	private	var childrenMatchers : Array<IChildrenMatcher>;
 
 	public function new() {
-		matchers = [new GenericAttributeMatcher(), new PropertiesMatcher()];
+		attributeMatchers = [new GenericAttributeMatcher(), new PropertiesMatcher()];
+		childrenMatchers = [new ScriptBlockChildrenMatcher()];
 	}
 
 	public function analyze(node : MXMLNode, ?parentNode : MXMLNode, ?parent:NodeScope) : NodeScope
@@ -36,19 +41,11 @@ class NodeAnalyzer {
 		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
 		// TODO namespaces from parent node
-		var resolvedQName : QName = result.context.resolveClassPath(node.name, node.namespaces);
+		var resolvedQName : QName = result.context.resolveQName(node.name, node);
 		result.type = result.context.getType(resolvedQName);
 		result.classType = result.context.getClassType(result.type);
+		result.fields = result.classType.fields.get();
 
-		for (attributeQName in node.attributes.keys()) {
-			var value : String = node.attributes.get(attributeQName);
-			for(attributeMatcher in matchers) {
-				attributeMatcher.matchAttribute(attributeQName, value, result.context, result);
-			}
-		}
-
-		// Checks
-		
 		if (result.classType.isInterface) {
 			trace("can't instantiate interface " + resolvedQName);
 			throw "can't instantiate interface " + resolvedQName;
@@ -59,7 +56,18 @@ class NodeAnalyzer {
 			throw "can't instantiate private class " + resolvedQName;
 		}
 
-		result.fields = result.classType.fields.get();
+		for (attributeQName in node.attributes.keys()) {
+			var value : String = node.attributes.get(attributeQName);
+			for(attributeMatcher in attributeMatchers) {
+				attributeMatcher.match(result, attributeQName, value);
+			}
+		}
+
+		for (childNode in node.children) {
+			for(childrenMatcher in childrenMatchers) {
+				childrenMatcher.match(result, childNode);
+			}
+		}
 		
 		return result;
 	}
