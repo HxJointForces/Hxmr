@@ -20,8 +20,6 @@ class NodeScope {
 
 	public var fields:Array<ClassField>;
 
-	public var parentScope:NodeScope;
-	
 	public var initializers : Map<String, String>;
 	
 	public var children : Array<NodeScope>;
@@ -29,6 +27,7 @@ class NodeScope {
 	public function new() {
 		typeParams = [];
 		fields = [];
+		children = [];
 		initializers = new Map();
 	}
 }

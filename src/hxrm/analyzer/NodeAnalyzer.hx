@@ -19,7 +19,7 @@ class NodeAnalyzer {
 		extensions = [new GenericExtension(this), new PropertiesExtension(this), new ScriptBlockExtension(this), new DefaultPropertyExtension(this)];
 	}
 
-	public function analyze(node : MXMLNode, ?parent:NodeScope) : NodeScope
+	public function analyze(node : MXMLNode) : NodeScope
 	{
 		var result : NodeScope = new NodeScope();
 
@@ -33,8 +33,6 @@ class NodeAnalyzer {
 		// т.е. я предполагал делать новый скоп для каждого дочернего нода
 		// SergeiEgorov: как раз таки нет:) В процессе анализа неймспейсы уйдут
 		//var namespaces : Map < String, Array<String> > = new Map();
-
-		result.parentScope = parent;
 
 		// TODO namespaces from parent node
 		var resolvedQName : QName = result.context.resolveQName(node.name, node);

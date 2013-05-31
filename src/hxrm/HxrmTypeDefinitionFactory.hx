@@ -51,7 +51,6 @@ class HxrmTypeDefinitionFactory {
 			return null;
 		}
 
-		trace(path);
 		//trace(Xml.parse(File.getContent(path)));
 
 		var node = null;
@@ -63,6 +62,7 @@ class HxrmTypeDefinitionFactory {
 		} catch (e:Dynamic) {
 			//Lib.rethrow(e); // Interp.Runtime(_)
 			trace(e);
+			return null;
 		}
 		
 		trace("\n" + node);
@@ -70,11 +70,13 @@ class HxrmTypeDefinitionFactory {
 		var scope : NodeScope = null;
 		try {
 			scope = analyzer.analyze(node);
+			trace(scope);
 		} /*catch (e:ParserError) {
 			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition(path)));
 		} */catch (e:Dynamic) {
 			//Lib.rethrow(e); // Interp.Runtime(_)
 			trace(e);
+			return null;
 		}
 
 		var typeDefinition : TypeDefinition = null;

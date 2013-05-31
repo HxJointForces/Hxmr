@@ -58,11 +58,16 @@ class Hxrm
 	
 	#if macro
 	static function onTypeNotFound(t:String):TypeDefinition {
-		
+		trace('onTypeNotFound $t');
 		if (t.startsWith("haxe")) return null;
-		var path = t.replace(".", "/") + ".xml";
-		path = Context.resolvePath(path);
-		return typeDefinitionFactory.createTypeDefinition(path, t);
+		try {
+			var path = t.replace(".", "/") + ".xml";
+			path = Context.resolvePath(path);
+			return typeDefinitionFactory.createTypeDefinition(path, t);
+		} catch(e : Dynamic) {
+			trace(Std.string(e));
+			return null;
+		}
 	}
 	#end
 }

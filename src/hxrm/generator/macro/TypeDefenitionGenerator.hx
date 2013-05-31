@@ -22,7 +22,6 @@ class TypeDefenitionGenerator
 	}
 	
 	public function write(analyzer : NodeAnalyzer, scope:NodeScope, type:String, file:String):TypeDefinition {
-
 		trace('write:$type');
 
 		var r = ~/(.*?=>.*?), /g; // g : replace all instances
