@@ -37,6 +37,26 @@ class NodeAnalyzer {
 		// TODO namespaces from parent node
 		var resolvedQName : QName = result.context.resolveQName(node.name, node);
 		result.type = result.context.getType(resolvedQName);
+		
+		for (attributeQName in node.attributes.keys()) {
+			var value : String = node.attributes.get(attributeQName);
+			new GenericExtension(this).matchAttribute(result, attributeQName, value);
+		}
+		trace(result.typeParams);
+			
+		var genericTypes = [];
+		for (genericType in result.typeParams) {
+			genericTypes.push(Context.getType(genericType.toHaxeTypeId()));
+		}
+		trace(genericTypes);
+		
+		switch (result.type) {
+			case TInst(t, _): result.type = TInst(t, genericTypes);
+			case _: throw "assert";
+		}
+		
+		trace(result.type);
+		
 		result.classType = result.context.getClassType(result.type);
 		result.fields = result.classType.fields.get();
 

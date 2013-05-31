@@ -17,7 +17,7 @@ using StringTools;
 using hxrm.parser.Tools.FilePosUtils;
 
 /**
- * java developer был тут ))
+ * 
  */
 class HxrmTypeDefinitionFactory {
 

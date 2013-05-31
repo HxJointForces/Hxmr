@@ -24,6 +24,7 @@ class TypeDefenitionGenerator
 	public function write(analyzer : NodeAnalyzer, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
+		trace(scope);
 		var r = ~/(.*?=>.*?), /g; // g : replace all instances
 		var scopeAsString : String = Std.string(scope);
 		scopeAsString = r.replace(scopeAsString, "$1,\n\t");
@@ -59,9 +60,25 @@ class TypeDefenitionGenerator
 	}
 
 	public function getTypePath(t:Type):TypePath {
+		trace(t);
 		var ct = Context.toComplexType(t);
 		trace(ct);
 		if (ct == null) {
+			switch (t) {
+				case TInst(ct, params):
+					var t = ct.get();
+					var pathParams = [];
+					for (p in params) {
+						trace(p);
+						pathParams.push(TPType(p.toComplexType()));
+					}
+					trace(pathParams);
+					var res = { pack:t.pack, name:t.name, params:pathParams };
+					trace(res);
+					return res;
+						
+				case _:
+			}
 			trace("can't get CT of " + t); // TODO:
 			return null;
 		}
