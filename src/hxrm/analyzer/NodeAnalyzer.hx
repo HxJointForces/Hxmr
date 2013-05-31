@@ -1,4 +1,6 @@
 package hxrm.analyzer;
+import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
+import hxrm.analyzer.attributeMatcher.IAttributeMatcher;
 import hxrm.utils.QNameUtils;
 import hxrm.parser.QName;
 import hxrm.parser.mxml.MXMLNode;
@@ -6,7 +8,11 @@ import haxe.macro.Context;
 import haxe.macro.Type;
 
 class NodeAnalyzer {
+
+	private var matchers : Array<IAttributeMatcher>;
+
 	public function new() {
+		matchers = [new GenericAttributeMatcher()];
 	}
 
 	public function analyze(node : MXMLNode, ?parent:NodeScope) : NodeScope
@@ -19,9 +25,9 @@ class NodeAnalyzer {
 		//    <B xmlns:b="b"/>  // namespaces = [a=>a, b=>b]
 		// </A>
 		// т.е. я предполагал делать новый скоп для каждого дочернего нода
+		// SergeiEgorov: как раз таки нет:) В процессе анализа неймспейсы уйдут
 		var namespaces : Map < String, Array<String> > = new Map();
 
-		result.typeParams = node.typeParams;
 		result.parentScope = parent;
 		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
@@ -29,28 +35,30 @@ class NodeAnalyzer {
 			namespaces[nsName] = QNameUtils.splitNamespace(node.namespaces[nsName]);
 		}
 
+		trace("YO");
 		var resolvedQName : QName = resolveClassPath(node.name, namespaces);
+		trace("YO1" + resolvedQName);
 		result.type = getType(resolvedQName);
 		result.classType = getClassType(result.type);
 
-		// Checks
-		switch (result.type) {
-			case TInst(t, params):
-				if (params.length != node.typeParams.length) {
-					trace("incorect type params count");
-					throw "incorect type params count";
-				}
-			case _:
+		for (attributeQName in node.attributes.keys()) {
+			var value : String = node.attributes.get(attributeQName);
+			for(attributeMatcher in matchers) {
+				attributeMatcher.matchAttribute(attributeQName, value, node, result);
+			}
 		}
 
+
+		// Checks
+		
 		if (result.classType.isInterface) {
 			trace("can't instantiate interface " + resolvedQName);
-			throw "";
+			throw "can't instantiate interface " + resolvedQName;
 		}
 
 		if (result.classType.isPrivate) {
 			trace("can't instantiate private class " + resolvedQName);
-			throw "";
+			throw "can't instantiate private class " + resolvedQName;
 		}
 		
 		trace(result.classType);
@@ -89,8 +97,12 @@ class NodeAnalyzer {
 		// <flash.display.Sprite /> support
 		var localQName : QName = QNameUtils.fromHaxeTypeId(q.localPart);
 
+		var localQNameParts : Array<String> = QNameUtils.splitNamespace(localQName.namespace);
 		// concat return new array
-		resolvedNamespaceParts = resolvedNamespaceParts.concat(QNameUtils.splitNamespace(localQName.namespace));
+		//TODO Namespace.isNotEmpty method
+		if(localQNameParts.length > 0 && localQNameParts[0] != QName.ASTERISK) {
+			resolvedNamespaceParts = resolvedNamespaceParts.concat(localQNameParts);
+		}
 
 		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.localPart);
 	}

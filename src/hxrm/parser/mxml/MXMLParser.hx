@@ -1,9 +1,6 @@
 package hxrm.parser.mxml;
 
 import hxrm.utils.QNameUtils;
-import hxrm.parser.mxml.attributes.GenericAttributeMatcher;
-import hxrm.parser.mxml.attributes.NamespaceAttributeMatcher;
-import hxrm.parser.mxml.attributes.IAttributeMatcher;
 import hxrm.parser.QName;
 import hxrm.parser.Tools;
 
@@ -11,12 +8,7 @@ using StringTools;
 
 class MXMLParser
 {
-	//TODO support for external matchers - KISS
-	public var matchers : Array<IAttributeMatcher>;
-
-	public function new() 
-	{
-		matchers = [new NamespaceAttributeMatcher(), new GenericAttributeMatcher()];
+	public function new() {
 	}
 	
 	public function parse(data:String):Null<MXMLNode> {
@@ -53,8 +45,6 @@ class MXMLParser
 	}
 	
 	function parseChildren(xmlNode:Xml, n:MXMLNode) {
-		//TODO inner property setters 
-		// я же говорил, пока не получим подробный тип нода, ничего не сделать тут более
 		for (c in xmlNode.elements()) {
 			var child = parseNode(c);
 			child.parentNode = n;
@@ -68,13 +58,13 @@ class MXMLParser
 			var attributeQName = QNameUtils.fromQualifiedString(attributeName);
 			var value = xmlNode.get(attributeName);
 			
-			var matched = false;
-			for(attributeMatcher in matchers) {
-			  matched = attributeMatcher.matchAttribute(attributeQName, value, n);
-			}
-			
-			if (!matched) {
-				n.values.set(attributeQName, value);
+			switch [attributeQName.namespace, attributeQName.localPart] {
+				case [ "*", "xmlns" ]:
+					n.namespaces[attributeQName.namespace] = value;
+				case [ "xmlns", _ ]:
+					n.namespaces[attributeQName.localPart] = value;
+				case _:
+					n.attributes.set(attributeQName, value);
 			}
 		}
 	}

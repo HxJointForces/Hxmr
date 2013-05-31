@@ -22,7 +22,7 @@ class MXMLParserTests extends TestCase {
 		assertEquals(0, mxmlNode.children.length);
 		assertEquals(null, mxmlNode.parentNode);
 		assertEquals(0, mxmlNode.typeParams.length);
-		assertFalse(mxmlNode.values.iterator().hasNext());
+		assertFalse(mxmlNode.attributes.iterator().hasNext());
 
 		assertTrue(mxmlNode.namespaces.exists(expectedNamespace));
 		assertEquals(expectedPackage, mxmlNode.namespaces.get(expectedNamespace));
