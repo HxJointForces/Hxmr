@@ -1,5 +1,6 @@
 package hxrm.generator.macro;
 
+import hxrm.analyzer.QNameUtils;
 import hxrm.utils.TypeUtils;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
@@ -27,8 +28,7 @@ class TypeDefenitionGenerator
 
 		TypeUtils.prettyPrintType(scope);
 		
-		var pack = type.split(".");
-		var name = pack.pop();
+		var qName : QName = QNameUtils.fromHaxeTypeId(type);
 		
 		var superClass:TypePath = getTypePath(scope.type);
 		trace(superClass);
@@ -36,8 +36,8 @@ class TypeDefenitionGenerator
 		var fields = [];
 		
 		return {
-			pack: pack,
-			name: name,
+			pack: qName.packageNameParts,
+			name: qName.className,
 			pos: Context.makePosition( { min:0, max:0, file:file } ),
 			meta: [],
 			params: params,
