@@ -59,11 +59,6 @@ class NodeAnalyzer {
 			throw "can't instantiate private class " + resolvedQName;
 		}
 
-		var r = ~/(.*?=>.*?), /g; // g : replace all instances
-		var classTypeAsString : String = Std.string(result.classType);
-		classTypeAsString = r.replace(classTypeAsString, "$1,\n\t");
-		trace("ClassType " + classTypeAsString.split("{").join("{\n\t").split("}").join("\n}\n"));
-
 		result.fields = result.classType.fields.get();
 		
 		return result;
