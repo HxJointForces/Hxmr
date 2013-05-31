@@ -1,25 +1,25 @@
-package hxrm.parser;
+package hxrm.analyzer;
 class QName {
 
 	public static inline var HAXE_ID_GLUE : String = ".";
 	public static inline var QUALIFIED_ID_GLUE : String = ":";
 	public static inline var ASTERISK : String = "*";
 
-	public var namespace : String;
-	public var localPart : String;
+	public var packageName : String;
+	public var className : String;
 	
 	public function new(namespace : String, localPart : String) {
-		this.namespace = namespace == null ? ASTERISK : namespace;
-		this.localPart = localPart;
+		this.packageName = namespace == null ? ASTERISK : namespace;
+		this.className = localPart;
 	}
 
 	public function toString() : String {
-		return '$namespace$QUALIFIED_ID_GLUE$localPart';
+		return '$packageName$QUALIFIED_ID_GLUE$className';
 	}
 
 	public function toHaxeTypeId() : String {
-		return if(namespace == ASTERISK) localPart;
-				else '$namespace.$localPart';
+		return if(packageName == ASTERISK) className;
+				else '$packageName.$className';
 	}
 
 	public function hashCode() : Int {

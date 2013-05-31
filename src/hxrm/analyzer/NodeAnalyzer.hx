@@ -4,7 +4,6 @@ import StringTools;
 import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
 import hxrm.analyzer.attributeMatcher.IAttributeMatcher;
 import hxrm.utils.QNameUtils;
-import hxrm.parser.QName;
 import hxrm.parser.mxml.MXMLNode;
 import haxe.macro.Context;
 import haxe.macro.Type;
@@ -103,13 +102,13 @@ class NodeAnalyzer {
 		// <flash.display.Sprite /> support
 		var localQName : QName = QNameUtils.fromHaxeTypeId(q.localPart);
 
-		var localQNameParts : Array<String> = QNameUtils.splitNamespace(localQName.namespace);
+		var localQNameParts : Array<String> = QNameUtils.splitNamespace(localQName.packageName);
 		// concat return new array
 		//TODO Namespace.isNotEmpty method
 		if(localQNameParts.length > 0 && localQNameParts[0] != QName.ASTERISK) {
 			resolvedNamespaceParts = resolvedNamespaceParts.concat(localQNameParts);
 		}
 
-		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.localPart);
+		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.className);
 	}
 }

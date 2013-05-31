@@ -5,7 +5,6 @@ import haxe.macro.Context;
 import haxe.macro.Type;
 import haxe.macro.Expr;
 import hxrm.parser.mxml.MXMLNode;
-import hxrm.parser.QName;
 
 using StringTools;
 using haxe.macro.Tools;

@@ -2,7 +2,6 @@ package hxrm.analyzer.attributeMatcher;
 
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
-import hxrm.parser.QName;
 class AttributeMatcherBase implements IAttributeMatcher {
 	public function new() {
 	}

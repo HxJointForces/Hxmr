@@ -1,6 +1,6 @@
 package hxrm.utils;
-import hxrm.parser.QName;
-import hxrm.parser.QName;
+import hxrm.analyzer.QName;
+import hxrm.analyzer.QName;
 class QNameUtils {
 
 	public static function fromHaxeTypeId(typeId : String) : QName {
