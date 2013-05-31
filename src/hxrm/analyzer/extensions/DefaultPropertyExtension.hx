@@ -14,6 +14,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
 	
+		//TODO better typename checking
 		if(StringTools.startsWith(child.namespaces.get(child.name.namespace), "http://")) {
 			return;
 		}
