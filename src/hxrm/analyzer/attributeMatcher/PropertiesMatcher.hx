@@ -7,13 +7,13 @@ class PropertiesMatcher extends AttributeMatcherBase {
 	}
 
 	override public function matchAttribute(attributeQName:MXMLQName, value:String, node:MXMLNode, scope:NodeScope):Void {
-		return switch [attributeQName.namespace, attributeQName.localPart] {
-			case [ "*", _ ]:
-				trace('${attributeQName.localPart} = $value');
-				true;
+	
+		if(attributeQName.namespace == node.name.namespace) {
+			trace('${attributeQName.localPart} = $value');
+		}
+		else {
 
-			case _:
-				super.matchAttribute(attributeQName, value, node, scope);
+			super.matchAttribute(attributeQName, value, node, scope);
 		}
 	}
 
