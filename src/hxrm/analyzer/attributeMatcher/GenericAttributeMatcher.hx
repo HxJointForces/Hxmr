@@ -11,7 +11,6 @@ using StringTools;
 class GenericAttributeMatcher extends AttributeMatcherBase {
 
 	public function new() {
-		super();
 	}
 	
 	override public function match(scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
