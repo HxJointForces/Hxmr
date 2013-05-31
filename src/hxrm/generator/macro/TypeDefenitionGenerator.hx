@@ -31,7 +31,7 @@ class TypeDefenitionGenerator
 		
 		var superTypeParams = [];
 		for (tp in scope.typeParams) {
-			superTypeParams.push(getTypePath(analyzer.getType(tp)));
+			superTypeParams.push(getTypePath(scope.context.getType(tp)));
 		}
 		trace(superTypeParams);
 		var superClass:TypePath = getTypePath(scope.type);

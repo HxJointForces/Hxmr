@@ -14,7 +14,7 @@ class GenericAttributeMatcher extends AttributeMatcherBase {
 		super();
 	}
 	
-	override public function matchAttribute(attributeQName:MXMLQName, value:String, node:MXMLNode, scope : NodeScope):Void {
+	override public function matchAttribute(attributeQName:MXMLQName, value:String, context : AnalyzerContext, scope : NodeScope):Void {
 		switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "generic", "type" ]:
 				scope.typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
@@ -28,7 +28,7 @@ class GenericAttributeMatcher extends AttributeMatcherBase {
 				}
 
 			case _:
-				super.matchAttribute(attributeQName, value, node, scope);
+				super.matchAttribute(attributeQName, value, context, scope);
 		}
 	}
 	

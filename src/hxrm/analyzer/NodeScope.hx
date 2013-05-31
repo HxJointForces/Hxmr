@@ -11,6 +11,8 @@ using haxe.macro.Tools;
 
 class NodeScope {
 
+	public var context : AnalyzerContext;
+
 	public var typeParams:Array<QName>;
 
 	public var type:Type;

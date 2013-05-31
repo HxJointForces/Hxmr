@@ -6,14 +6,13 @@ class PropertiesMatcher extends AttributeMatcherBase {
 		super();
 	}
 
-	override public function matchAttribute(attributeQName:MXMLQName, value:String, node:MXMLNode, scope:NodeScope):Void {
+	override public function matchAttribute(attributeQName:MXMLQName, value:String, context : AnalyzerContext, scope:NodeScope):Void {
 	
-		if(attributeQName.namespace == node.name.namespace) {
+		if(attributeQName.namespace == context.node.name.namespace) {
 			trace('${attributeQName.localPart} = $value');
 		}
 		else {
-
-			super.matchAttribute(attributeQName, value, node, scope);
+			super.matchAttribute(attributeQName, value, context, scope);
 		}
 	}
 

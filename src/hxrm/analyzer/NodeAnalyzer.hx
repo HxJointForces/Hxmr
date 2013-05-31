@@ -19,6 +19,9 @@ class NodeAnalyzer {
 	public function analyze(node : MXMLNode, ?parentNode : MXMLNode, ?parent:NodeScope) : NodeScope
 	{
 		var result : NodeScope = new NodeScope();
+
+
+		result.context = new AnalyzerContext(node);
 		
 		// namespaces тоже надо в скопе держать, т.к. у вложенных нодов их нужно 
 		// объединять с текущими неймспейсами
@@ -33,14 +36,14 @@ class NodeAnalyzer {
 		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
 		// TODO namespaces from parent node
-		var resolvedQName : QName = resolveClassPath(node.name, node.namespaces);
-		result.type = getType(resolvedQName);
-		result.classType = getClassType(result.type);
+		var resolvedQName : QName = result.context.resolveClassPath(node.name, node.namespaces);
+		result.type = result.context.getType(resolvedQName);
+		result.classType = result.context.getClassType(result.type);
 
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
 			for(attributeMatcher in matchers) {
-				attributeMatcher.matchAttribute(attributeQName, value, node, result);
+				attributeMatcher.matchAttribute(attributeQName, value, result.context, result);
 			}
 		}
 
@@ -64,49 +67,5 @@ class NodeAnalyzer {
 		result.fields = result.classType.fields.get();
 		
 		return result;
-	}
-	
-	public inline function getClassType(type : Type) : ClassType {
-		return switch (type) {
-			case TInst(t, params):
-				t.get();
-			case _:
-				trace("unsupported type: " + type);
-				throw "unsupported type: " + type;
-		}
-	}
-
-	public function getType(typeQName:QName):Type {
-		var type = null;
-		try {
-			type = Context.getType(typeQName.toHaxeTypeId());
-		} catch (e:Dynamic) {
-			trace(e);
-			throw "can't find type: " + typeQName;
-		}
-		return type;
-	}
-
-	public function resolveClassPath(node:MXMLQName, namespaces : Map<String, String>):QName {
-
-		if (!namespaces.exists(node.namespace)) throw "unknow namespace";
-		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(namespaces[node.namespace]);
-		
-		if(resolvedPackageNameParts != null && resolvedPackageNameParts.length > 0) {
-			if(resolvedPackageNameParts[resolvedPackageNameParts.length - 1] == MXMLQName.ASTERISK) {
-				resolvedPackageNameParts.pop();
-			}
-		}
-		
-		// <flash.display.Sprite /> support
-		var localQName : QName = QNameUtils.fromHaxeTypeId(node.localPart);
-
-		// concat return new array
-		//TODO Namespace.isNotEmpty method
-		if(QNameUtils.packageNameIsEmpty(localQName.packageNameParts)) {
-			resolvedPackageNameParts = resolvedPackageNameParts.concat(localQName.packageNameParts);
-		}
-
-		return new QName(resolvedPackageNameParts, localQName.className);
 	}
 }
