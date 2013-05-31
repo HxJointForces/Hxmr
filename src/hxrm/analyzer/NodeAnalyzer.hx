@@ -1,4 +1,5 @@
 package hxrm.analyzer;
+import StringTools;
 import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
 import hxrm.analyzer.attributeMatcher.IAttributeMatcher;
 import hxrm.utils.QNameUtils;
@@ -35,19 +36,20 @@ class NodeAnalyzer {
 			namespaces[nsName] = QNameUtils.splitNamespace(node.namespaces[nsName]);
 		}
 
-		trace("YO");
 		var resolvedQName : QName = resolveClassPath(node.name, namespaces);
-		trace("YO1" + resolvedQName);
 		result.type = getType(resolvedQName);
 		result.classType = getClassType(result.type);
 
 		for (attributeQName in node.attributes.keys()) {
+			var matched = false;
 			var value : String = node.attributes.get(attributeQName);
 			for(attributeMatcher in matchers) {
-				attributeMatcher.matchAttribute(attributeQName, value, node, result);
+				matched = attributeMatcher.matchAttribute(attributeQName, value, node, result);
+			}
+			if(!matched) {
+				//TODO this is a field setter
 			}
 		}
-
 
 		// Checks
 		
@@ -60,8 +62,11 @@ class NodeAnalyzer {
 			trace("can't instantiate private class " + resolvedQName);
 			throw "can't instantiate private class " + resolvedQName;
 		}
-		
-		trace(result.classType);
+
+		var r = ~/(.*?=>.*?),/g; // g : replace all instances
+		var classTypeAsString : String = Std.string(result.classType);
+		classTypeAsString = r.replace(classTypeAsString, "$1,\n\t");
+		trace("ClassType " + classTypeAsString.split("{").join("{\n\t").split("}").join("\n}\n"));
 
 		result.fields = result.classType.fields.get();
 		

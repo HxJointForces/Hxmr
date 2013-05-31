@@ -15,23 +15,22 @@ class GenericAttributeMatcher extends AttributeMatcherBase implements IAttribute
 		super();
 	}
 	
-	override public function matchAttribute(attributeQName:QName, value:String, n:MXMLNode, scope : NodeScope):Bool {
+	override public function matchAttribute(attributeQName:QName, value:String, node:MXMLNode, scope : NodeScope):Bool {
 		return switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "generic", "type" ]:
-				var typeParams : Array<QName> = value.split(",").map(QNameUtils.fromHaxeTypeId);
+				scope.typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
 				switch (scope.type) {
 					case TInst(t, params):
-						if (params.length != typeParams.length) {
+						if (params.length != scope.typeParams.length) {
 							trace("incorect type params count");
 							throw "incorect type params count";
 						}
-						scope.typeParams = typeParams;
 					case _:
 				}
 				true;
 
 			case _:
-				super.matchAttribute(attributeQName, value, n, scope);
+				super.matchAttribute(attributeQName, value, node, scope);
 		}
 	}
 	
