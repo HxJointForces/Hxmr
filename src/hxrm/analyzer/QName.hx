@@ -29,7 +29,7 @@ class QName {
 		
 		var hash = 5381;
 		for( i in 0...haxeTypeId.length) {
-			hash = ((hash<<5)+hash)+haxeTypeId.charCodeAt(i);
+			hash = ((hash<<5)+hash)+StringTools.fastCodeAt(haxeTypeId, i);
 		}
 		return hash;
 	}

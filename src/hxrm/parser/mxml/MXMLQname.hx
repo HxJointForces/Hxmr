@@ -21,7 +21,7 @@ class MXMLQName {
 
 		var hash = 5381;
 		for( i in 0...qNameAsString.length) {
-			hash = ((hash<<5)+hash)+qNameAsString.charCodeAt(i);
+			hash = ((hash<<5)+hash)+StringTools.fastCodeAt(haxeTypeId, i);
 		}
 		return hash;
 	}
