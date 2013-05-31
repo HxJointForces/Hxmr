@@ -14,6 +14,7 @@ class NodeAnalyzerExtensionBase implements INodeAnalyzerExtension {
 		return false;
 	}
 
-	public function matchChild(scope : NodeScope, child : MXMLNode) : Void {
+	public function matchChild(scope : NodeScope, child : MXMLNode) : Bool {
+		return false;
 	}
 }

@@ -54,9 +54,15 @@ class NodeAnalyzer {
 			}
 		}
 
-		for (childNode in node.children) {
-			for(childrenMatcher in extensions) {
-				childrenMatcher.matchChild(result, childNode);
+		while(true) {
+			var oneMoreTime : Bool = false;
+			for (childNode in node.children) {
+				for(childrenMatcher in extensions) {
+					oneMoreTime = childrenMatcher.matchChild(result, childNode) || oneMoreTime;
+				}
+			}
+			if(!oneMoreTime) {
+				break;
 			}
 		}
 		

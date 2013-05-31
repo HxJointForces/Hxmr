@@ -4,7 +4,7 @@ import hxrm.analyzer.NodeScope;
 import hxrm.parser.mxml.MXMLNode;
 class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
-	override public function matchChild(scope:NodeScope, child:MXMLNode):Void {
+	override public function matchChild(scope:NodeScope, child:MXMLNode):Bool {
 	
 		if(StringTools.startsWith(child.namespaces.get(child.name.namespace), "http://")) {
 			return super.matchChild(scope, child);
@@ -17,6 +17,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		scope.children.push(childScope);
+		return false;
 	}
 
 
