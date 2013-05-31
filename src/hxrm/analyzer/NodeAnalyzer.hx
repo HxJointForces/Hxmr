@@ -91,10 +91,10 @@ class NodeAnalyzer {
 		return type;
 	}
 
-	public function resolveClassPath(q:MXMLQName, namespaces : Map<String, String>):QName {
+	public function resolveClassPath(node:MXMLQName, namespaces : Map<String, String>):QName {
 
-		if (!namespaces.exists(q.namespace)) throw "unknow namespace";
-		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(namespaces[q.namespace]);
+		if (!namespaces.exists(node.namespace)) throw "unknow namespace";
+		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(namespaces[node.namespace]);
 		
 		if(resolvedPackageNameParts != null && resolvedPackageNameParts.length > 0) {
 			if(resolvedPackageNameParts[resolvedPackageNameParts.length - 1] == MXMLQName.ASTERISK) {
@@ -103,7 +103,7 @@ class NodeAnalyzer {
 		}
 		
 		// <flash.display.Sprite /> support
-		var localQName : QName = QNameUtils.fromHaxeTypeId(q.localPart);
+		var localQName : QName = QNameUtils.fromHaxeTypeId(node.localPart);
 
 		// concat return new array
 		//TODO Namespace.isNotEmpty method
