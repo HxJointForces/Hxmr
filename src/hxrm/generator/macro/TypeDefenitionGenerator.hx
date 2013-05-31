@@ -1,5 +1,6 @@
 package hxrm.generator.macro;
 
+import hxrm.utils.TypeUtils;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Context;
@@ -24,10 +25,7 @@ class TypeDefenitionGenerator
 	public function write(analyzer : NodeAnalyzer, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
-		var r = ~/(.*?=>.*?), /g; // g : replace all instances
-		var scopeAsString : String = Std.string(scope);
-		scopeAsString = r.replace(scopeAsString, "$1,\n\t");
-		trace("ClassType " + scopeAsString.split("{").join("{\n\t").split("}").join("\n}\n"));
+		TypeUtils.prettyPrintType(scope);
 		
 		var pack = type.split(".");
 		var name = pack.pop();
