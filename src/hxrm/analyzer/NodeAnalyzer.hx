@@ -28,6 +28,18 @@ class NodeAnalyzer {
 		var resolvedQName : QName = result.context.resolveQName(node.name, node);
 
 		result.type = result.context.getType(resolvedQName);
+		result.classType = result.context.getClassType(result.type);
+		result.fields = result.classType.fields.get();
+
+		if (result.classType.isInterface) {
+			trace("can't instantiate interface " + resolvedQName);
+			throw "can't instantiate interface " + resolvedQName;
+		}
+
+		if (result.classType.isPrivate) {
+			trace("can't instantiate private class " + resolvedQName);
+			throw "can't instantiate private class " + resolvedQName;
+		}
 
 		while(true) {
 			var oneMoreTime : Bool = false;
@@ -42,24 +54,10 @@ class NodeAnalyzer {
 			}
 		}
 
-		result.classType = result.context.getClassType(result.type);
-
-		result.fields = result.classType.fields.get();
-
 		for (childNode in node.children) {
 			for(childrenMatcher in extensions) {
 				childrenMatcher.matchChild(result, childNode);
 			}
-		}
-
-		if (result.classType.isInterface) {
-			trace("can't instantiate interface " + resolvedQName);
-			throw "can't instantiate interface " + resolvedQName;
-		}
-
-		if (result.classType.isPrivate) {
-			trace("can't instantiate private class " + resolvedQName);
-			throw "can't instantiate private class " + resolvedQName;
 		}
 		
 		return result;
