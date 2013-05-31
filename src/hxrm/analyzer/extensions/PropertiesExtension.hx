@@ -4,7 +4,15 @@ import hxrm.parser.mxml.MXMLQName;
 
 class PropertiesExtension extends NodeAnalyzerExtensionBase {
 
-	override public function matchAttribute(scope:NodeScope, attributeQName:MXMLQName, value:String):Bool {
+	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+		for (attributeQName in node.attributes.keys()) {
+			var value : String = node.attributes.get(attributeQName);
+			matchAttribute(scope, attributeQName, value);
+		}
+		return false;
+	}
+
+	function matchAttribute(scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
 	
 		if(attributeQName.namespace == scope.context.node.name.namespace || attributeQName.namespace == MXMLQName.ASTERISK) {
 			trace('${attributeQName.localPart} = $value');
@@ -15,10 +23,6 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			}
 			
 			scope.initializers.set(attributeQName.localPart, value);
-			return false;
-		}
-		else {
-			return super.matchAttribute(scope, attributeQName, value);
 		}
 	}
 }

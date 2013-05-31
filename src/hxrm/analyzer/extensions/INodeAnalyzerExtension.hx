@@ -5,9 +5,13 @@ import hxrm.parser.mxml.MXMLNode;
 import hxrm.analyzer.NodeScope;
 interface INodeAnalyzerExtension {
 
+/*
 	// return true if it needs one more iteration
 	function matchAttribute(scope : NodeScope, attributeQName : MXMLQName, value : String) : Bool;
 
 	// return true if it needs one more iteration
 	function matchChild(scope : NodeScope, child : MXMLNode) : Bool;
+*/
+
+	function analyze(scope : NodeScope, node : MXMLNode) : Bool;
 }
