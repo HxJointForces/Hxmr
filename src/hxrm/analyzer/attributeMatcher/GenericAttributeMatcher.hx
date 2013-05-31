@@ -1,6 +1,5 @@
 package hxrm.analyzer.attributeMatcher;
 
-import hxrm.utils.QNameUtils;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 

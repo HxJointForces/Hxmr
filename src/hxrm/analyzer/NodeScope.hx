@@ -1,6 +1,5 @@
 package hxrm.analyzer;
 
-import hxrm.utils.QNameUtils;
 import haxe.macro.Context;
 import haxe.macro.Type;
 import haxe.macro.Expr;

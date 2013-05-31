@@ -3,7 +3,6 @@ import hxrm.parser.mxml.MXMLQName;
 import StringTools;
 import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
 import hxrm.analyzer.attributeMatcher.IAttributeMatcher;
-import hxrm.utils.QNameUtils;
 import hxrm.parser.mxml.MXMLNode;
 import haxe.macro.Context;
 import haxe.macro.Type;

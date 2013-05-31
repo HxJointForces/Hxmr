@@ -1,4 +1,4 @@
-package hxrm.utils;
+package hxrm.analyzer;
 import hxrm.analyzer.QName;
 import hxrm.analyzer.QName;
 class QNameUtils {
