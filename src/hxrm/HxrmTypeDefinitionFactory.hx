@@ -72,7 +72,6 @@ class HxrmTypeDefinitionFactory {
 		var scope : NodeScope = null;
 		try {
 			scope = analyzer.analyze(node);
-			trace(scope);
 		} /*catch (e:ParserError) {
 			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition(path)));
 		} */catch (e:Dynamic) {
