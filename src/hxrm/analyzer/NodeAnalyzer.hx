@@ -16,7 +16,7 @@ class NodeAnalyzer {
 		matchers = [new GenericAttributeMatcher()];
 	}
 
-	public function analyze(node : MXMLNode, ?parent:NodeScope) : NodeScope
+	public function analyze(node : MXMLNode, ?parentNode : MXMLNode, ?parent:NodeScope) : NodeScope
 	{
 		var result : NodeScope = new NodeScope();
 		
@@ -27,16 +27,13 @@ class NodeAnalyzer {
 		// </A>
 		// т.е. я предполагал делать новый скоп для каждого дочернего нода
 		// SergeiEgorov: как раз таки нет:) В процессе анализа неймспейсы уйдут
-		var namespaces : Map < String, Array<String> > = new Map();
+		//var namespaces : Map < String, Array<String> > = new Map();
 
 		result.parentScope = parent;
 		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
-		for (nsName in node.namespaces.keys()) {
-			namespaces[nsName] = QNameUtils.splitPackage(node.namespaces[nsName]);
-		}
-
-		var resolvedQName : QName = resolveClassPath(node.name, namespaces);
+		// TODO namespaces from parent node
+		var resolvedQName : QName = resolveClassPath(node.name, node.namespaces);
 		result.type = getType(resolvedQName);
 		result.classType = getClassType(result.type);
 
@@ -94,10 +91,10 @@ class NodeAnalyzer {
 		return type;
 	}
 
-	public function resolveClassPath(q:MXMLQName, namespaces : Map<String, Array<String>>):QName {
+	public function resolveClassPath(q:MXMLQName, namespaces : Map<String, String>):QName {
 
 		if (!namespaces.exists(q.namespace)) throw "unknow namespace";
-		var resolvedPackageNameParts : Array<String> = namespaces[q.namespace];
+		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(namespaces[q.namespace]);
 		
 		if(resolvedPackageNameParts != null && resolvedPackageNameParts.length > 0) {
 			if(resolvedPackageNameParts[resolvedPackageNameParts.length - 1] == MXMLQName.ASTERISK) {
