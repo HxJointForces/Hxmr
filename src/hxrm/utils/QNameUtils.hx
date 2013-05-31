@@ -3,15 +3,6 @@ import hxrm.parser.QName;
 import hxrm.parser.QName;
 class QNameUtils {
 
-	public static function fromQualifiedString(s: String) : QName {
-		var parts = s.split(QName.QUALIFIED_ID_GLUE);
-		return if (parts.length == 1) {
-			new QName(QName.ASTERISK, parts[0]);
-		} else {
-			new QName(parts[0], parts[1]);
-		}
-	}
-
 	public static function fromHaxeTypeId(typeId : String) : QName {
 		var parts : Array<String> = splitNamespace(typeId);
 		var localName : String = parts.pop();

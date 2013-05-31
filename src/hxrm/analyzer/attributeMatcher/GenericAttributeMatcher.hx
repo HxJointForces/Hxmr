@@ -2,6 +2,7 @@ package hxrm.analyzer.attributeMatcher;
 
 import hxrm.utils.QNameUtils;
 import hxrm.parser.mxml.MXMLNode;
+import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.QName;
 
 using StringTools;
@@ -9,13 +10,13 @@ using StringTools;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class GenericAttributeMatcher extends AttributeMatcherBase implements IAttributeMatcher {
+class GenericAttributeMatcher extends AttributeMatcherBase {
 
 	public function new() {
 		super();
 	}
 	
-	override public function matchAttribute(attributeQName:QName, value:String, node:MXMLNode, scope : NodeScope):Bool {
+	override public function matchAttribute(attributeQName:MXMLQName, value:String, node:MXMLNode, scope : NodeScope):Bool {
 		return switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "generic", "type" ]:
 				scope.typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);

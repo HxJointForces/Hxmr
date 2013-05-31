@@ -3,10 +3,10 @@ package hxrm.parser.mxml;
 class MXMLNode
 {
 	// нужно везде вписать FilePos, как только мы сможем получать эту информацию
-	public var name:QName;
+	public var name:MXMLQName;
 	public var namespaces:Map<String, String>;
 	
-	public var attributes:Map<QName, String>;
+	public var attributes:Map<MXMLQName, String>;
 	
 	public var children:Array<MXMLNode>;
 	

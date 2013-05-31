@@ -1,7 +1,5 @@
 package hxrm.parser.mxml;
 
-import hxrm.utils.QNameUtils;
-import hxrm.parser.QName;
 import hxrm.parser.Tools;
 
 using StringTools;
@@ -36,7 +34,7 @@ class MXMLParser
 	function parseNode(xmlNode : Xml):Null<MXMLNode>  {
 	
 		var n = new MXMLNode();
-		n.name = QNameUtils.fromQualifiedString(xmlNode.nodeName);
+		n.name = MXMLQNameUtils.fromQualifiedString(xmlNode.nodeName);
 
 		parseAttributes(xmlNode, n);
 		parseChildren(xmlNode, n);
@@ -55,7 +53,7 @@ class MXMLParser
 	function parseAttributes(xmlNode:Xml, n:MXMLNode) {
 		for (attributeName in xmlNode.attributes()) {
 			
-			var attributeQName = QNameUtils.fromQualifiedString(attributeName);
+			var attributeQName = MXMLQNameUtils.fromQualifiedString(attributeName);
 			var value = xmlNode.get(attributeName);
 			
 			switch [attributeQName.namespace, attributeQName.localPart] {

@@ -1,4 +1,5 @@
 package hxrm.analyzer;
+import hxrm.parser.mxml.MXMLQName;
 import StringTools;
 import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
 import hxrm.analyzer.attributeMatcher.IAttributeMatcher;
@@ -94,7 +95,7 @@ class NodeAnalyzer {
 		return type;
 	}
 
-	public function resolveClassPath(q:QName, namespaces : Map<String, Array<String>>):QName {
+	public function resolveClassPath(q:MXMLQName, namespaces : Map<String, Array<String>>):QName {
 
 		if (!namespaces.exists(q.namespace)) throw "unknow namespace";
 		var resolvedNamespaceParts : Array<String> = namespaces[q.namespace];
