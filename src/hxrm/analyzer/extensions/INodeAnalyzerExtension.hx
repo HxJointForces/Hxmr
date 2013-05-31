@@ -4,7 +4,7 @@ import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.analyzer.NodeScope;
 interface INodeAnalyzerExtension {
-	function matchAttribute(scope : NodeScope, attributeQName : MXMLQName, value : String) : Void;
+	function matchAttribute(scope : NodeScope, attributeQName : MXMLQName, value : String) : Bool;
 
 	function matchChild(scope : NodeScope, child : MXMLNode) : Void;
 }

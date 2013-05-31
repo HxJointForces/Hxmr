@@ -13,8 +13,6 @@ class NodeScope {
 
 	public var context : AnalyzerContext;
 
-	public var typeParams:Array<QName>;
-
 	public var type:Type;
 	public var classType:ClassType;
 
@@ -25,7 +23,6 @@ class NodeScope {
 	public var children : Array<NodeScope>;
 
 	public function new() {
-		typeParams = [];
 		fields = [];
 		children = [];
 		initializers = new Map();

@@ -10,7 +10,8 @@ class NodeAnalyzerExtensionBase implements INodeAnalyzerExtension {
 		this.analyzer = analyzer;
 	}
 
-	public function matchAttribute(scope : NodeScope, attributeQName : MXMLQName, value : String) : Void {
+	public function matchAttribute(scope : NodeScope, attributeQName : MXMLQName, value : String) : Bool {
+		return false;
 	}
 
 	public function matchChild(scope : NodeScope, child : MXMLNode) : Void {

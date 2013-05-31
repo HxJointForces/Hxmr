@@ -30,11 +30,6 @@ class TypeDefenitionGenerator
 		var pack = type.split(".");
 		var name = pack.pop();
 		
-		var superTypeParams = [];
-		for (tp in scope.typeParams) {
-			superTypeParams.push(getTypePath(scope.context.getType(tp)));
-		}
-		trace(superTypeParams);
 		var superClass:TypePath = getTypePath(scope.type);
 		trace(superClass);
 		var params = [];

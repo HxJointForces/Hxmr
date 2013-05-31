@@ -6,6 +6,6 @@ class TypeUtils {
 	public static function prettyPrintType(type : Dynamic) : Void {
 		var scopeAsString : String = Std.string(type);
 		scopeAsString = r.replace(scopeAsString, "$1,\n\t");
-		trace("ClassType " + scopeAsString.split("{").join("{\n\t").split("}").join("\n}\n"));
+		trace(scopeAsString.split("{").join("{\n\t").split("}").join("\n}\n"));
 	}
 }

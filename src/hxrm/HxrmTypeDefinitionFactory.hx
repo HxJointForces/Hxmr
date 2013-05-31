@@ -1,5 +1,6 @@
 package hxrm;
 
+import haxe.CallStack;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import hxrm.generator.macro.TypeDefenitionGenerator;
@@ -61,6 +62,7 @@ class HxrmTypeDefinitionFactory {
 			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition(path)));
 		} catch (e:Dynamic) {
 			//Lib.rethrow(e); // Interp.Runtime(_)
+			trace(CallStack.exceptionStack().join("\n"));
 			trace(e);
 			return null;
 		}
@@ -75,7 +77,8 @@ class HxrmTypeDefinitionFactory {
 			Context.error(e.toString(), Context.makePosition(e.filePos.toMacroPosition(path)));
 		} */catch (e:Dynamic) {
 			//Lib.rethrow(e); // Interp.Runtime(_)
-			trace(e);
+			trace(CallStack.exceptionStack().join("\n"));
+			trace("analyzer: " + e);
 			return null;
 		}
 
