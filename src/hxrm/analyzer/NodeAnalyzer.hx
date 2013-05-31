@@ -33,7 +33,7 @@ class NodeAnalyzer {
 		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
 		for (nsName in node.namespaces.keys()) {
-			namespaces[nsName] = QNameUtils.splitNamespace(node.namespaces[nsName]);
+			namespaces[nsName] = QNameUtils.splitPackage(node.namespaces[nsName]);
 		}
 
 		var resolvedQName : QName = resolveClassPath(node.name, namespaces);
@@ -97,18 +97,23 @@ class NodeAnalyzer {
 	public function resolveClassPath(q:MXMLQName, namespaces : Map<String, Array<String>>):QName {
 
 		if (!namespaces.exists(q.namespace)) throw "unknow namespace";
-		var resolvedNamespaceParts : Array<String> = namespaces[q.namespace];
-
+		var resolvedPackageNameParts : Array<String> = namespaces[q.namespace];
+		
+		if(resolvedPackageNameParts != null && resolvedPackageNameParts.length > 0) {
+			if(resolvedPackageNameParts[resolvedPackageNameParts.length - 1] == MXMLQName.ASTERISK) {
+				resolvedPackageNameParts.pop();
+			}
+		}
+		
 		// <flash.display.Sprite /> support
 		var localQName : QName = QNameUtils.fromHaxeTypeId(q.localPart);
 
-		var localQNameParts : Array<String> = QNameUtils.splitNamespace(localQName.packageName);
 		// concat return new array
 		//TODO Namespace.isNotEmpty method
-		if(localQNameParts.length > 0 && localQNameParts[0] != QName.ASTERISK) {
-			resolvedNamespaceParts = resolvedNamespaceParts.concat(localQNameParts);
+		if(QNameUtils.packageNameIsEmpty(localQName.packageNameParts)) {
+			resolvedPackageNameParts = resolvedPackageNameParts.concat(localQName.packageNameParts);
 		}
 
-		return new QName(QNameUtils.joinNamespaceParts(resolvedNamespaceParts), localQName.className);
+		return new QName(resolvedPackageNameParts, localQName.className);
 	}
 }

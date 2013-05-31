@@ -4,18 +4,21 @@ import hxrm.analyzer.QName;
 class QNameUtils {
 
 	public static function fromHaxeTypeId(typeId : String) : QName {
-		var parts : Array<String> = splitNamespace(typeId);
+		var parts : Array<String> = splitPackage(typeId);
 		var localName : String = parts.pop();
-		return new QName(joinNamespaceParts(parts), localName);
+		return new QName(parts, localName);
 	}
 
-	public static function joinNamespaceParts(parts : Array<String>) : String {
-		return if(parts.length == 0) QName.ASTERISK;
-			else parts.join(QName.HAXE_ID_GLUE);
+	public static function joinPackageNameParts(parts : Array<String>) : String {
+		return  parts.join(QName.HAXE_ID_GLUE);
+	}
+	
+	public static function packageNameIsEmpty(parts : Array<String>) : Bool {
+		return parts == null || parts.length == 0;
 	}
 
-	public static function splitNamespace(namespace : String) : Array<String> {
-		return namespace.split(QName.HAXE_ID_GLUE);
+	public static function splitPackage(packageName : String) : Array<String> {
+		return packageName.split(QName.HAXE_ID_GLUE);
 	}
 
 }
