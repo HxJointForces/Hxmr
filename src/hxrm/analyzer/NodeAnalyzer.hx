@@ -1,4 +1,5 @@
 package hxrm.analyzer;
+import hxrm.analyzer.attributeMatcher.PropertiesMatcher;
 import hxrm.parser.mxml.MXMLQName;
 import StringTools;
 import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
@@ -12,7 +13,7 @@ class NodeAnalyzer {
 	private var matchers : Array<IAttributeMatcher>;
 
 	public function new() {
-		matchers = [new GenericAttributeMatcher()];
+		matchers = [new GenericAttributeMatcher(), new PropertiesMatcher()];
 	}
 
 	public function analyze(node : MXMLNode, ?parentNode : MXMLNode, ?parent:NodeScope) : NodeScope
@@ -37,13 +38,9 @@ class NodeAnalyzer {
 		result.classType = getClassType(result.type);
 
 		for (attributeQName in node.attributes.keys()) {
-			var matched = false;
 			var value : String = node.attributes.get(attributeQName);
 			for(attributeMatcher in matchers) {
-				matched = attributeMatcher.matchAttribute(attributeQName, value, node, result);
-			}
-			if(!matched) {
-				//TODO this is a field setter
+				attributeMatcher.matchAttribute(attributeQName, value, node, result);
 			}
 		}
 

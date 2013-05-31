@@ -65,6 +65,8 @@ class HxrmTypeDefinitionFactory {
 			trace(e);
 		}
 		
+		trace("\n" + node);
+		
 		var scope : NodeScope = null;
 		try {
 			scope = analyzer.analyze(node);
@@ -78,7 +80,6 @@ class HxrmTypeDefinitionFactory {
 		var typeDefinition : TypeDefinition = null;
 		if (scope != null) {
 
-			trace("\n" + node);
 			typeDefinition = tdWriter.write(analyzer, scope, type, path);
 			
 			#if debug  
