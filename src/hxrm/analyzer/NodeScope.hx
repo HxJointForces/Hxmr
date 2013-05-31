@@ -22,12 +22,12 @@ class NodeScope {
 
 	public var parentScope:NodeScope;
 	
-	public var initializers : HashMap<QName, String>;
+	public var initializers : Map<String, String>;
 
 	public function new() {
 		typeParams = [];
 		fields = [];
-		initializers = new HashMap();
+		initializers = new Map();
 	}
 
 	public function copyFrom(s:NodeScope):Void {

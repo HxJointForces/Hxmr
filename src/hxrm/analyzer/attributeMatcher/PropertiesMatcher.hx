@@ -10,6 +10,8 @@ class PropertiesMatcher extends AttributeMatcherBase {
 	
 		if(attributeQName.namespace == context.node.name.namespace) {
 			trace('${attributeQName.localPart} = $value');
+			
+			scope.initializers.set(attributeQName.localPart, value);
 		}
 		else {
 			super.matchAttribute(attributeQName, value, context, scope);
