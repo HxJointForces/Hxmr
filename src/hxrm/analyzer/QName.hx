@@ -9,7 +9,7 @@ class QName {
 	public var className : String;
 	
 	public function new(packageNameParts : Array<String>, className : String) {
-		this.packageNameParts = packageNameParts;
+		this.packageNameParts = packageNameParts != null ? packageNameParts : [];
 		this.className = className;
 	}
 
