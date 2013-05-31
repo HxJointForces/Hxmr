@@ -1,4 +1,4 @@
-package hxrm.analyzer.attributeMatcher;
+package hxrm.analyzer.extensions;
 
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
@@ -8,13 +8,9 @@ using StringTools;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class GenericAttributeMatcher extends AttributeMatcherBase {
+class GenericExtension extends NodeAnalyzerExtensionBase {
 
-	public function new(analyzer : NodeAnalyzer) {
-		super(analyzer);
-	}
-	
-	override public function match(scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
+	override public function matchAttribute(scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
 		switch [attributeQName.namespace, attributeQName.localPart] {
 			case [ "generic", "type" ]:
 				scope.typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
@@ -28,7 +24,7 @@ class GenericAttributeMatcher extends AttributeMatcherBase {
 				}
 
 			case _:
-				super.match(scope, attributeQName, value);
+				super.matchAttribute(scope, attributeQName, value);
 		}
 	}
 	

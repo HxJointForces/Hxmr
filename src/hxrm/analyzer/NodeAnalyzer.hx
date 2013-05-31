@@ -1,25 +1,22 @@
 package hxrm.analyzer;
 
-import hxrm.analyzer.childrenMatcher.DefaultPropertyChildrenMatcher;
-import hxrm.analyzer.childrenMatcher.ScriptBlockChildrenMatcher;
-import hxrm.analyzer.childrenMatcher.IChildrenMatcher;
-import hxrm.analyzer.attributeMatcher.PropertiesMatcher;
+import hxrm.analyzer.extensions.DefaultPropertyExtension;
+import hxrm.analyzer.extensions.ScriptBlockExtension;
+import hxrm.analyzer.extensions.PropertiesExtension;
 import hxrm.parser.mxml.MXMLQName;
 import StringTools;
-import hxrm.analyzer.attributeMatcher.GenericAttributeMatcher;
-import hxrm.analyzer.attributeMatcher.IAttributeMatcher;
+import hxrm.analyzer.extensions.GenericExtension;
+import hxrm.analyzer.extensions.INodeAnalyzerExtension;
 import hxrm.parser.mxml.MXMLNode;
 import haxe.macro.Context;
 import haxe.macro.Type;
 
 class NodeAnalyzer {
 
-	private var attributeMatchers : Array<IAttributeMatcher>;
-	private	var childrenMatchers : Array<IChildrenMatcher>;
+	private var extensions : Array<INodeAnalyzerExtension>;
 
 	public function new() {
-		attributeMatchers = [new GenericAttributeMatcher(this), new PropertiesMatcher(this)];
-		childrenMatchers = [new ScriptBlockChildrenMatcher(this), new DefaultPropertyChildrenMatcher(this)];
+		extensions = [new GenericExtension(this), new PropertiesExtension(this), new ScriptBlockExtension(this), new DefaultPropertyExtension(this)];
 	}
 
 	public function analyze(node : MXMLNode, ?parent:NodeScope) : NodeScope
@@ -57,14 +54,14 @@ class NodeAnalyzer {
 
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			for(attributeMatcher in attributeMatchers) {
-				attributeMatcher.match(result, attributeQName, value);
+			for(attributeMatcher in extensions) {
+				attributeMatcher.matchAttribute(result, attributeQName, value);
 			}
 		}
 
 		for (childNode in node.children) {
-			for(childrenMatcher in childrenMatchers) {
-				childrenMatcher.match(result, childNode);
+			for(childrenMatcher in extensions) {
+				childrenMatcher.matchChild(result, childNode);
 			}
 		}
 		
