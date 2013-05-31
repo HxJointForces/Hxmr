@@ -23,14 +23,12 @@ class NodeScope {
 	public var parentScope:NodeScope;
 	
 	public var initializers : Map<String, String>;
+	
+	public var children : Array<NodeScope>;
 
 	public function new() {
 		typeParams = [];
 		fields = [];
 		initializers = new Map();
-	}
-
-	public function copyFrom(s:NodeScope):Void {
-		//TODO
 	}
 }

@@ -3,7 +3,9 @@ package hxrm.analyzer.childrenMatcher;
 import hxrm.parser.mxml.MXMLNode;
 
 class ScriptBlockChildrenMatcher extends ChildrenMatcherBase {
-	public function new() {
+
+	public function new(analyzer : NodeAnalyzer) {
+		super(analyzer);
 	}
 
 	override public function match(scope:NodeScope, child:MXMLNode):Void {

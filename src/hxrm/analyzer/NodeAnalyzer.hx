@@ -1,5 +1,6 @@
 package hxrm.analyzer;
 
+import hxrm.analyzer.childrenMatcher.DefaultPropertyChildrenMatcher;
 import hxrm.analyzer.childrenMatcher.ScriptBlockChildrenMatcher;
 import hxrm.analyzer.childrenMatcher.IChildrenMatcher;
 import hxrm.analyzer.attributeMatcher.PropertiesMatcher;
@@ -17,14 +18,13 @@ class NodeAnalyzer {
 	private	var childrenMatchers : Array<IChildrenMatcher>;
 
 	public function new() {
-		attributeMatchers = [new GenericAttributeMatcher(), new PropertiesMatcher()];
-		childrenMatchers = [new ScriptBlockChildrenMatcher()];
+		attributeMatchers = [new GenericAttributeMatcher(this), new PropertiesMatcher(this)];
+		childrenMatchers = [new ScriptBlockChildrenMatcher(this), new DefaultPropertyChildrenMatcher(this)];
 	}
 
-	public function analyze(node : MXMLNode, ?parentNode : MXMLNode, ?parent:NodeScope) : NodeScope
+	public function analyze(node : MXMLNode, ?parent:NodeScope) : NodeScope
 	{
 		var result : NodeScope = new NodeScope();
-
 
 		result.context = new AnalyzerContext(node);
 		
@@ -38,7 +38,6 @@ class NodeAnalyzer {
 		//var namespaces : Map < String, Array<String> > = new Map();
 
 		result.parentScope = parent;
-		if (result.parentScope != null) result.copyFrom(result.parentScope);
 
 		// TODO namespaces from parent node
 		var resolvedQName : QName = result.context.resolveQName(node.name, node);

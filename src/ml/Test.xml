@@ -3,6 +3,6 @@
 	<deep:B generic:type="haxe.Utf8" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
 	
 	<hx:Script>
-		
+		trace("Hello!");
 	</hx:Script>
 </ans:A>

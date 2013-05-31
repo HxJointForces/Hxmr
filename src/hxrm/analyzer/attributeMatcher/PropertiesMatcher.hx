@@ -3,7 +3,9 @@ import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 
 class PropertiesMatcher extends AttributeMatcherBase {
-	public function new() {
+
+	public function new(analyzer : NodeAnalyzer) {
+		super(analyzer);
 	}
 
 	override public function match(scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
