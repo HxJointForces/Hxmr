@@ -58,8 +58,9 @@ class Hxrm
 	
 	#if macro
 	static function onTypeNotFound(t:String):TypeDefinition {
-		//trace('onTypeNotFound $t');
+		
 		if (t.startsWith("haxe")) return null;
+		trace('onTypeNotFound $t');
 		try {
 			var path = t.replace(".", "/") + ".xml";
 			path = Context.resolvePath(path);

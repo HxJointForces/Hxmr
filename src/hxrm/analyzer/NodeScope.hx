@@ -16,14 +16,14 @@ class NodeScope {
 	public var type:Type;
 	public var classType:ClassType;
 
-	public var fields:Array<ClassField>;
+	public var classFields:Array<ClassField>;
 
 	public var initializers : Map<String, String>;
 	
 	public var children : Array<NodeScope>;
 
 	public function new() {
-		fields = [];
+		classFields = [];
 		children = [];
 		initializers = new Map();
 	}

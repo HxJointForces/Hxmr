@@ -17,7 +17,7 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 
 		scope.type = scope.context.getType(resolvedQName);
 		scope.classType = scope.context.getClassType(scope.type);
-		scope.fields = scope.classType.fields.get();
+		scope.classFields = scope.classType.fields.get();
 
 		if (scope.classType.isInterface) {
 			trace("can't instantiate interface " + resolvedQName);

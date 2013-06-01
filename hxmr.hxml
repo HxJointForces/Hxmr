@@ -1,6 +1,3 @@
 -cp src
--swf bin/hxmr.swf
--swf-header 800:600:30:FFFFFF
---flash-strict
--swf-version 10
+-js bin/hxmr.js
 -main Main

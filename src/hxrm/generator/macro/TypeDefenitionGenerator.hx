@@ -26,7 +26,7 @@ class TypeDefenitionGenerator
 	public function write(analyzer : NodeAnalyzer, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
-		TypeUtils.prettyPrintType(scope);
+		//TypeUtils.prettyPrintType(scope);
 		
 		var qName : QName = QNameUtils.fromHaxeTypeId(type);
 		
