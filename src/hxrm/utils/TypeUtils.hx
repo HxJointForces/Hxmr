@@ -19,11 +19,7 @@ class TypeUtils {
 				
 				var nextIndex = index;
 				var found = false;
-				while(true) {
-					nextIndex++;
-					if(nextIndex >= splitted.length) {
-						break;
-					}
+				while(++nextIndex < splitted.length) {
 					var nextS = splitted.charAt(nextIndex);
 					
 					if(nextS == ",") {

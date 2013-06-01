@@ -15,5 +15,7 @@ class A<T>
 	public var a:T;
 	
 	public var aString:String;
+
+	public var innerString : String;
 	
 }

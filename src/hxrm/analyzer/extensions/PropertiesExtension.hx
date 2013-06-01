@@ -10,6 +10,11 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			var value : String = node.attributes.get(attributeQName);
 			matchAttribute(scope, attributeQName, value);
 		}
+		
+		for (childNode in node.children) {
+			matchChild(scope, childNode);
+		}
+
 		return false;
 	}
 
@@ -19,13 +24,26 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		trace('${attributeQName.localPart} = $value');
-		
-		if(scope.initializers.exists(attributeQName.localPart)) {
-			trace("duplicate property assign!");
-			//throw "duplicate property assign!";
+		rememberProperty(scope, attributeQName, value);
+	}
+
+	function matchChild(scope:NodeScope, child:MXMLNode):Void {
+	
+		if(child.name.namespace != scope.context.node.name.namespace) {
+			return;
 		}
 		
+		//TODO rememberProperty(scope, child.name, )
+	}
+
+	function rememberProperty(scope : NodeScope, attributeQName:MXMLQName, value:String) : Void {
+		trace('${attributeQName.localPart} = $value');
+
+		if(scope.initializers.exists(attributeQName.localPart)) {
+			trace("duplicate property assign!");
+			throw "duplicate property assign!";
+		}
+
 		scope.initializers.set(attributeQName.localPart, value);
 	}
 }

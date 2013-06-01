@@ -20,11 +20,11 @@ class NodeScope {
 
 	public var initializers : Map<String, String>;
 	
-	public var children : Array<NodeScope>;
+	public var children : Map<String,NodeScope>;
 
 	public function new() {
 		classFields = [];
-		children = [];
+		children = new Map();
 		initializers = new Map();
 	}
 }

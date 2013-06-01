@@ -5,4 +5,8 @@
 	<hx:Script>
 		trace("Hello!");
 	</hx:Script>
+	
+	<ans:innerString>
+		<hx:String>Hello!</hx:String>
+	</ans:innerString>
 </ans:A>
