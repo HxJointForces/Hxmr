@@ -1,5 +1,6 @@
 package hxrm;
 
+import hxrm.utils.TypeUtils;
 import haxe.CallStack;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
@@ -80,6 +81,10 @@ class HxrmTypeDefinitionFactory {
 			trace("analyzer: " + e);
 			return null;
 		}
+		
+		#if bsideup
+			TypeUtils.prettyPrintType(scope);
+		#end
 
 		var typeDefinition : TypeDefinition = null;
 		if (scope != null) {
