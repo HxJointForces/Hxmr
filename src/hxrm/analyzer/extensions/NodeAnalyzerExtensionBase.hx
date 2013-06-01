@@ -10,7 +10,7 @@ class NodeAnalyzerExtensionBase implements INodeAnalyzerExtension {
 		this.analyzer = analyzer;
 	}
 
-	public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+	public function analyze(scope:NodeScope):Bool {
 		return false;
 	}
 }

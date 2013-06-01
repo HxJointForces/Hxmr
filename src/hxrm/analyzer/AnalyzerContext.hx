@@ -1,4 +1,5 @@
 package hxrm.analyzer;
+import hxrm.parser.mxml.MXMLQNameUtils;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
@@ -36,10 +37,9 @@ class AnalyzerContext {
 		return type;
 	}
 
-	public function resolveQName(mxmlQName : MXMLQName, node : MXMLNode):QName {
+	public function resolveQName(mxmlQName : MXMLQName):QName {
 
-		if (!node.namespaces.exists(mxmlQName.namespace)) throw "unknow namespace";
-		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(node.namespaces[mxmlQName.namespace]);
+		var resolvedPackageNameParts : Array<String> = QNameUtils.splitPackage(MXMLQNameUtils.resolveNamespaceValue(node, mxmlQName.namespace));
 
 		if(resolvedPackageNameParts != null && resolvedPackageNameParts.length > 0) {
 			if(resolvedPackageNameParts[resolvedPackageNameParts.length - 1] == MXMLQName.ASTERISK) {

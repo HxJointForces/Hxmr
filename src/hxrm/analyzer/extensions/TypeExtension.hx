@@ -1,8 +1,8 @@
 package hxrm.analyzer.extensions;
 
-import hxrm.analyzer.QNameUtils;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
+import hxrm.parser.mxml.MXMLQNameUtils;
 import haxe.macro.Context;
 
 using StringTools;
@@ -12,9 +12,10 @@ using StringTools;
  */
 class TypeExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+	override public function analyze(scope:NodeScope):Bool {
+		var node : MXMLNode = scope.context.node;
 
-		var resolvedQName : QName = scope.context.resolveQName(node.name, node);
+		var resolvedQName : QName = scope.context.resolveQName(node.name);
 
 		scope.type = scope.context.getType(resolvedQName);
 		scope.classType = scope.context.getClassType(scope.type);
@@ -40,31 +41,36 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 
 	function matchAttribute(scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
 
+		if(attributeQName.localPart != "type") {
+			return;
+		}
+		
 		//TODO remove hardcoded string
-		if(scope.context.node.namespaces.get(attributeQName.namespace) == "http://haxe.org/hxmr/generic" && attributeQName.localPart == "type") {
-			
-			var typeParams = value.split(",").map(function (s) return QNameUtils.fromHaxeTypeId(s.trim()) );
-			switch (scope.type) {
-				case TInst(t, params):
-					if (params.length != typeParams.length) {
-						trace("incorect type params count");
-						throw "incorect type params count";
-					}
-				case _:
-			}
+		if(MXMLQNameUtils.resolveNamespaceValue(scope.context.node, attributeQName.namespace) != "http://haxe.org/hxmr/generic") {
+			return;
+		}
+		
+		var typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
+		switch (scope.type) {
+			case TInst(t, params):
+				if (params.length != typeParams.length) {
+					trace("incorect type params count");
+					throw "incorect type params count";
+				}
+			case _:
+		}
 
-			trace(typeParams);
+		trace(typeParams);
 
-			var genericTypes = [];
-			for (genericType in typeParams) {
-				genericTypes.push(Context.getType(genericType.toHaxeTypeId()));
-			}
-			trace(genericTypes);
+		var genericTypes = [];
+		for (genericType in typeParams) {
+			genericTypes.push(Context.getType(genericType.toHaxeTypeId()));
+		}
+		trace(genericTypes);
 
-			switch (scope.type) {
-				case TInst(t, _): scope.type = TInst(t, genericTypes);
-				case _: throw "assert";
-			}
+		switch (scope.type) {
+			case TInst(t, _): scope.type = TInst(t, genericTypes);
+			case _: throw "assert";
 		}
 	}
 	

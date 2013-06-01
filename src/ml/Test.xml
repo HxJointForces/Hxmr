@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ans:A generic:type="haxe.Timer" ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*" xmlns:hx="http://haxe.org/hxmr/" xmlns:generic="http://haxe.org/hxmr/generic">
-	<deep:B generic:type="haxe.Utf8" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
-	<ans:t><ans:haxe.Timer /></ans:t>
+	<deep:B generic:type="haxe.Utf8,haxe.Timer" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
+	
 	<hx:Script>
 		trace("Hello!");
 	</hx:Script>

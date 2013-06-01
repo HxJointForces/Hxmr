@@ -1,10 +1,14 @@
 package hxrm.analyzer.extensions;
+
 import StringTools;
 import hxrm.analyzer.NodeScope;
 import hxrm.parser.mxml.MXMLNode;
+import hxrm.parser.mxml.MXMLQNameUtils;
+
 class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+	override public function analyze(scope:NodeScope):Bool {
+		var node : MXMLNode = scope.context.node;
 		for (childNode in node.children) {
 			matchChild(scope, childNode);
 		}
@@ -15,7 +19,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
 	
 		//TODO better typename checking
-		if(StringTools.startsWith(child.namespaces.get(child.name.namespace), "http://")) {
+		if(StringTools.startsWith(MXMLQNameUtils.resolveNamespaceValue(child, child.name.namespace), "http://")) {
 			return;
 		}
 		
