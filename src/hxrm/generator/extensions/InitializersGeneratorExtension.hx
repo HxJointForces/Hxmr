@@ -25,7 +25,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			var value = null;
 			try {
 				trace('parsing ${bind.value}');
-				value = Context.parseInlineString(bind.value, generator.pos);
+				value = Context.parseInlineString(bind.value, pos);
 			} catch (e:Dynamic) {
 				throw "can't parse value: " + e;
 			}
