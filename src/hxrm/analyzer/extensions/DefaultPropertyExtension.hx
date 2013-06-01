@@ -24,8 +24,6 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
 	
-		TypeUtils.prettyPrintType(scope.classFields.join("\n"));
-		
 		if(child.name.namespace == scope.context.node.name.namespace) {
 			for(field in scope.classFields) {
 				if(child.name.localPart == field.name) {

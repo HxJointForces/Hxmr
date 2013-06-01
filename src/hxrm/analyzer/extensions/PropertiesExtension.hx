@@ -36,7 +36,6 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 
-		trace(child.children);
 		var childScope : NodeScope = analyzer.analyze(child.children[0]);
 
 		if(childScope == null) {
@@ -48,7 +47,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 	}
 
 	function rememberProperty(scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {
-		trace('${attributeQName.localPart} = $value');
+		//trace('${attributeQName.localPart} = $value');
 
 		if(scope.initializers.exists(attributeQName.localPart)) {
 			trace("duplicate property assign!");
