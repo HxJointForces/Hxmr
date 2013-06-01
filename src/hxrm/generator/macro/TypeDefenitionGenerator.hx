@@ -70,18 +70,18 @@ class TypeDefenitionGenerator
 				throw "can't parse value: " + e;
 			}
 			var valueType = Context.typeof(value);
-			var fieldType = null;
+			var field = null;
 			
 			for (f in scope.classFields)
-				if (f.name == fieldName) fieldType = f.type;
+				if (f.name == fieldName) field = f;
 				
-			if (fieldType == null)
+			if (field == null)
 				throw 'class ${scope.type} doesn\'t have field $fieldName';
 			
 			var res = 
-				if (!Context.unify(valueType, fieldType)) {
+				if (!Context.unify(valueType, field.type)) {
 					// extensions must be here
-					var fieldCT = scope.context.getClassType(fieldType);
+					var fieldCT = scope.context.getClassType(field.type);
 					switch([fieldCT.module, fieldCT.name]) {
 						case ["String", "String"]:
 							macro Std.string($value);
@@ -90,7 +90,7 @@ class TypeDefenitionGenerator
 						case ["Float", "Float"]:
 							macro Std.parseFloat(Std.string($value));
 						case _:
-							throw 'can\'t unify value:$valueType to fieldType:$fieldType';
+							throw 'can\'t unify value:$valueType to fieldType:${field.type}';
 					}
 				}
 				else
@@ -102,7 +102,7 @@ class TypeDefenitionGenerator
 		for (child in scope.children) {
 			var childExpr = generateChild(child, scope);
 			if (childExpr != null)
-				ctorFields.push(childExpr);
+				ctorFields = ctorFields.concat(childExpr);
 		}
 		
 		var ctorExpr = { expr:EBlock(ctorFields), pos:pos };
@@ -116,17 +116,28 @@ class TypeDefenitionGenerator
 		}
 	}
 	
-	function generateChild(child:NodeScope, root:NodeScope):Expr {
-		trace(child);
-		
-		var has = false;
+	function generateChild(child:NodeScope, root:NodeScope):Array<Expr> {
+		return null;
+		var fieldName = child.context.node.name.localPart;
+		var field = null;
 		for (f in root.classFields) {
-			//if (f.name == child
+			if (f.name == fieldName) {
+				field = f.type;
+				break;
+			}
+		}
+		if (field == null) {
+			throw 'class ${child.type} doesn\'t have field $fieldName';
 		}
 		var res = [];
 		
+		for (c in child.children) {
+			var genChild = generateChild(c, child);
+			if (genChild != null) res = res.concat(genChild);
+		}
 		
-		return null;
+		
+		return res.length > 0 ? res : null;
 	}
 	
 	public function cleanCache():Void {
