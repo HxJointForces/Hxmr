@@ -1,6 +1,7 @@
 package hxrm.analyzer.extensions;
 
 import hxrm.parser.mxml.MXMLNode;
+import hxrm.parser.mxml.MXMLQNameUtils;
 
 class ScriptBlockExtension extends NodeAnalyzerExtensionBase {
 
@@ -13,7 +14,7 @@ class ScriptBlockExtension extends NodeAnalyzerExtensionBase {
 
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
 		// TODO remove hardcoded URL
-		if(child.namespaces.get(child.name.namespace) == "http://haxe.org/hxmr/" && child.name.localPart == "Script") {
+		if(MXMLQNameUtils.resolveNamespaceValue(child, child.name.namespace) == "http://haxe.org/hxmr/" && child.name.localPart == "Script") {
 			trace("Script block!");
 		}
 	}

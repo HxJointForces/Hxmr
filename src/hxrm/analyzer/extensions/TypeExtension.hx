@@ -2,6 +2,7 @@ package hxrm.analyzer.extensions;
 
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
+import hxrm.parser.mxml.MXMLQNameUtils;
 import haxe.macro.Context;
 
 using StringTools;
@@ -13,7 +14,7 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
 
-		var resolvedQName : QName = scope.context.resolveQName(node.name, node);
+		var resolvedQName : QName = scope.context.resolveQName(node.name);
 
 		scope.type = scope.context.getType(resolvedQName);
 		scope.classType = scope.context.getClassType(scope.type);
@@ -40,8 +41,7 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 	function matchAttribute(scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
 
 		//TODO remove hardcoded string
-		if(scope.context.node.namespaces.get(attributeQName.namespace) == "http://haxe.org/hxmr/generic" && attributeQName.localPart == "type") {
-			
+		if(MXMLQNameUtils.resolveNamespaceValue(scope.context.node, attributeQName.namespace) == "http://haxe.org/hxmr/generic" && attributeQName.localPart == "type") {
 			var typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
 			switch (scope.type) {
 				case TInst(t, params):
