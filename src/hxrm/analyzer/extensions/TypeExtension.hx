@@ -1,5 +1,6 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.analyzer.QNameUtils;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 import haxe.macro.Context;
@@ -42,7 +43,7 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		//TODO remove hardcoded string
 		if(scope.context.node.namespaces.get(attributeQName.namespace) == "http://haxe.org/hxmr/generic" && attributeQName.localPart == "type") {
 			
-			var typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
+			var typeParams = value.split(",").map(function (s) return QNameUtils.fromHaxeTypeId(s.trim()) );
 			switch (scope.type) {
 				case TInst(t, params):
 					if (params.length != typeParams.length) {
