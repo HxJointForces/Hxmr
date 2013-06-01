@@ -13,16 +13,18 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 	}
 
 	function matchAttribute(scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
-	
-		if(attributeQName.namespace == scope.context.node.name.namespace || attributeQName.namespace == MXMLQName.ASTERISK) {
-			trace('${attributeQName.localPart} = $value');
-			
-			if(scope.initializers.exists(attributeQName.localPart)) {
-				trace("duplicate property assign!");
-				//throw "duplicate property assign!";
-			}
-			
-			scope.initializers.set(attributeQName.localPart, value);
+
+		if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
+			return;
 		}
+		
+		trace('${attributeQName.localPart} = $value');
+		
+		if(scope.initializers.exists(attributeQName.localPart)) {
+			trace("duplicate property assign!");
+			//throw "duplicate property assign!";
+		}
+		
+		scope.initializers.set(attributeQName.localPart, value);
 	}
 }

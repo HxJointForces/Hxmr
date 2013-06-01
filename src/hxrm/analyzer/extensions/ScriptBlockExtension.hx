@@ -13,10 +13,17 @@ class ScriptBlockExtension extends NodeAnalyzerExtensionBase {
 	}
 
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
-		// TODO remove hardcoded URL
-		if(MXMLQNameUtils.resolveNamespaceValue(child, child.name.namespace) == "http://haxe.org/hxmr/" && child.name.localPart == "Script") {
-			trace("Script block!");
+
+		if(child.name.localPart != "Script"){
+			return;
 		}
+		
+		// TODO remove hardcoded URL
+		if(MXMLQNameUtils.resolveNamespaceValue(child, child.name.namespace) != "http://haxe.org/hxmr/") {
+			return;
+		}
+
+		trace("Script block!");
 	}
 
 }
