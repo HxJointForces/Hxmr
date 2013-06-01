@@ -4,7 +4,8 @@ import hxrm.parser.mxml.MXMLQName;
 
 class PropertiesExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+	override public function analyze(scope:NodeScope):Bool {
+		var node : MXMLNode = scope.context.node;
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
 			matchAttribute(scope, attributeQName, value);

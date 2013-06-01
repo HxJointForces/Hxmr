@@ -12,7 +12,8 @@ using StringTools;
  */
 class TypeExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+	override public function analyze(scope:NodeScope):Bool {
+		var node : MXMLNode = scope.context.node;
 
 		var resolvedQName : QName = scope.context.resolveQName(node.name);
 

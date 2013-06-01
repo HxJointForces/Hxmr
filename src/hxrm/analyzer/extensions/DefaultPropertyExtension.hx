@@ -7,7 +7,8 @@ import hxrm.parser.mxml.MXMLQNameUtils;
 
 class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope, node:MXMLNode):Bool {
+	override public function analyze(scope:NodeScope):Bool {
+		var node : MXMLNode = scope.context.node;
 		for (childNode in node.children) {
 			matchChild(scope, childNode);
 		}

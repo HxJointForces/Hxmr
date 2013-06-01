@@ -6,5 +6,5 @@ import hxrm.analyzer.NodeScope;
 interface INodeAnalyzerExtension {
 
 	// return true if it needs one more iteration
-	function analyze(scope : NodeScope, node : MXMLNode) : Bool;
+	function analyze(scope : NodeScope) : Bool;
 }

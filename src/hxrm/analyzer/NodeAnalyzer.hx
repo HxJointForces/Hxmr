@@ -29,7 +29,7 @@ class NodeAnalyzer {
 			var oneMoreTime : Bool = false;
 			
 			for(extension in extensions) {
-				oneMoreTime = extension.analyze(result, node) || oneMoreTime;
+				oneMoreTime = extension.analyze(result) || oneMoreTime;
 			}
 			
 			if(!oneMoreTime) {
