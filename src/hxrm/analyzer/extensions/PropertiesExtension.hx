@@ -1,4 +1,7 @@
 package hxrm.analyzer.extensions;
+import hxrm.analyzer.initializers.NodeScopeInitializator;
+import hxrm.analyzer.initializers.BindingInitializator;
+import hxrm.analyzer.initializers.IInitializator;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 
@@ -24,7 +27,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		rememberProperty(scope, attributeQName, value);
+		rememberProperty(scope, attributeQName, new BindingInitializator(value));
 	}
 
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
@@ -32,11 +35,19 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 		if(child.name.namespace != scope.context.node.name.namespace) {
 			return;
 		}
+
+		trace(child.children);
+		var childScope : NodeScope = analyzer.analyze(child.children[0]);
+
+		if(childScope == null) {
+			trace("childScope is null");
+			return;
+		}
 		
-		//TODO rememberProperty(scope, child.name, )
+		rememberProperty(scope, child.name, new NodeScopeInitializator(childScope));
 	}
 
-	function rememberProperty(scope : NodeScope, attributeQName:MXMLQName, value:String) : Void {
+	function rememberProperty(scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {
 		trace('${attributeQName.localPart} = $value');
 
 		if(scope.initializers.exists(attributeQName.localPart)) {

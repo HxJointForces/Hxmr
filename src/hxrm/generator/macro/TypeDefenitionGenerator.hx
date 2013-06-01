@@ -1,5 +1,7 @@
 package hxrm.generator.macro;
 
+import hxrm.analyzer.initializers.BindingInitializator;
+import hxrm.analyzer.initializers.IInitializator;
 import hxrm.analyzer.QNameUtils;
 import hxrm.utils.TypeUtils;
 import hxrm.analyzer.NodeAnalyzer;
@@ -63,9 +65,17 @@ class TypeDefenitionGenerator
 		
 		// initializers
 		for (fieldName in scope.initializers.keys()) {
+			var initializator : IInitializator = scope.initializers[fieldName];
+			
+			if(!Std.is(initializator, BindingInitializator)) {
+				continue;
+			}
+			
+			var bind = cast(initializator, BindingInitializator);
+			
 			var value = null;
 			try {
-				value = Context.parseInlineString(scope.initializers[fieldName], pos);
+				value = Context.parseInlineString(bind.value, pos);
 			} catch (e:Dynamic) {
 				throw "can't parse value: " + e;
 			}
@@ -74,12 +84,11 @@ class TypeDefenitionGenerator
 			
 			for (f in scope.classFields)
 				if (f.name == fieldName) field = f;
-				
+			
 			if (field == null)
 				throw 'class ${scope.type} doesn\'t have field $fieldName';
 			
-			var res = 
-				if (!Context.unify(valueType, field.type)) {
+			var res = if (!Context.unify(valueType, field.type)) {
 					// extensions must be here
 					var fieldCT = scope.context.getClassType(field.type);
 					switch([fieldCT.module, fieldCT.name]) {
@@ -95,7 +104,7 @@ class TypeDefenitionGenerator
 				}
 				else
 					value;
-					
+			
 			ctorFields.push(macro $i { fieldName } = $res);
 		}
 		

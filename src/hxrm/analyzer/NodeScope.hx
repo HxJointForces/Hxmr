@@ -1,5 +1,6 @@
 package hxrm.analyzer;
 
+import hxrm.analyzer.initializers.IInitializator;
 import haxe.ds.HashMap;
 import haxe.macro.Context;
 import haxe.macro.Type;
@@ -18,13 +19,13 @@ class NodeScope {
 
 	public var classFields:Array<ClassField>;
 
-	public var initializers : Map<String, String>;
+	public var initializers : Map<String, IInitializator>;
 	
-	public var children : Map<String,NodeScope>;
+	public var children : Array<NodeScope>;
 
 	public function new() {
 		classFields = [];
-		children = new Map();
+		children = [];
 		initializers = new Map();
 	}
 }

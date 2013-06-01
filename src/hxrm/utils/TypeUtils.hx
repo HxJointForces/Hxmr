@@ -47,7 +47,7 @@ class TypeUtils {
 	}
 
 	static inline function indent(indentLevel : Int) : String {
-		var glue : String = "  ";
+		var glue : String = "   ";
 		return StringTools.rpad("", glue, indentLevel * glue.length);
 	}
 }

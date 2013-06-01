@@ -43,10 +43,11 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		var childScope : NodeScope = analyzer.analyze(child);
 		
 		if(childScope == null) {
+			trace("childScope is null");
 			return;
 		}
 		
-		scope.children.set(child.name.localPart, childScope);
+		scope.children.push(childScope);
 	}
 
 

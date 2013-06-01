@@ -7,6 +7,6 @@
 	</hx:Script>
 	
 	<ans:innerString>
-		<hx:String>Hello!</hx:String>
+		<String xmlns="*">Hello!</String>
 	</ans:innerString>
 </ans:A>
