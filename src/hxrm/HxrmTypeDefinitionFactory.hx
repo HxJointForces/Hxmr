@@ -84,7 +84,13 @@ class HxrmTypeDefinitionFactory {
 		var typeDefinition : TypeDefinition = null;
 		if (scope != null) {
 
-			typeDefinition = tdWriter.write(analyzer, scope, type, path);
+			try {
+				typeDefinition = tdWriter.write(analyzer, scope, type, path);
+			} catch (e:Dynamic) {
+				trace(CallStack.exceptionStack().join("\n"));
+				trace("generator: " + e);
+				return null;
+			}
 			
 			#if debug  
 			// TODO: сделать принт в файлы по требованию из девайнов
