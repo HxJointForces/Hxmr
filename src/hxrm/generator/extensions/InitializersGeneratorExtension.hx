@@ -30,9 +30,6 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			}
 			var field = scope.getFieldByName(fieldName);
 
-			if (field == null)
-				throw 'class ${scope.type} doesn\'t have field $fieldName';
-
 			var valueType = Context.typeof(value);
 			var res = if (!Context.unify(valueType, field.type)) {
 				// extensions must be here

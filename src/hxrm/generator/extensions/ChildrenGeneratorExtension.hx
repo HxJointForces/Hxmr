@@ -19,11 +19,7 @@ class ChildrenGeneratorExtension extends GeneratorExtensionBase {
 
 	function generateChild(child:NodeScope, root:NodeScope):Array<Expr> {
 		return null;
-		var fieldName = child.context.node.name.localPart;
 		
-		if (root.getFieldByName(fieldName) == null) {
-			throw 'class ${child.type} doesn\'t have field $fieldName';
-		}
 		var res = [];
 
 		for (c in child.children) {
