@@ -1,6 +1,5 @@
 package hxrm.analyzer.extensions;
 
-import hxrm.utils.TypeUtils;
 import StringTools;
 import hxrm.analyzer.NodeScope;
 import hxrm.parser.mxml.MXMLNode;
@@ -15,6 +14,13 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		var node : MXMLNode = scope.context.node;
+
+
+
+		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
+			throw "You cann't mix cdata with inner tags!\n" + node;
+		}
+		
 		for (childNode in node.children) {
 			matchChild(scope, childNode);
 		}

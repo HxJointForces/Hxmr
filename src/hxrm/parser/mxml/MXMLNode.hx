@@ -12,11 +12,14 @@ class MXMLNode
 	
 	public var parentNode : MXMLNode;
 	
+	public var cdata : String;
+	
 	public function new() 
 	{
 		attributes = new Map();
 		namespaces = new Map();
 		children = [];
+		cdata = "";
 	}
 	
 	public function toString() {
@@ -43,13 +46,17 @@ class MXMLNode
 		{
 			result +=  i2 + '$valueQName : ${attributes.get(valueQName)}\n';
 		}
-		
+
 		result += i1 + "Children:\n";
-		
+
 		for (childNode in children)
 		{
 			result += childNode.toStringTabs(indentLevel + 2) + "\n";
 		}
+
+		result += i1 + "CDATA:\n";
+		result += cdata + "\n";
+		
 		result += i0 + "]";
 		
 		return result;

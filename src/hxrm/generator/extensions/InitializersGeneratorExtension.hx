@@ -2,7 +2,6 @@ package hxrm.generator.extensions;
 
 import hxrm.analyzer.initializers.IInitializator;
 import hxrm.analyzer.initializers.BindingInitializator;
-import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Expr;
 import haxe.macro.Context;

@@ -24,7 +24,7 @@ class ScriptBlockExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 
-		trace("Script block!");
+		trace('Script block with code:${child.cdata}');
 	}
 
 }

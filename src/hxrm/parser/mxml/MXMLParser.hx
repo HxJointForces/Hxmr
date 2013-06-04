@@ -1,5 +1,6 @@
 package hxrm.parser.mxml;
 
+import StringTools;
 import hxrm.parser.Tools;
 
 using StringTools;
@@ -18,43 +19,54 @@ class MXMLParser
 			throw new ParserError(UNKNOWN_DATA_FORMAT, { to : 0 , from : 0 });
 		}
 		
-		return parseRootNode(xml);
+		return parseNode(xml);
 	}
 	
-	function parseRootNode(node : Xml):Null<MXMLNode>  {
-		var firstElement = node.firstElement();
-		
-		if (firstElement == null) {
-			throw new ParserError(EMPTY_DATA, { to : 0 , from : 0 });
-		}
-		
-		return parseNode(firstElement);
-	}
-
 	function parseNode(xmlNode : Xml):Null<MXMLNode>  {
 	
+		if(xmlNode.nodeType == Xml.Document) {
+			var firstElement = xmlNode.firstElement();
+
+			if (firstElement == null) {
+				throw new ParserError(EMPTY_DATA, { to : 0 , from : 0 });
+			}
+
+			return parseNode(firstElement);
+		}
+		
 		var n = new MXMLNode();
 		n.name = MXMLQNameUtils.fromQualifiedString(xmlNode.nodeName);
+		
+		trace(xmlNode);
 
 		parseAttributes(xmlNode, n);
-		parseChildren(xmlNode, n);
+		
+		for(innerNode in xmlNode.iterator()) {
+			if(innerNode.nodeType == Xml.PCData || innerNode.nodeType == Xml.CData) {
+				var value = StringTools.trim(innerNode.nodeValue);
+				trace(value);
+				if(value != null && value.length > 0) {
+					n.cdata += value;
+				}
+			} else {
+				parseChild(n, xmlNode, innerNode);
+			}
+		}
 
 		return n;
 	}
 	
-	function parseChildren(xmlNode:Xml, n:MXMLNode) {
-		for (c in xmlNode.elements()) {
-			var child : MXMLNode = parseNode(c);
-			child.parentNode = n;
-			
-			for(key in n.namespaces.keys()) {
-				if(!child.namespaces.exists(key)) {
-					child.namespaces.set(key, n.namespaces.get(key));
-				}
+	function parseChild(n:MXMLNode, xmlNode:Xml, c : Xml) {
+		var child : MXMLNode = parseNode(c);
+		child.parentNode = n;
+		
+		for(key in n.namespaces.keys()) {
+			if(!child.namespaces.exists(key)) {
+				child.namespaces.set(key, n.namespaces.get(key));
 			}
-			
-			n.children.push(child);
 		}
+		
+		n.children.push(child);
 	}
 	
 	function parseAttributes(xmlNode:Xml, n:MXMLNode) {

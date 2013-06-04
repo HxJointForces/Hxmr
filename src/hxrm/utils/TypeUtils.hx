@@ -13,11 +13,9 @@ class TypeUtils {
 				case "{":
 					i++;
 					"{\n" + indent(i);
-				
 				case "}":
 					i--;
 					"\n" + indent(i) + "}";
-				
 				case ",":
 					var nextIndex = index;
 					var found = false;
@@ -37,10 +35,8 @@ class TypeUtils {
 						",";
 					}
 				
-				case "\n":
-					"\n" + indent(i);
-				case _:
-					s;
+				case "\n"	: "\n" + indent(i);
+				case _		: s;
 			}
 		}
 		
