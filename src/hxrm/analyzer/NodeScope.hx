@@ -1,11 +1,8 @@
 package hxrm.analyzer;
 
+import hxrm.parser.Tools;
 import hxrm.analyzer.initializers.IInitializator;
-import haxe.ds.HashMap;
-import haxe.macro.Context;
 import haxe.macro.Type;
-import haxe.macro.Expr;
-import hxrm.parser.mxml.MXMLNode;
 
 using StringTools;
 using haxe.macro.Tools;
@@ -24,8 +21,18 @@ class NodeScope {
 	public var children : Array<NodeScope>;
 
 	public function new() {
-		classFields = [];
-		children = [];
-		initializers = new Map();
+	}
+
+	public function getFieldByName(name : String) : ClassField {
+		if(classFields == null) {
+			return null;
+		}
+		
+		for(field in classFields) {
+			if(field.name == name) {
+				return field;
+			}
+		}
+		return null;
 	}
 }

@@ -9,13 +9,15 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(scope:NodeScope):Bool {
 
+		if(scope.children == null) {
+			scope.children = [];
+		}
+		
 		if(scope.classFields == null) {
 			return true;
 		}
 		
 		var node : MXMLNode = scope.context.node;
-
-
 
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
 			throw "You cann't mix cdata with inner tags!\n" + node;
@@ -31,10 +33,8 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 	function matchChild(scope:NodeScope, child:MXMLNode):Void {
 	
 		if(child.name.namespace == scope.context.node.name.namespace) {
-			for(field in scope.classFields) {
-				if(child.name.localPart == field.name) {
-					return;
-				}
+			if(scope.getFieldByName(child.name.localPart) != null) {
+				return;
 			}
 		}
 		
@@ -48,7 +48,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		
 		if(childScope == null) {
 			trace("childScope is null");
-			return;
+			throw "childScope is null";
 		}
 		
 		scope.children.push(childScope);

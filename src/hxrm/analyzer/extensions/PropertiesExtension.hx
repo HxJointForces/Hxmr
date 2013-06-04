@@ -1,4 +1,5 @@
 package hxrm.analyzer.extensions;
+import haxe.macro.Type.ClassField;
 import hxrm.analyzer.initializers.NodeScopeInitializator;
 import hxrm.analyzer.initializers.BindingInitializator;
 import hxrm.analyzer.initializers.IInitializator;
@@ -8,6 +9,11 @@ import hxrm.parser.mxml.MXMLQName;
 class PropertiesExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(scope:NodeScope):Bool {
+	
+		if(scope.initializers == null) {
+			scope.initializers = new Map();
+		}
+	
 		var node : MXMLNode = scope.context.node;
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
@@ -27,6 +33,10 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
+		if(scope.getFieldByName(attributeQName.localPart) == null) {
+			throw "unknown field!";
+		}
+		
 		rememberProperty(scope, attributeQName, new BindingInitializator(value));
 	}
 
@@ -36,6 +46,16 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 
+		var field : ClassField = scope.getFieldByName(child.name.localPart);
+		if(field == null) {
+			throw "unknown field: " + child.name.localPart;
+		}
+
+		// TODO ArrayInitializers
+		if(child.children.length > 1 || (child.cdata != null && child.cdata.length > 0)) {
+			throw "value must be exactly one node";
+		}
+		
 		var childScope : NodeScope = analyzer.analyze(child.children[0]);
 
 		if(childScope == null) {
