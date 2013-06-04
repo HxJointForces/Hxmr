@@ -33,29 +33,36 @@ class MXMLNode
 		var result : String = i0 + 'MXMLNode(name="$name")';
 		
 		result += "[\n";
+
+		if(namespaces.keys().hasNext()) {
+			result += i1 + "Namespaces:\n";
+			for(namespaceName in namespaces.keys())
+			{
+				result +=  i2 + '$namespaceName : ${namespaces.get(namespaceName)}\n';
+			}
+		}
+
+		if(attributes.keys().hasNext()) {
+			result += i1 + "Attributes:\n";
+			for(valueQName in attributes.keys())
+			{
+				result +=  i2 + '$valueQName : ${attributes.get(valueQName)}\n';
+			}
+		}
+
 		
-		result += i1 + "Namespaces:\n";
-		for(namespaceName in namespaces.keys())
-		{
-			result +=  i2 + '$namespaceName : ${namespaces.get(namespaceName)}\n';
+		if(children.length > 0) {
+			result += i1 + "Children:\n";
+			for (childNode in children)
+			{
+				result += childNode.toStringTabs(indentLevel + 2) + "\n";
+			}
 		}
-
-		result += i1 + "Attributes:\n";
-
-		for(valueQName in attributes.keys())
-		{
-			result +=  i2 + '$valueQName : ${attributes.get(valueQName)}\n';
+		
+		if(cdata != null && cdata.length > 0) {
+			result += i1 + "CDATA:\n";
+			result += cdata + "\n";
 		}
-
-		result += i1 + "Children:\n";
-
-		for (childNode in children)
-		{
-			result += childNode.toStringTabs(indentLevel + 2) + "\n";
-		}
-
-		result += i1 + "CDATA:\n";
-		result += cdata + "\n";
 		
 		result += i0 + "]";
 		
