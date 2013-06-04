@@ -36,8 +36,6 @@ class MXMLParser
 		
 		var n = new MXMLNode();
 		n.name = MXMLQNameUtils.fromQualifiedString(xmlNode.nodeName);
-		
-		trace(xmlNode);
 
 		parseAttributes(xmlNode, n);
 		
