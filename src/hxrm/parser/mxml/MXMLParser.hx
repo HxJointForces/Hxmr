@@ -43,8 +43,9 @@ class MXMLParser
 			switch(innerNode.nodeType) {
 				case Xml.PCData, Xml.CData:
 					parseCDATA(n, xmlNode, innerNode);
-				default:
+				case Xml.Element:
 					parseChild(n, xmlNode, innerNode);
+				default: throw ("unknown node type: " + innerNode.nodeType);
 			}
 		}
 
