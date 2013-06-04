@@ -42,16 +42,20 @@ class MXMLParser
 		for(innerNode in xmlNode.iterator()) {
 			switch(innerNode.nodeType) {
 				case Xml.PCData, Xml.CData:
-					var value = StringTools.trim(innerNode.nodeValue);
-					if(value != null && value.length > 0) {
-						n.cdata += value;
-					}
+					parseCDATA(n, xmlNode, innerNode);
 				default:
 					parseChild(n, xmlNode, innerNode);
 			}
 		}
 
 		return n;
+	}
+	
+	function parseCDATA(n : MXMLNode, xmlNode : Xml, cDataNode : Xml) {
+		var value = StringTools.trim(cDataNode.nodeValue);
+		if(value != null && value.length > 0) {
+			n.cdata += value;
+		}
 	}
 	
 	function parseChild(n:MXMLNode, xmlNode:Xml, c : Xml) {
