@@ -3,7 +3,9 @@
 	<deep:B generic:type="haxe.Utf8,haxe.Timer" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
 
 	<hx:Script>
-		trace("Hello!");
+		<![CDATA[
+			trace("Hello!");
+		]]>
 	</hx:Script>
 	
 	<ans:innerString>
