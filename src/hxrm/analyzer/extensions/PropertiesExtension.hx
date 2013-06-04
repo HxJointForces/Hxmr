@@ -46,14 +46,13 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 
-		var field : ClassField = scope.getFieldByName(child.name.localPart);
-		if(field == null) {
-			throw "unknown field: " + child.name.localPart;
-		}
-
 		// TODO ArrayInitializers
 		if(child.children.length > 1 || (child.cdata != null && child.cdata.length > 0)) {
 			throw "value must be exactly one node";
+		}
+
+		if(scope.getFieldByName(child.name.localPart) == null) {
+			throw "unknown field: " + child.name.localPart;
 		}
 		
 		var childScope : NodeScope = analyzer.analyze(child.children[0]);
