@@ -40,14 +40,14 @@ class MXMLParser
 		parseAttributes(xmlNode, n);
 		
 		for(innerNode in xmlNode.iterator()) {
-			if(innerNode.nodeType == Xml.PCData || innerNode.nodeType == Xml.CData) {
-				var value = StringTools.trim(innerNode.nodeValue);
-				trace(value);
-				if(value != null && value.length > 0) {
-					n.cdata += value;
-				}
-			} else {
-				parseChild(n, xmlNode, innerNode);
+			switch(innerNode.nodeType) {
+				case Xml.PCData, Xml.CData:
+					var value = StringTools.trim(innerNode.nodeValue);
+					if(value != null && value.length > 0) {
+						n.cdata += value;
+					}
+				default:
+					parseChild(n, xmlNode, innerNode);
 			}
 		}
 
