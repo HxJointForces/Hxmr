@@ -14,7 +14,7 @@ class NodeScope {
 	public var type:Type;
 	public var classType:ClassType;
 
-	public var classFields:Array<ClassField>;
+	public var classFields:Map<String, ClassField>;
 
 	public var initializers : Map<String, IInitializator>;
 	
@@ -28,11 +28,6 @@ class NodeScope {
 			return null;
 		}
 		
-		for(field in classFields) {
-			if(field.name == name) {
-				return field;
-			}
-		}
-		return null;
+		return classFields.get(name);
 	}
 }

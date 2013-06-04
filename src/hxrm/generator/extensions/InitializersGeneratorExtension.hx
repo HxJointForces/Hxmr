@@ -28,18 +28,12 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			} catch (e:Dynamic) {
 				throw "can't parse value: " + e;
 			}
-			var valueType = Context.typeof(value);
-			var field = null;
-
-			for (f in scope.classFields)
-				if (f.name == fieldName) {
-					field = f;
-					break;
-				}
+			var field = scope.getFieldByName(fieldName);
 
 			if (field == null)
 				throw 'class ${scope.type} doesn\'t have field $fieldName';
 
+			var valueType = Context.typeof(value);
 			var res = if (!Context.unify(valueType, field.type)) {
 				// extensions must be here
 				var fieldCT = scope.context.getClassType(field.type);
