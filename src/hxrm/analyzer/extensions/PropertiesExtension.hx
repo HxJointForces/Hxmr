@@ -50,6 +50,10 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 		if(child.children.length > 1 || (child.cdata != null && child.cdata.length > 0)) {
 			throw "value must be exactly one node";
 		}
+		
+		if(child.attributes.iterator().hasNext()) {
+			throw "property node can't have attributes";
+		}
 
 		if(scope.getFieldByName(child.name.localPart) == null) {
 			throw "unknown field: " + child.name.localPart;
