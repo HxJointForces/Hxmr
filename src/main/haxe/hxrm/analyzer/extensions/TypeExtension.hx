@@ -16,13 +16,6 @@ class TypeAnalyzerError extends NodeAnalyzerError {
 	public function new(type : TypeAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
-	
-	public override function toString() {
-		return switch (cast(type, TypeAnalyzerErrorType)) {
-			case CANT_INSTANTIATE_INTERFACE: "CANT_INSTANTIATE_INTERFACE";
-			case CANT_INSTANTIATE_PRIVATE_CLASS: "CANT_INSTANTIATE_PRIVATE_CLASS";
-		}
-	}
 }
 
 /**
