@@ -11,6 +11,10 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 
 	public override function generate(scope:NodeScope, type:TypeDefinition, pos : Position):Bool {
 
+		if(getCtor(type) == null) {
+			return true;
+		}
+
 		// initializers
 		for (fieldName in scope.initializers.keys()) {
 			var initializator : IInitializator = scope.initializers[fieldName];
