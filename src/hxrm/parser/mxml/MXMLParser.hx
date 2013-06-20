@@ -31,7 +31,7 @@ class MXMLParser
 		try {
 			xml = Xml.parse(data);
 		} catch (e:Dynamic) {
-			context.error(new ParserError(ParserErrorType.UNKNOWN_DATA_FORMAT));
+			context.error(new ParserError(UNKNOWN_DATA_FORMAT));
 			return null;
 		}
 		
@@ -44,7 +44,7 @@ class MXMLParser
 			var firstElement = xmlNode.firstElement();
 
 			if (firstElement == null) {
-				context.error(new ParserError(ParserErrorType.EMPTY_DATA));
+				context.error(new ParserError(EMPTY_DATA));
 				return null;
 			}
 

@@ -52,7 +52,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		if(scope.getFieldByName(attributeQName.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(PropertiesAnalyzerErrorType.UNKNOWN_FIELD));
+			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD));
 			return;
 		}
 		
@@ -67,17 +67,17 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 
 		// TODO ArrayInitializers
 		if(child.children.length > 1 || (child.cdata != null && child.cdata.length > 0)) {
-			context.error(new PropertiesAnalyzerError(PropertiesAnalyzerErrorType.VALUE_MUST_BE_ONE_NODE));
+			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
 			return;
 		}
 		
 		if(child.attributes.iterator().hasNext()) {
-			context.error(new PropertiesAnalyzerError(PropertiesAnalyzerErrorType.ATTRIBUTES_IN_PROPERTY));
+			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY));
 			return;
 		}
 
 		if(scope.getFieldByName(child.name.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(PropertiesAnalyzerErrorType.UNKNOWN_FIELD));
+			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD));
 			return;
 		}
 		
@@ -95,7 +95,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 	function rememberProperty(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {
 
 		if(scope.initializers.exists(attributeQName.localPart)) {
-			context.error(new PropertiesAnalyzerError(PropertiesAnalyzerErrorType.DUPLICATE));
+			context.error(new PropertiesAnalyzerError(DUPLICATE));
 			return;
 		}
 

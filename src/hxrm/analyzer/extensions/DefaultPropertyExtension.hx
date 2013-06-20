@@ -35,7 +35,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		var node : MXMLNode = scope.context.node;
 
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
-			context.error(new DefaultPropertyAnalyzerError(DefaultPropertyAnalyzerErrorType.CDATA_WITH_INNER_TAGS));
+			context.error(new DefaultPropertyAnalyzerError(CDATA_WITH_INNER_TAGS));
 			return false;
 		}
 		

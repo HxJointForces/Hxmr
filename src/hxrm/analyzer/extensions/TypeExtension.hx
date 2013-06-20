@@ -55,12 +55,12 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		}
 
 		if (scope.classType.isInterface) {
-			context.error(new TypeAnalyzerError(TypeAnalyzerErrorType.CANT_INSTANTIATE_INTERFACE));
+			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_INTERFACE));
 			return false;
 		}
 
 		if (scope.classType.isPrivate) {
-			context.error(new TypeAnalyzerError(TypeAnalyzerErrorType.CANT_INSTANTIATE_PRIVATE_CLASS));
+			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_PRIVATE_CLASS));
 			return false;
 		}
 		
@@ -87,7 +87,7 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		switch (scope.type) {
 			case TInst(t, params):
 				if (params.length != typeParams.length) {
-					context.error(new TypeAnalyzerError(TypeAnalyzerErrorType.INCORRENT_TYPE_PARAMS_COUNT));
+					context.error(new TypeAnalyzerError(INCORRENT_TYPE_PARAMS_COUNT));
 					return;
 				}
 			case _:
