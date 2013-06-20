@@ -8,7 +8,6 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 import hxrm.analyzer.QName;
-import hxrm.HxmrContext;
 
 using StringTools;
 using haxe.macro.Tools;
@@ -27,7 +26,7 @@ class TypeDefenitionGenerator
 	}
 	
 	
-	public function write(context : HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
+	public function write(context : hxrm.HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
 		pos = Context.makePosition( { min:0, max:0, file:file } );

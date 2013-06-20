@@ -23,11 +23,7 @@ class NodeScope {
 	public function new() {
 	}
 
-	public function getFieldByName(name : String) : ClassField {
-		if(classFields == null) {
-			return null;
-		}
-		
-		return classFields.get(name);
+	inline public function getFieldByName(name : String) : ClassField {
+		return classFields != null ? classFields.get(name) : null;
 	}
 }

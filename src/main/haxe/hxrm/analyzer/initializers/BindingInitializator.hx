@@ -1,6 +1,6 @@
 package hxrm.analyzer.initializers;
 
-class BindingInitializator implements IInitializator{
+class BindingInitializator {
 
 	public var value : String;
 

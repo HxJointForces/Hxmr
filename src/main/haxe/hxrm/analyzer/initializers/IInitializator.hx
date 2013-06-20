@@ -1,5 +1,6 @@
 package hxrm.analyzer.initializers;
 
-interface IInitializator {
-
+enum IInitializator {
+	InitBinding(initializator:BindingInitializator);
+	InitNodeScope(initializator:NodeScopeInitializator);
 }

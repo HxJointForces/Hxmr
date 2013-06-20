@@ -1,6 +1,6 @@
 package hxrm.analyzer.initializers;
 
-class NodeScopeInitializator implements IInitializator {
+class NodeScopeInitializator {
 
 	public var scope : NodeScope;
 	public function new(scope : NodeScope) {

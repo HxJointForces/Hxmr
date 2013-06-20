@@ -53,7 +53,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		rememberProperty(context, scope, attributeQName, new BindingInitializator(value));
+		rememberProperty(context, scope, attributeQName, InitBinding(new BindingInitializator(value)));
 	}
 
 	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
@@ -86,7 +86,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		rememberProperty(context, scope, child.name, new NodeScopeInitializator(childScope));
+		rememberProperty(context, scope, child.name, InitNodeScope(new NodeScopeInitializator(childScope)));
 	}
 
 	function rememberProperty(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {
