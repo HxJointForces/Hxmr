@@ -6,15 +6,14 @@ package deep;
  */
 class B<T,K>
 {
-
-	public function new() 
-	{
-		
-	}
-	
 	public var t:T;
 	
 	public var test:Int;
 	public var prop:String;
+
+	public function new()
+	{
+
+	}
 	
 }
