@@ -28,10 +28,10 @@ class NodeAnalyzer {
 		result.context = new AnalyzerContext(node);
 		
 		var currentIterationExtensions = extensions.copy();
-		var nextIterationExtensions : Array<INodeAnalyzerExtension> = [];
 
 		while(currentIterationExtensions.length != 0) {
-		
+			var nextIterationExtensions : Array<INodeAnalyzerExtension> = [];
+			
 			for(extension in currentIterationExtensions) {
 				if(extension.analyze(context, result)) {
 					nextIterationExtensions.push(extension);
