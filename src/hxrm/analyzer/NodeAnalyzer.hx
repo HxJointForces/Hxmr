@@ -8,6 +8,10 @@ import hxrm.analyzer.extensions.INodeAnalyzerExtension;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.HxmrContext;
 
+
+class NodeAnalyzerError extends ContextError {
+}
+
 class NodeAnalyzer {
 
 	private var extensions : Array<INodeAnalyzerExtension>;

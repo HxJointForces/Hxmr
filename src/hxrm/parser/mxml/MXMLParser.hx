@@ -5,6 +5,21 @@ import hxrm.HxmrContext;
 
 using StringTools;
 
+// константы типов ошибок
+enum ParserErrorType {
+	UNKNOWN_DATA_FORMAT;
+	EMPTY_DATA;
+}
+
+class ParserError extends ContextError {
+	public var type : ParserErrorType;
+	
+	public function new(type : ParserErrorType) {
+		this.type = type;
+		super({from : 0, to : -1});
+	}
+}
+
 class MXMLParser
 {
 	public function new() {
@@ -16,7 +31,7 @@ class MXMLParser
 		try {
 			xml = Xml.parse(data);
 		} catch (e:Dynamic) {
-			context.error({type : UNKNOWN_DATA_FORMAT, pos : {from : 0, to : 0}});
+			context.error(new ParserError(ParserErrorType.UNKNOWN_DATA_FORMAT));
 			return null;
 		}
 		
@@ -29,7 +44,7 @@ class MXMLParser
 			var firstElement = xmlNode.firstElement();
 
 			if (firstElement == null) {
-				context.error({type : EMPTY_DATA, pos : {from : 0, to : 0}});
+				context.error(new ParserError(ParserErrorType.EMPTY_DATA));
 				return null;
 			}
 

@@ -66,15 +66,23 @@ class HxrmTypeDefinitionFactory {
 			trace("\n" + node);
 			
 			var scope : NodeScope = analyzer.analyze(context, node);
+
+			if(checkErrors()) {
+				return null;
+			}
 			
 			#if bsideup
 				TypeUtils.prettyPrintType(scope);
 			#end
 	
 			var typeDefinition : TypeDefinition = tdWriter.write(context, scope, type, path);
+
+			if(checkErrors()) {
+				return null;
+			}
 				
 			#if debug  
-			// TODO: сделать принт в файлы по требованию из девайнов
+			// TODO: print to file on demand
 			trace(p.printTypeDefinition(typeDefinition, true));
 			#end
 
@@ -95,7 +103,7 @@ class HxrmTypeDefinitionFactory {
 		}
 		
 		for(e in context.errors) {
-			trace(e.type);
+			trace(e);
 		}
 		return true;
 	}

@@ -1,9 +1,24 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.HxmrContext.FilePos;
+import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import StringTools;
 import hxrm.analyzer.NodeScope;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQNameUtils;
+
+enum DefaultPropertyAnalyzerErrorType {
+	CDATA_WITH_INNER_TAGS;
+}
+
+class DefaultPropertyAnalyzerError extends NodeAnalyzerError {
+	public var type : DefaultPropertyAnalyzerErrorType;
+
+	public function new(type : DefaultPropertyAnalyzerErrorType, ?pos : FilePos) {
+		super(pos);
+		this.type = type;
+	}
+}
 
 class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
@@ -20,7 +35,8 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		var node : MXMLNode = scope.context.node;
 
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
-			throw "You cann't mix cdata with inner tags!\n" + node;
+			context.error(new DefaultPropertyAnalyzerError(DefaultPropertyAnalyzerErrorType.CDATA_WITH_INNER_TAGS));
+			return false;
 		}
 		
 		for (childNode in node.children) {
@@ -47,8 +63,9 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		var childScope : NodeScope = analyzer.analyze(context, child);
 		
 		if(childScope == null) {
+			//TODO logging?
 			trace("childScope is null");
-			throw "childScope is null";
+			return;
 		}
 		
 		scope.children.push(childScope);

@@ -4,16 +4,12 @@ package hxrm;
 // Позволит генерировать удобные ерроры открывающиеся прямо в нужном месте
 typedef FilePos = { from:Int, ?to:Int }
 
-// константы типов ошибок
-enum ParserErrorType {
-	UNKNOWN_DATA_FORMAT;
-	EMPTY_DATA;
-}
+class ContextError {
+	public var filePos:FilePos;
 
-typedef ContextError = {
-	type : ParserErrorType,
-	?substitutions : Map<String, String>,
-	?pos : FilePos
+	public function new(pos:FilePos) {
+		filePos = pos;
+	}
 }
 
 class HxmrContext {

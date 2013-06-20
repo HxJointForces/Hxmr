@@ -1,11 +1,29 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.HxmrContext.FilePos;
+import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLQNameUtils;
 import haxe.macro.Context;
 
 using StringTools;
+
+enum TypeAnalyzerErrorType {
+	CANT_INSTANTIATE_INTERFACE;
+	CANT_INSTANTIATE_PRIVATE_CLASS;
+	INCORRENT_TYPE_PARAMS_COUNT;
+}
+
+class TypeAnalyzerError extends NodeAnalyzerError {
+	public var type : TypeAnalyzerErrorType;
+
+	public function new(type : TypeAnalyzerErrorType, ?pos : FilePos) {
+		super(pos);
+		this.type = type;
+	}
+}
+
 /**
  * ...
  * @author deep <system.grand@gmail.com>
@@ -37,13 +55,13 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		}
 
 		if (scope.classType.isInterface) {
-			trace("can't instantiate interface " + resolvedQName);
-			throw "can't instantiate interface " + resolvedQName;
+			context.error(new TypeAnalyzerError(TypeAnalyzerErrorType.CANT_INSTANTIATE_INTERFACE));
+			return false;
 		}
 
 		if (scope.classType.isPrivate) {
-			trace("can't instantiate private class " + resolvedQName);
-			throw "can't instantiate private class " + resolvedQName;
+			context.error(new TypeAnalyzerError(TypeAnalyzerErrorType.CANT_INSTANTIATE_PRIVATE_CLASS));
+			return false;
 		}
 		
 		for (attributeQName in node.attributes.keys()) {
@@ -69,8 +87,8 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		switch (scope.type) {
 			case TInst(t, params):
 				if (params.length != typeParams.length) {
-					trace("incorect type params count");
-					throw "incorect type params count";
+					context.error(new TypeAnalyzerError(TypeAnalyzerErrorType.INCORRENT_TYPE_PARAMS_COUNT));
+					return;
 				}
 			case _:
 		}
