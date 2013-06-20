@@ -1,7 +1,5 @@
 package hxrm.generator.extensions;
 
-import hxrm.generator.TypeDefenitionGenerator;
-import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Expr;
 import haxe.macro.Expr;
@@ -16,6 +14,15 @@ class GeneratorExtensionBase implements IGeneratorExtension {
 
 	public function generate(scope:NodeScope, type:TypeDefinition, pos : Position) : Bool {
 		return false;
+	}
+
+	function getCtor(type:TypeDefinition) : Field {
+		for(field in type.fields) {
+			if(field.name == "new") {
+				return field;
+			}
+		}
+		return null;
 	}
 
 }
