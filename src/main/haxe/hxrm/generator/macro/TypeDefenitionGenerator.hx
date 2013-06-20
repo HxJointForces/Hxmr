@@ -8,6 +8,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 import hxrm.analyzer.QName;
+import hxrm.HxmrContext;
 
 using StringTools;
 using haxe.macro.Tools;

@@ -59,7 +59,7 @@ class HxrmTypeDefinitionFactory {
 
 			var node = parser.parse(context, File.getContent(path));
 			
-			if(checkErrors()) {
+			if(checkErrors(path)) {
 				return null;
 			}
 			
@@ -67,7 +67,7 @@ class HxrmTypeDefinitionFactory {
 			
 			var scope : NodeScope = analyzer.analyze(context, node);
 
-			if(checkErrors()) {
+			if(checkErrors(path)) {
 				return null;
 			}
 			
@@ -77,7 +77,7 @@ class HxrmTypeDefinitionFactory {
 	
 			var typeDefinition : TypeDefinition = tdWriter.write(context, scope, type, path);
 
-			if(checkErrors()) {
+			if(checkErrors(path)) {
 				return null;
 			}
 				
@@ -97,13 +97,14 @@ class HxrmTypeDefinitionFactory {
 		return null;
 	}
 
-	private function checkErrors() : Bool {
+	private function checkErrors(file:String) : Bool {
 		if(context.errors.length == 0) {
 			return false;
 		}
 		
 		for(e in context.errors) {
 			trace(e);
+			e.nativeThrow(file); // TODO: test multiple errors
 		}
 		return true;
 	}

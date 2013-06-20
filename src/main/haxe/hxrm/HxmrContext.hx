@@ -1,9 +1,9 @@
 package hxrm;
 
-// нужно придумать как из xml брать номер символа в котором ошибка и по который. 
-// Позволит генерировать удобные ерроры открывающиеся прямо в нужном месте
 import haxe.CallStack;
 import EnumValue;
+import haxe.macro.Context;
+
 typedef Pos = { from:Int, ?to:Int }
 
 class ContextError {
@@ -13,6 +13,21 @@ class ContextError {
 	public function new(type : EnumValue, pos:Pos) {
 		this.type = type;
 		this.pos = pos;
+	}
+	
+	public function nativeThrow(file:String) {
+		Context.error(
+			toString(), 
+			Context.makePosition( {
+				file:file,
+				min:pos.from,
+				max:pos.to != null ? pos.to : pos.from 
+			} )
+		);
+	}
+	
+	public function toString() {
+		return Std.string(type);
 	}
 }
 
