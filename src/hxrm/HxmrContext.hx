@@ -3,13 +3,13 @@ package hxrm;
 // нужно придумать как из xml брать номер символа в котором ошибка и по который. 
 // Позволит генерировать удобные ерроры открывающиеся прямо в нужном месте
 import EnumValue;
-typedef FilePos = { from:Int, ?to:Int }
+typedef Pos = { from:Int, ?to:Int }
 
 class ContextError {
 	private var type:EnumValue;
-	private var pos:FilePos;
+	private var pos:Pos;
 
-	public function new(type : EnumValue, pos:FilePos) {
+	public function new(type : EnumValue, pos:Pos) {
 		this.type = type;
 		this.pos = pos;
 	}

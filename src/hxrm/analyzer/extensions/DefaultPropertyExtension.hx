@@ -1,6 +1,6 @@
 package hxrm.analyzer.extensions;
 
-import hxrm.HxmrContext.FilePos;
+import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import StringTools;
 import hxrm.analyzer.NodeScope;
@@ -12,7 +12,7 @@ enum DefaultPropertyAnalyzerErrorType {
 }
 
 class DefaultPropertyAnalyzerError extends NodeAnalyzerError {
-	public function new(type : DefaultPropertyAnalyzerErrorType, ?pos : FilePos) {
+	public function new(type : DefaultPropertyAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
 }

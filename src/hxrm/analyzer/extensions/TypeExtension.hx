@@ -1,6 +1,6 @@
 package hxrm.analyzer.extensions;
 
-import hxrm.HxmrContext.FilePos;
+import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
@@ -16,7 +16,7 @@ enum TypeAnalyzerErrorType {
 }
 
 class TypeAnalyzerError extends NodeAnalyzerError {
-	public function new(type : TypeAnalyzerErrorType, ?pos : FilePos) {
+	public function new(type : TypeAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
 }

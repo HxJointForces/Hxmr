@@ -1,5 +1,5 @@
 package hxrm.analyzer.extensions;
-import hxrm.HxmrContext.FilePos;
+import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import haxe.macro.Type.ClassField;
 import hxrm.analyzer.initializers.NodeScopeInitializator;
@@ -16,7 +16,7 @@ enum PropertiesAnalyzerErrorType {
 }
 
 class PropertiesAnalyzerError extends NodeAnalyzerError {
-	public function new(type : PropertiesAnalyzerErrorType, ?pos : FilePos) {
+	public function new(type : PropertiesAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
 }
