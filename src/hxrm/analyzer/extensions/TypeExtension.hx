@@ -4,8 +4,6 @@ import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
-import hxrm.parser.mxml.MXMLQNameUtils;
-import haxe.macro.Context;
 
 using StringTools;
 

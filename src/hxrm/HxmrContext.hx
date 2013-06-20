@@ -2,6 +2,7 @@ package hxrm;
 
 // нужно придумать как из xml брать номер символа в котором ошибка и по который. 
 // Позволит генерировать удобные ерроры открывающиеся прямо в нужном месте
+import haxe.CallStack;
 import EnumValue;
 typedef Pos = { from:Int, ?to:Int }
 
@@ -24,6 +25,7 @@ class HxmrContext {
 	}
 
 	public function error(err : ContextError) : Void {
+		trace("\n" + CallStack.callStack().join("\n") + "\n" + err);
 		errors.push(err);
 	}
 }

@@ -7,17 +7,17 @@ import hxrm.analyzer.NodeScope;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQNameUtils;
 
-enum DefaultPropertyAnalyzerErrorType {
+enum ChildrenAnalyzerErrorType {
 	CDATA_WITH_INNER_TAGS;
 }
 
-class DefaultPropertyAnalyzerError extends NodeAnalyzerError {
-	public function new(type : DefaultPropertyAnalyzerErrorType, ?pos : Pos) {
+class ChildrenAnalyzerError extends NodeAnalyzerError {
+	public function new(type : ChildrenAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
 }
 
-class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
+class ChildrenExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
@@ -32,7 +32,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		var node : MXMLNode = scope.context.node;
 
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
-			context.error(new DefaultPropertyAnalyzerError(CDATA_WITH_INNER_TAGS));
+			context.error(new ChildrenAnalyzerError(CDATA_WITH_INNER_TAGS));
 			return false;
 		}
 		
