@@ -27,7 +27,7 @@ class NodeAnalyzer {
 
 		result.context = new AnalyzerContext(node);
 		
-		var currentIterationExtensions = extensions.copy();
+		var currentIterationExtensions = extensions;
 
 		while(currentIterationExtensions.length != 0) {
 			var nextIterationExtensions : Array<INodeAnalyzerExtension> = [];

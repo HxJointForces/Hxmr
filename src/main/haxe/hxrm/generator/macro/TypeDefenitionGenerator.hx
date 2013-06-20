@@ -10,6 +10,7 @@ import haxe.macro.Type;
 import hxrm.analyzer.QName;
 
 using StringTools;
+using haxe.macro.Tools;
 /**
  * ...
  * @author deep <system.grand@gmail.com>
@@ -28,7 +29,7 @@ class TypeDefenitionGenerator
 	public function write(context : HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
-		var pos = Context.makePosition( { min:0, max:0, file:file } );
+		pos = Context.makePosition( { min:0, max:0, file:file } );
 		var qName : QName = QNameUtils.fromHaxeTypeId(type);
 		
 		var typeDefinition : TypeDefinition =  {
@@ -59,7 +60,7 @@ class TypeDefenitionGenerator
 	
 	function generateCtor(scope:NodeScope):Field
 	{
-		var ctorExpr = { expr:EBlock([]), pos:pos };
+		var ctorExpr = macro { super(); };
 		
 		return {
 			name: "new",

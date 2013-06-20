@@ -16,8 +16,8 @@ class Main
 		Hxrm.build();
 		
 		trace(17);
-		var a = 127;
-		var a = new ml.Test();
+		var a:ml.Test = new ml.Test();
+		trace(a);
 		
 	}
 	
