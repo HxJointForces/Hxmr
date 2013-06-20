@@ -1,6 +1,5 @@
 package hxrm.analyzer;
 
-import hxrm.parser.Tools;
 import hxrm.analyzer.initializers.IInitializator;
 import haxe.macro.Type;
 
