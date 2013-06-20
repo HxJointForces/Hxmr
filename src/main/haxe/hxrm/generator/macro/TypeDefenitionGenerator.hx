@@ -43,16 +43,18 @@ class TypeDefenitionGenerator
 			fields:[generateCtor(scope)]
 		}
 
-		while(true) {
-			var oneMoreTime : Bool = false;
 
-			for(extension in extensions) {
-				oneMoreTime = extension.generate(scope, typeDefinition, pos) || oneMoreTime;
-			}
+		var currentIterationExtensions = extensions.copy();
 
-			if(!oneMoreTime) {
-				break;
+		while(currentIterationExtensions.length != 0) {
+			var nextIterationExtensions : Array<IGeneratorExtension> = [];
+
+			for(extension in currentIterationExtensions) {
+				if(extension.generate(scope, typeDefinition, pos)) {
+					nextIterationExtensions.push(extension);
+				}
 			}
+			currentIterationExtensions = nextIterationExtensions;
 		}
 		
 		return typeDefinition;
