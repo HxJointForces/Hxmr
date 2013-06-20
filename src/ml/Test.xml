@@ -10,7 +10,7 @@
 	<deep:B generic:type="haxe.Utf8,haxe.Timer" xmlns:bnamespace="*" test="123" deep:prop="asValue"/>
 	
 	<ans:innerString>
-		<String>
+		<String xmlns="*">
 			Hello!
 			qwe
 		</String>

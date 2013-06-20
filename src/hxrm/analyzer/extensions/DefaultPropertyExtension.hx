@@ -7,7 +7,7 @@ import hxrm.parser.mxml.MXMLQNameUtils;
 
 class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope):Bool {
+	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
 		if(scope.children == null) {
 			scope.children = [];
@@ -24,13 +24,13 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		for (childNode in node.children) {
-			matchChild(scope, childNode);
+			matchChild(context, scope, childNode);
 		}
 		
 		return false;
 	}
 
-	function matchChild(scope:NodeScope, child:MXMLNode):Void {
+	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
 	
 		if(child.name.namespace == scope.context.node.name.namespace) {
 			if(scope.getFieldByName(child.name.localPart) != null) {
@@ -44,7 +44,7 @@ class DefaultPropertyExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		var childScope : NodeScope = analyzer.analyze(child);
+		var childScope : NodeScope = analyzer.analyze(context, child);
 		
 		if(childScope == null) {
 			trace("childScope is null");

@@ -1,7 +1,7 @@
 package hxrm.parser.mxml;
 
 import StringTools;
-import hxrm.parser.Tools;
+import hxrm.HxmrContext;
 
 using StringTools;
 
@@ -10,28 +10,30 @@ class MXMLParser
 	public function new() {
 	}
 	
-	public function parse(data:String):Null<MXMLNode> {
+	public function parse(context : HxmrContext, data:String):Null<MXMLNode> {
 		
 		var xml = null;
 		try {
 			xml = Xml.parse(data);
 		} catch (e:Dynamic) {
-			throw new ParserError(UNKNOWN_DATA_FORMAT, { to : 0 , from : 0 });
+			context.error({type : UNKNOWN_DATA_FORMAT, pos : {from : 0, to : 0}});
+			return null;
 		}
 		
-		return parseNode(xml);
+		return parseNode(context, xml);
 	}
 	
-	function parseNode(xmlNode : Xml):Null<MXMLNode>  {
+	function parseNode(context : HxmrContext, xmlNode : Xml):Null<MXMLNode>  {
 	
 		if(xmlNode.nodeType == Xml.Document) {
 			var firstElement = xmlNode.firstElement();
 
 			if (firstElement == null) {
-				throw new ParserError(EMPTY_DATA, { to : 0 , from : 0 });
+				context.error({type : EMPTY_DATA, pos : {from : 0, to : 0}});
+				return null;
 			}
 
-			return parseNode(firstElement);
+			return parseNode(context, firstElement);
 		}
 		
 		var n = new MXMLNode();
@@ -44,7 +46,7 @@ class MXMLParser
 				case Xml.PCData, Xml.CData:
 					parseCDATA(n, xmlNode, innerNode);
 				case Xml.Element:
-					parseChild(n, xmlNode, innerNode);
+					parseChild(context, n, xmlNode, innerNode);
 				default: throw ("unknown node type: " + innerNode.nodeType);
 			}
 		}
@@ -59,8 +61,8 @@ class MXMLParser
 		}
 	}
 	
-	function parseChild(n:MXMLNode, xmlNode:Xml, c : Xml) {
-		var child : MXMLNode = parseNode(c);
+	function parseChild(context : HxmrContext, n:MXMLNode, xmlNode:Xml, c : Xml) {
+		var child : MXMLNode = parseNode(context, c);
 		child.parentNode = n;
 		
 		for(key in n.namespaces.keys()) {

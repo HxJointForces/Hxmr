@@ -2,20 +2,14 @@ package hxrm.generator.macro;
 
 import hxrm.generator.extensions.InitializersGeneratorExtension;
 import hxrm.generator.extensions.IGeneratorExtension;
-import hxrm.analyzer.initializers.BindingInitializator;
-import hxrm.analyzer.initializers.IInitializator;
 import hxrm.analyzer.QNameUtils;
-import hxrm.utils.TypeUtils;
-import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
-import hxrm.parser.mxml.MXMLNode;
 import hxrm.analyzer.QName;
 
 using StringTools;
-using haxe.macro.Tools;
 /**
  * ...
  * @author deep <system.grand@gmail.com>
@@ -31,8 +25,7 @@ class TypeDefenitionGenerator
 	}
 	
 	
-	// analyzer вроде и не нужен
-	public function write(analyzer : NodeAnalyzer, scope:NodeScope, type:String, file:String):TypeDefinition {
+	public function write(context : HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
 		var pos = Context.makePosition( { min:0, max:0, file:file } );

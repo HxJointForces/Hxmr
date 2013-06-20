@@ -8,7 +8,7 @@ import hxrm.parser.mxml.MXMLQName;
 
 class PropertiesExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope):Bool {
+	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 	
 		if(scope.initializers == null) {
 			scope.initializers = new Map();
@@ -17,17 +17,17 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 		var node : MXMLNode = scope.context.node;
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(scope, attributeQName, value);
+			matchAttribute(context, scope, attributeQName, value);
 		}
 		
 		for (childNode in node.children) {
-			matchChild(scope, childNode);
+			matchChild(context, scope, childNode);
 		}
 
 		return false;
 	}
 
-	function matchAttribute(scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
+	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
 
 		if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
 			return;
@@ -40,7 +40,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 		rememberProperty(scope, attributeQName, new BindingInitializator(value));
 	}
 
-	function matchChild(scope:NodeScope, child:MXMLNode):Void {
+	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
 	
 		if(child.name.namespace != scope.context.node.name.namespace) {
 			return;
@@ -59,7 +59,7 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			throw "unknown field: " + child.name.localPart;
 		}
 		
-		var childScope : NodeScope = analyzer.analyze(child.children[0]);
+		var childScope : NodeScope = analyzer.analyze(context, child.children[0]);
 
 		if(childScope == null) {
 			trace("childScope is null");

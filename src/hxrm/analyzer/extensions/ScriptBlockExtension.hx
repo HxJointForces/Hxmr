@@ -5,15 +5,15 @@ import hxrm.parser.mxml.MXMLQNameUtils;
 
 class ScriptBlockExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope):Bool {
+	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 		var node : MXMLNode = scope.context.node;
 		for (childNode in node.children) {
-				matchChild(scope, childNode);
+				matchChild(context, scope, childNode);
 		}
 		return false;
 	}
 
-	function matchChild(scope:NodeScope, child:MXMLNode):Void {
+	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
 
 		if(child.name.localPart != "Script"){
 			return;

@@ -12,7 +12,7 @@ using StringTools;
  */
 class TypeExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(scope:NodeScope):Bool {
+	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 		var node : MXMLNode = scope.context.node;
 
 		var resolvedQName : QName = scope.context.resolveQName(node.name);
@@ -48,13 +48,13 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(scope, attributeQName, value);
+			matchAttribute(context, scope, attributeQName, value);
 		}
 		
 		return false;
 	}
 
-	function matchAttribute(scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
+	function matchAttribute(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
 
 		if(attributeQName.localPart != "type") {
 			return;

@@ -1,7 +1,5 @@
 package hxrm.analyzer.extensions;
 
-import hxrm.parser.mxml.MXMLQName;
-import hxrm.parser.mxml.MXMLNode;
 class NodeAnalyzerExtensionBase implements INodeAnalyzerExtension {
 
 	var analyzer : NodeAnalyzer;
@@ -10,7 +8,7 @@ class NodeAnalyzerExtensionBase implements INodeAnalyzerExtension {
 		this.analyzer = analyzer;
 	}
 
-	public function analyze(scope:NodeScope):Bool {
+	public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 		return false;
 	}
 }
