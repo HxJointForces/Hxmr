@@ -15,6 +15,12 @@ class ChildrenAnalyzerError extends NodeAnalyzerError {
 	public function new(type : ChildrenAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
+	
+	public override function toString() {
+		return switch (cast(type, ChildrenAnalyzerErrorType)) {
+			case CDATA_WITH_INNER_TAGS: "CDATA_WITH_INNER_TAGS"; // TODO: l10n
+		}
+	}
 }
 
 class ChildrenExtension extends NodeAnalyzerExtensionBase {

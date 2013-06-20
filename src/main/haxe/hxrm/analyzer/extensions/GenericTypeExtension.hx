@@ -15,6 +15,12 @@ class GenericTypeAnalyzerError extends NodeAnalyzerError {
 	public function new(type : GenericTypeAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
+	
+	public override function toString() {
+		return switch (cast(type, GenericTypeAnalyzerErrorType)) {
+			case INCORRECT_TYPE_PARAMS_COUNT: "INCORRECT_TYPE_PARAMS_COUNT";
+		}
+	}
 }
 
 class GenericTypeExtension extends NodeAnalyzerExtensionBase {

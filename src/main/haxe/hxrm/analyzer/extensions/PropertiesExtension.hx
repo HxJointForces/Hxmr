@@ -19,6 +19,15 @@ class PropertiesAnalyzerError extends NodeAnalyzerError {
 	public function new(type : PropertiesAnalyzerErrorType, ?pos : Pos) {
 		super(type, pos);
 	}
+	
+	public override function toString() {
+		return switch (cast(type, PropertiesAnalyzerErrorType)) {
+			case UNKNOWN_FIELD: "UNKNOWN_FIELD";
+			case VALUE_MUST_BE_ONE_NODE: "VALUE_MUST_BE_ONE_NODE";
+			case ATTRIBUTES_IN_PROPERTY: "ATTRIBUTES_IN_PROPERTY";
+			case DUPLICATE: "DUPLICATE";
+		}
+	}
 }
 
 class PropertiesExtension extends NodeAnalyzerExtensionBase {
