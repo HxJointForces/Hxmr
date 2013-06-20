@@ -16,11 +16,8 @@ enum TypeAnalyzerErrorType {
 }
 
 class TypeAnalyzerError extends NodeAnalyzerError {
-	public var type : TypeAnalyzerErrorType;
-
 	public function new(type : TypeAnalyzerErrorType, ?pos : FilePos) {
-		super(pos);
-		this.type = type;
+		super(type, pos);
 	}
 }
 

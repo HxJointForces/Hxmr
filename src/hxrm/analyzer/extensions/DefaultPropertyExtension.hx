@@ -12,11 +12,8 @@ enum DefaultPropertyAnalyzerErrorType {
 }
 
 class DefaultPropertyAnalyzerError extends NodeAnalyzerError {
-	public var type : DefaultPropertyAnalyzerErrorType;
-
 	public function new(type : DefaultPropertyAnalyzerErrorType, ?pos : FilePos) {
-		super(pos);
-		this.type = type;
+		super(type, pos);
 	}
 }
 

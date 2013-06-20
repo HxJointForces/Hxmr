@@ -16,11 +16,8 @@ enum PropertiesAnalyzerErrorType {
 }
 
 class PropertiesAnalyzerError extends NodeAnalyzerError {
-	public var type : PropertiesAnalyzerErrorType;
-
 	public function new(type : PropertiesAnalyzerErrorType, ?pos : FilePos) {
-		super(pos);
-		this.type = type;
+		super(type, pos);
 	}
 }
 

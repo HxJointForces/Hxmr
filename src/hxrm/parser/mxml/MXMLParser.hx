@@ -12,11 +12,8 @@ enum ParserErrorType {
 }
 
 class ParserError extends ContextError {
-	public var type : ParserErrorType;
-	
 	public function new(type : ParserErrorType) {
-		this.type = type;
-		super({from : 0, to : -1});
+		super(type, {from : 0, to : -1});
 	}
 }
 
