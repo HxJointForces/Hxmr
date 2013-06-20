@@ -5,7 +5,7 @@ import hxrm.utils.TypeUtils;
 import haxe.CallStack;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
-import hxrm.generator.macro.TypeDefenitionGenerator;
+import hxrm.generator.TypeDefenitionGenerator;
 import haxe.macro.Expr;
 import haxe.macro.Printer;
 import hxrm.parser.mxml.MXMLParser;

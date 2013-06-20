@@ -1,6 +1,6 @@
 package hxrm.generator.extensions;
 
-import hxrm.generator.macro.TypeDefenitionGenerator;
+import hxrm.generator.TypeDefenitionGenerator;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Expr;
