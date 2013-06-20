@@ -29,7 +29,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		for (fieldName in scope.initializers.keys()) {
 			var initializatorEnum : IInitializator = scope.initializers[fieldName];
 			
-			var res = switch(initializatorEnum) {
+			var res : Expr = switch(initializatorEnum) {
 				case InitBinding(initializator): parseBindingInitializator(scope, type, pos, fieldName, initializator);
 				case InitNodeScope(initializator): null;
 			}

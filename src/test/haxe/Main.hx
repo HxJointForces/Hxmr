@@ -18,6 +18,7 @@ class Main
 		
 		var a = new ml.Test();
 		
+		trace(a.aString);
 	}
 	
 }

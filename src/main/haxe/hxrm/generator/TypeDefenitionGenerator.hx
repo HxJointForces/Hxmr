@@ -1,5 +1,6 @@
 package hxrm.generator;
 
+import hxrm.utils.TypeUtils;
 import hxrm.generator.extensions.ConstructorGeneratorExtension;
 import hxrm.generator.extensions.InitializersGeneratorExtension;
 import hxrm.generator.extensions.IGeneratorExtension;
@@ -54,6 +55,8 @@ class TypeDefenitionGenerator
 			}
 			currentIterationExtensions = nextIterationExtensions;
 		}
+		
+		TypeUtils.prettyPrintType(typeDefinition);
 		
 		return typeDefinition;
 	}

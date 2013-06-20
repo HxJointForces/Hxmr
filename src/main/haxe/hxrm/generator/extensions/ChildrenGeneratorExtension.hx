@@ -6,7 +6,6 @@ import hxrm.analyzer.NodeScope;
 
 class ChildrenGeneratorExtension extends GeneratorExtensionBase {
 
-
 	override public function generate(scope:NodeScope, type:TypeDefinition, pos : Position):Bool {
 
 		if(getCtor(type) == null) {
@@ -21,7 +20,7 @@ class ChildrenGeneratorExtension extends GeneratorExtensionBase {
 
 			if(defaultProperty != null) {
 				//TODO use pos from base class!!!
-				//context.error(new ChildrenAnalyzerError(DUPLICATE_DEFAULT_PROPERTY));
+				//context.error(new ChildrenGeneratorExtension(DUPLICATE_DEFAULT_PROPERTY));
 				return false;
 			}
 

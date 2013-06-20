@@ -28,7 +28,7 @@ class AnalyzerContext {
 	public function getType(typeQName:QName):Type {
 		var type = null;
 		try {
-			trace(typeQName.toHaxeTypeId());
+			//trace(typeQName.toHaxeTypeId());
 			type = Context.getType(typeQName.toHaxeTypeId());
 		} catch (e:Dynamic) {
 			trace(e);
