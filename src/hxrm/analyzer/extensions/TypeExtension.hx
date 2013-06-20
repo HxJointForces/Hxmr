@@ -12,7 +12,6 @@ using StringTools;
 enum TypeAnalyzerErrorType {
 	CANT_INSTANTIATE_INTERFACE;
 	CANT_INSTANTIATE_PRIVATE_CLASS;
-	INCORRENT_TYPE_PARAMS_COUNT;
 }
 
 class TypeAnalyzerError extends NodeAnalyzerError {
@@ -61,47 +60,7 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 			return false;
 		}
 		
-		for (attributeQName in node.attributes.keys()) {
-			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(context, scope, attributeQName, value);
-		}
-		
 		return false;
-	}
-
-	function matchAttribute(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
-
-		if(attributeQName.localPart != "type") {
-			return;
-		}
-		
-		//TODO remove hardcoded string
-		if(MXMLQNameUtils.resolveNamespaceValue(scope.context.node, attributeQName.namespace) != "http://haxe.org/hxmr/generic") {
-			return;
-		}
-		
-		var typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
-		switch (scope.type) {
-			case TInst(t, params):
-				if (params.length != typeParams.length) {
-					context.error(new TypeAnalyzerError(INCORRENT_TYPE_PARAMS_COUNT));
-					return;
-				}
-			case _:
-		}
-
-		trace(typeParams);
-
-		var genericTypes = [];
-		for (genericType in typeParams) {
-			genericTypes.push(Context.getType(genericType.toHaxeTypeId()));
-		}
-		trace(genericTypes);
-
-		switch (scope.type) {
-			case TInst(t, _): scope.type = TInst(t, genericTypes);
-			case _: throw "assert";
-		}
 	}
 	
 }

@@ -17,7 +17,10 @@ class MXMLNode
 	public function new() 
 	{
 		attributes = new Map();
+		
 		namespaces = new Map();
+		namespaces.set(MXMLQName.ASTERISK, MXMLQName.ASTERISK);
+		
 		children = [];
 		cdata = "";
 	}

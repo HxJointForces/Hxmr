@@ -1,5 +1,6 @@
 package hxrm.analyzer;
 
+import hxrm.analyzer.extensions.GenericTypeExtension;
 import hxrm.analyzer.extensions.DefaultPropertyExtension;
 import hxrm.analyzer.extensions.ScriptBlockExtension;
 import hxrm.analyzer.extensions.PropertiesExtension;
@@ -17,7 +18,7 @@ class NodeAnalyzer {
 	private var extensions : Array<INodeAnalyzerExtension>;
 
 	public function new() {
-		extensions = [new TypeExtension(this), new PropertiesExtension(this), new ScriptBlockExtension(this), new DefaultPropertyExtension(this)];
+		extensions = [new TypeExtension(this), new PropertiesExtension(this), new ScriptBlockExtension(this), new DefaultPropertyExtension(this), new GenericTypeExtension(this)];
 	}
 
 	public function analyze(context : HxmrContext, node : MXMLNode) : NodeScope
