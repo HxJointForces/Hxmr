@@ -26,17 +26,18 @@ class NodeAnalyzer {
 		var result : NodeScope = new NodeScope();
 
 		result.context = new AnalyzerContext(node);
+		
+		var currentIterationExtensions = extensions.copy();
+		var nextIterationExtensions : Array<INodeAnalyzerExtension> = [];
 
-		while(true) {
-			var oneMoreTime : Bool = false;
-			
-			for(extension in extensions) {
-				oneMoreTime = extension.analyze(context, result) || oneMoreTime;
+		while(currentIterationExtensions.length != 0) {
+		
+			for(extension in currentIterationExtensions) {
+				if(extension.analyze(context, result)) {
+					nextIterationExtensions.push(extension);
+				}
 			}
-			
-			if(!oneMoreTime) {
-				break;
-			}
+			currentIterationExtensions = nextIterationExtensions;
 		}
 		
 		return result;
