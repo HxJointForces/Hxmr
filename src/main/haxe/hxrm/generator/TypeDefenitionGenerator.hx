@@ -1,4 +1,4 @@
-package hxrm.generator.macro;
+package hxrm.generator;
 
 import hxrm.generator.extensions.ConstructorGeneratorExtension;
 import hxrm.generator.extensions.InitializersGeneratorExtension;
