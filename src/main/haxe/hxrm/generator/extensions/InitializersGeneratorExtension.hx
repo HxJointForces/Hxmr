@@ -11,51 +11,64 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 
 	public override function generate(scope:NodeScope, type:TypeDefinition, pos : Position):Bool {
 
-		if(getCtor(type) == null) {
+		var ctor : Field = getCtor(type);
+		if(ctor == null) {
 			return true;
+		}
+		
+		var ctorExprs : Array<Expr> = switch(ctor.kind) {
+			case FFun(fun):
+				switch(fun.expr.expr) {
+					case EBlock(block): block;
+					case _: throw "assert";
+				}
+			case _: throw "assert";
 		}
 
 		// initializers
 		for (fieldName in scope.initializers.keys()) {
-			var initializator : IInitializator = scope.initializers[fieldName];
-
-			if(!Std.is(initializator, BindingInitializator)) {
+			var initializatorEnum : IInitializator = scope.initializers[fieldName];
+			
+			var res = switch(initializatorEnum) {
+				case InitBinding(initializator): parseBindingInitializator(scope, type, pos, fieldName, initializator);
+				case InitNodeScope(initializator): null;
+			}
+			
+			if(res == null) {
+				//TODO remove it
 				continue;
 			}
 
-			var bind = cast(initializator, BindingInitializator);
-
-			var value = null;
-			try {
-				trace('parsing ${bind.value}');
-				value = Context.parseInlineString(bind.value, pos);
-			} catch (e:Dynamic) {
-				throw "can't parse value: " + e;
-			}
-			var field = scope.getFieldByName(fieldName);
-
-			var valueType = Context.typeof(value);
-			var res = if (!Context.unify(valueType, field.type)) {
-				// extensions must be here
-				var fieldCT = scope.context.getClassType(field.type);
-				switch([fieldCT.module, fieldCT.name]) {
-					case ["String", "String"]:
-						macro Std.string($value);
-					case ["Int", "Int"]:
-						macro Std.parseInt(Std.string($value));
-					case ["Float", "Float"]:
-						macro Std.parseFloat(Std.string($value));
-					case _:
-						throw 'can\'t unify value:$valueType to fieldType:${field.type}';
-				}
-			}
-			else
-				value;
-
-			//TODO type.fields.push(macro $i { fieldName } = $res);
+			var expr = macro $i { fieldName } = $res;
+			
+			ctorExprs.push(expr);
 		}
 
 		return false;
+	}
+
+	function parseBindingInitializator(scope:NodeScope, type:TypeDefinition, pos : Position, fieldName : String, initializator : BindingInitializator) : Expr {
+		var value = null;
+		try {
+			value = Context.parseInlineString(initializator.value, pos);
+		} catch (e:Dynamic) {
+			throw "can't parse value: " + e;
+		}
+		var field = scope.getFieldByName(fieldName);
+		
+		var valueType = Context.typeof(value);
+		return if (Context.unify(valueType, field.type)) {
+			macro $value;
+		} else {
+			// extensions must be here
+			var fieldCT = scope.context.getClassType(field.type);
+			switch([fieldCT.module, fieldCT.name]) {
+				case ["String", "String"]	: macro Std.string($value);
+				case ["Int", "Int"]			: macro Std.parseInt(Std.string($value));
+				case ["Float", "Float"]		: macro Std.parseFloat(Std.string($value));
+				case _: throw 'can\'t unify value:$valueType to fieldType:${field.type}';
+			}
+		}
 	}
 
 

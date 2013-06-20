@@ -1,4 +1,5 @@
 -cp src/main/haxe/
 -cp src/test/haxe/
+-D dump=pretty
 -js bin/hxmr.js
 -main Main
