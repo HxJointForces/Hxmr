@@ -19,7 +19,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		var ctorExprs : Array<Expr> = switch(ctor.kind) {
 			case FFun(fun):
 				switch(fun.expr.expr) {
-					case EBlock(block): block;
+					case EBlock(exprs): exprs;
 					case _: throw "assert";
 				}
 			case _: throw "assert";
