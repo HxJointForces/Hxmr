@@ -44,7 +44,7 @@ class TypeDefenitionGenerator
 		}
 
 
-		var currentIterationExtensions = extensions.copy();
+		var currentIterationExtensions = extensions;
 
 		while(currentIterationExtensions.length != 0) {
 			var nextIterationExtensions : Array<IGeneratorExtension> = [];
