@@ -9,12 +9,10 @@ import hxrm.generator.TypeDefenitionGenerator;
 import haxe.macro.Expr;
 import haxe.macro.Printer;
 import hxrm.parser.mxml.MXMLParser;
-import hxrm.parser.Tools;
 import sys.FileSystem;
 import sys.io.File;
 
 using StringTools;
-using hxrm.parser.Tools.FilePosUtils;
 
 /**
  * 

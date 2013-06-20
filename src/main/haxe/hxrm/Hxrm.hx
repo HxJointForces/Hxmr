@@ -3,13 +3,11 @@ package hxrm;
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import hxrm.parser.Tools;
 import neko.Lib;
 import sys.FileSystem;
 import sys.io.File;
 
 using StringTools;
-using hxrm.parser.Tools.FilePosUtils;
 #end
 
 /**
