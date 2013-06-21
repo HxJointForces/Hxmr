@@ -10,6 +10,7 @@ import hxrm.parser.mxml.MXMLQName;
 
 enum PropertiesAnalyzerErrorType {
 	UNKNOWN_FIELD;
+	VALUE_MUST_BE_NODE_OR_CDATA;
 	VALUE_MUST_BE_ONE_NODE;
 	ATTRIBUTES_IN_PROPERTY;
 	DUPLICATE;
@@ -66,27 +67,38 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 
-		// TODO ArrayInitializers
-		if(child.children.length > 1 || (child.cdata != null && child.cdata.length > 0)) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
-			return;
-		}
-		
 		if(child.attributes.iterator().hasNext()) {
 			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY));
 			return;
 		}
 
-		var childScope : NodeScope = analyzer.analyze(context, child.children[0]);
-
-		if(childScope == null) {
-			//TODO logging?
-			trace("childScope is null");
+		var hasCDATA = (child.cdata != null && child.cdata.length > 0);
+		
+		if(child.children.length > 1 && hasCDATA) {
+			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA));
 			return;
 		}
-
 		
-		rememberProperty(context, scope, child.name, InitNodeScope(new NodeScopeInitializator(childScope)));
+		if(child.children.length > 0) {
+			// TODO ArrayInitializers
+			if(child.children.length > 1) {
+				context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
+				return;
+			}
+			var childScope : NodeScope = analyzer.analyze(context, child.children[0]);
+	
+			if(childScope == null) {
+				//TODO logging?
+				trace("childScope is null");
+				return;
+			}
+			
+			rememberProperty(context, scope, child.name, InitNodeScope(new NodeScopeInitializator(childScope)));
+		}
+		
+		if(hasCDATA) {
+			rememberProperty(context, scope, child.name, InitBinding(new BindingInitializator(child.name.localPart, '"${child.cdata}"')));
+		}
 	}
 
 	function rememberProperty(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {

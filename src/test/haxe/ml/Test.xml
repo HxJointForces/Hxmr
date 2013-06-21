@@ -3,7 +3,5 @@
 	
 	<deep:B id="myB" generic:type="haxe.Timer" test="123" deep:prop="asValue"/>
 	
-	<ans:innerString>
-		<String id="myString" />
-	</ans:innerString>
+	<ans:innerString>Hello!</ans:innerString>
 </ans:A>
