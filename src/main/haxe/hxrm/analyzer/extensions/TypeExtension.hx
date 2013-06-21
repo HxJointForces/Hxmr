@@ -30,10 +30,10 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 		var node : MXMLNode = scope.context.node;
 
-		var resolvedQName : QName = scope.context.resolveQName(node.name);
+		scope.typeName = scope.context.resolveQName(node.name);
 
 		if(scope.type == null) {
-			scope.type = scope.context.getType(resolvedQName);
+			scope.type = scope.context.getType(scope.typeName);
 		}
 		
 		if(scope.classType == null) {

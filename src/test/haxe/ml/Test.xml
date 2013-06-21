@@ -6,6 +6,6 @@
 	<ans:innerString>Hello!</ans:innerString>
 	
 	<ans:anotherInnerString>
-		<String>Hello again!</String>
+		<!--String id="myString">Hello again!</String-->
 	</ans:anotherInnerString>
 </ans:A>

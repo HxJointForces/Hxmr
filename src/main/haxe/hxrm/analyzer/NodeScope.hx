@@ -8,6 +8,7 @@ class NodeScope {
 
 	public var context : AnalyzerContext;
 
+	public var typeName : QName;
 	public var type:Type;
 	public var classType:ClassType;
 
