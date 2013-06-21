@@ -6,7 +6,7 @@ import hxrm.analyzer.NodeScope;
 
 class ChildrenGeneratorExtension extends GeneratorExtensionBase {
 
-	override public function generate(scope:NodeScope, type:TypeDefinition, pos : Position):Bool {
+	override public function generate(context:GeneratorContext, scope:GeneratorScope):Bool {
 
 		if(getCtor(type) == null) {
 			return true;

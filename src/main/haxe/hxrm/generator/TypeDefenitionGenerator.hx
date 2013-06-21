@@ -27,7 +27,7 @@ class TypeDefenitionGenerator
 	}
 	
 	
-	public function write(context : HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
+	public function write(context : HxmrContext, nodeScope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
 		var pos : Position = Context.makePosition( { min:0, max:0, file:file } );
@@ -40,9 +40,15 @@ class TypeDefenitionGenerator
 			meta: [],
 			params: [],
 			isExtern: false,
-			kind: TDClass(getTypePath(scope.type), null, false),
+			kind: TDClass(getTypePath(nodeScope.type), null, false),
 			fields:[]
 		}
+		
+		var context = new GeneratorContext(context, nodeScope);
+		context.pos = pos;
+		
+		var scope = new GeneratorScope(typeDefinition);
+		
 
 		var currentIterationExtensions = extensions;
 
@@ -50,7 +56,7 @@ class TypeDefenitionGenerator
 			var nextIterationExtensions : Array<IGeneratorExtension> = [];
 
 			for(extension in currentIterationExtensions) {
-				if(extension.generate(scope, typeDefinition, pos)) {
+				if(extension.generate(context, scope)) {
 					nextIterationExtensions.push(extension);
 				}
 			}
