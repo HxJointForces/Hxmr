@@ -4,7 +4,7 @@ import StringTools;
 import haxe.ds.HashMap;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
-import hxrm.analyzer.initializers.NodeScopeInitializator;
+import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.analyzer.initializers.IInitializator;
 import haxe.macro.Type;
 
@@ -18,9 +18,11 @@ class NodeScope {
 
 	public var classFields:Map<String, ClassField>;
 
+	public var defaultProperty : String;
+	
 	public var initializers : Array<IInitializator>;
 	
-	public var children : Array<NodeScopeInitializator>;
+	public var children : Array<FieldInitializator>;
 	
 	private var fieldNamesSeek : HashMap<QName, Int>;
 

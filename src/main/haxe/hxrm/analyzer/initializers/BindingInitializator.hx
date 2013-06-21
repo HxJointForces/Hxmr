@@ -2,11 +2,11 @@ package hxrm.analyzer.initializers;
 
 class BindingInitializator {
 
-	public var value : String;
+	public var value : Dynamic;
 
 	public var fieldName : String;
 
-	public function new(fieldName : String, value : String) {
+	public function new(fieldName : String, value : Dynamic) {
 		this.fieldName = fieldName;
 		this.value = value;
 	}

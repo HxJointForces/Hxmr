@@ -3,7 +3,7 @@ import hxrm.analyzer.initializers.IInitializator;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import haxe.macro.Type.ClassField;
-import hxrm.analyzer.initializers.NodeScopeInitializator;
+import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.analyzer.initializers.BindingInitializator;
 import hxrm.analyzer.initializers.IInitializator;
 import hxrm.parser.mxml.MXMLNode;
@@ -97,7 +97,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			}
 
 			var innerChildId : String = scope.getFieldNameForNode(innerChild);
-			rememberProperty(context, scope, InitNodeScope(new NodeScopeInitializator(innerChildId, childScope)));
+			rememberProperty(context, scope, InitNodeScope(new FieldInitializator(innerChildId, '"${innerChild.cdata}"', childScope.type)));
 			rememberProperty(context, scope, InitBinding(new BindingInitializator(child.name.localPart, innerChildId)));
 			
 		} else if(hasCDATA) {
@@ -122,7 +122,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 	function getInitializatorFieldName(value:IInitializator) : String {
 		return switch(value) {
 			case InitBinding(bindingInitializator): bindingInitializator.fieldName;
-			case InitNodeScope(nodeInitializator): nodeInitializator.id;
+			case InitNodeScope(nodeInitializator): nodeInitializator.fieldName;
 		}
 	}
 

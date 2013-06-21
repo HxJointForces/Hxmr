@@ -1,8 +1,10 @@
 package hxrm.analyzer.extensions;
 
-import hxrm.analyzer.initializers.NodeScopeInitializator;
+import hxrm.analyzer.NodeScope;
+import hxrm.analyzer.initializers.BindingInitializator;
+import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.parser.mxml.MXMLQName;
-import hxrm.analyzer.initializers.NodeScopeInitializator;
+import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import StringTools;
@@ -23,28 +25,56 @@ class ChildrenAnalyzerError extends NodeAnalyzerError {
 class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
-		
-		if(scope.initializers == null) {
-			return true;
-		}
 
 		scope.children = [];
 		
 		var node : MXMLNode = scope.context.node;
+		
+		if(node.children.length == 0) {
+			return false;
+		}
+	
+		if(scope.initializers == null) {
+			return true;
+		}
 
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
 			context.error(new ChildrenAnalyzerError(CDATA_WITH_INNER_TAGS));
 			return false;
 		}
+
+		for(field in scope.classFields) {
+			if(!field.meta.has("hxmrDefaultProperty")) {
+				continue;
+			}
+
+			if(scope.defaultProperty != null) {
+				//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
+				return false;
+			}
+
+			scope.defaultProperty = field.name;
+		}
+
+		if(scope.defaultProperty == null && scope.children.length > 0) {
+			// TODO error default property not found
+			trace("default property not found");
+			return false;
+		}
+
+		var defaultPropertyNode : MXMLNode = new MXMLNode();
+		defaultPropertyNode.name = new MXMLQName("*", "Array");
+		var defaultPropertyNodeScope : NodeScope = analyzer.analyze(context, defaultPropertyNode);
+		scope.initializers.push(InitBinding(new BindingInitializator(scope.defaultProperty, defaultPropertyNodeScope)));
 		
 		for (childNode in node.children) {
-			matchChild(context, scope, childNode);
+			matchDefaultProperyChild(context, scope, defaultPropertyNodeScope, childNode);
 		}
 		
 		return false;
 	}
 
-	override function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
+	function matchDefaultProperyChild(context : HxmrContext, scope:NodeScope, defaultPropertyNodeScope : NodeScope, child:MXMLNode):Void {
 	
 		if(isInnerProperty(scope, child)) {
 			return;
@@ -65,10 +95,10 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		}
 
 		var innerChildId = scope.getFieldNameForNode(child);
-		var nodeScopeInitializer = new NodeScopeInitializator(innerChildId, childScope);
+		var nodeScopeInitializer = new FieldInitializator(innerChildId, childScope, childScope.type);
 		rememberProperty(context, scope, InitNodeScope(nodeScopeInitializer));
-		
-		scope.children.push(nodeScopeInitializer);
+
+		defaultPropertyNodeScope.children.push(nodeScopeInitializer);
 	}
 
 
