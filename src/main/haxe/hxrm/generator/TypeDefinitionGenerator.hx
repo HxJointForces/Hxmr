@@ -17,7 +17,7 @@ using StringTools;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class TypeDefenitionGenerator
+class TypeDefinitionGenerator
 {
 	private var extensions : Array<IGeneratorExtension>;
 	

@@ -3,13 +3,13 @@ package hxrm.generator.extensions;
 import haxe.macro.Expr;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
-import hxrm.generator.TypeDefenitionGenerator;
+import hxrm.generator.TypeDefinitionGenerator;
 
 class GeneratorExtensionBase implements IGeneratorExtension {
 	
-	var generator:TypeDefenitionGenerator;
+	var generator:TypeDefinitionGenerator;
 
-	public function new(generator:TypeDefenitionGenerator) {
+	public function new(generator:TypeDefinitionGenerator) {
 		this.generator = generator;
 	}
 

@@ -5,7 +5,7 @@ import hxrm.utils.TypeUtils;
 import haxe.CallStack;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
-import hxrm.generator.TypeDefenitionGenerator;
+import hxrm.generator.TypeDefinitionGenerator;
 import haxe.macro.Expr;
 import haxe.macro.Printer;
 import hxrm.parser.mxml.MXMLParser;
@@ -23,7 +23,7 @@ class HxrmTypeDefinitionFactory {
 
 	var parser:MXMLParser;
 	var analyzer:NodeAnalyzer;
-	var tdWriter:TypeDefenitionGenerator;
+	var tdWriter:TypeDefinitionGenerator;
 	
 	#if debug
 	var p:Printer;
@@ -34,7 +34,7 @@ class HxrmTypeDefinitionFactory {
 		
 		parser = new MXMLParser();
 		analyzer = new NodeAnalyzer();
-		tdWriter = new TypeDefenitionGenerator();
+		tdWriter = new TypeDefinitionGenerator();
 		
 		#if debug
 		p = new Printer();
