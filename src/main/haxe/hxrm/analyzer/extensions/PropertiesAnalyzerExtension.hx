@@ -27,7 +27,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 	
 		if(scope.initializers == null) {
-			scope.initializers = [];
+			scope.initializers = new Map();
 		}
 	
 		var node : MXMLNode = scope.context.node;
@@ -103,14 +103,12 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 	function rememberProperty(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {
 
-		/* TODO
 		if(scope.initializers.exists(attributeQName.localPart)) {
 			context.error(new PropertiesAnalyzerError(DUPLICATE));
 			return;
 		}
-		*/
 
-		scope.initializers.push(value);
+		scope.initializers.set(attributeQName.localPart, value);
 	}
 
 	function isInnerProperty(scope : NodeScope, child : MXMLNode) : Bool {
