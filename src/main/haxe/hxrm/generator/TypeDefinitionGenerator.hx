@@ -44,10 +44,10 @@ class TypeDefinitionGenerator
 			fields:[]
 		}
 		
-		var context = new GeneratorContext(context, nodeScope);
-		context.pos = pos;
-		
 		var scope = new GeneratorScope(typeDefinition);
+		
+		scope.context = new GeneratorContext(nodeScope);
+		scope.context.pos = pos; //TODO remove
 		
 
 		var currentIterationExtensions = extensions;

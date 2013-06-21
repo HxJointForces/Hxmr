@@ -2,7 +2,6 @@ package hxrm.generator;
 
 import haxe.macro.Expr;
 import hxrm.analyzer.NodeScope;
-import hxrm.HxmrContext;
 
 /**
  * ...
@@ -10,14 +9,11 @@ import hxrm.HxmrContext;
  */
 class GeneratorContext
 {
-	public var hxmrContext:HxmrContext;
-	//public var generator:TypeDefinitionGenerator;
 	public var node:NodeScope;
 	
 	public var pos:Position; // pos must be read from NodeScope
 	
-	public function new(hxmrContext:HxmrContext, node:NodeScope) {
-		this.hxmrContext = hxmrContext;
+	public function new(node:NodeScope) {
 		this.node = node;
 	}
 }

@@ -1,12 +1,12 @@
 package hxrm.generator.extensions;
 
 import haxe.macro.Type.ClassField;
-import haxe.macro.Expr.TypeDefinition;
+import haxe.macro.Expr;
 import hxrm.analyzer.NodeScope;
 
 class ChildrenGeneratorExtension extends GeneratorExtensionBase {
 
-	override public function generate(context:GeneratorContext, scope:GeneratorScope):Bool {
+	override public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
 
 		if(getCtor(type) == null) {
 			return true;

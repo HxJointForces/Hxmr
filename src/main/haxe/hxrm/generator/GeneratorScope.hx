@@ -8,6 +8,8 @@ import haxe.macro.Expr;
  */
 class GeneratorScope {
 	
+	public var context : GeneratorContext;
+
 	public var typeDefinition:TypeDefinition;
 	
 	public var ctor:Field;

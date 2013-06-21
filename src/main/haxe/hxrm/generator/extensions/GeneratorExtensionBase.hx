@@ -13,7 +13,7 @@ class GeneratorExtensionBase implements IGeneratorExtension {
 		this.generator = generator;
 	}
 
-	public function generate(context:GeneratorContext, scope:GeneratorScope) : Bool {
+	public function generate(context:HxmrContext, scope:GeneratorScope) : Bool {
 		return false;
 	}
 
