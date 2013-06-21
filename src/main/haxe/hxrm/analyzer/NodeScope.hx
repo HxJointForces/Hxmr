@@ -3,9 +3,6 @@ package hxrm.analyzer;
 import hxrm.analyzer.initializers.IInitializator;
 import haxe.macro.Type;
 
-using StringTools;
-using haxe.macro.Tools;
-
 class NodeScope {
 
 	public var context : AnalyzerContext;

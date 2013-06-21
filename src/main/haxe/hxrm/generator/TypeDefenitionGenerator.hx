@@ -1,5 +1,6 @@
 package hxrm.generator;
 
+import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
 import hxrm.generator.extensions.ConstructorGeneratorExtension;
 import hxrm.generator.extensions.InitializersGeneratorExtension;
@@ -26,7 +27,7 @@ class TypeDefenitionGenerator
 	}
 	
 	
-	public function write(context : hxrm.HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
+	public function write(context : HxmrContext, scope:NodeScope, type:String, file:String):TypeDefinition {
 		trace('write:$type');
 
 		var pos : Position = Context.makePosition( { min:0, max:0, file:file } );
