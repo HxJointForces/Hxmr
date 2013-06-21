@@ -21,12 +21,12 @@ class PropertiesAnalyzerError extends NodeAnalyzerError {
 	}
 }
 
-class PropertiesExtension extends NodeAnalyzerExtensionBase {
+class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 	
 		if(scope.initializers == null) {
-			scope.initializers = new Map();
+			scope.initializers = [];
 		}
 	
 		var node : MXMLNode = scope.context.node;
@@ -48,17 +48,21 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
+		if(attributeQName.localPart == "id") {
+			return;
+		}
+		
 		if(scope.getFieldByName(attributeQName.localPart) == null) {
 			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD));
 			return;
 		}
 		
-		rememberProperty(context, scope, attributeQName, InitBinding(new BindingInitializator(value)));
+		rememberProperty(context, scope, attributeQName, InitBinding(new BindingInitializator(attributeQName.localPart, value)));
 	}
 
 	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
 	
-		if(child.name.namespace != scope.context.node.name.namespace) {
+		if(!isInnerProperty(scope, child)) {
 			return;
 		}
 
@@ -73,11 +77,6 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 
-		if(scope.getFieldByName(child.name.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD));
-			return;
-		}
-		
 		var childScope : NodeScope = analyzer.analyze(context, child.children[0]);
 
 		if(childScope == null) {
@@ -85,17 +84,29 @@ class PropertiesExtension extends NodeAnalyzerExtensionBase {
 			trace("childScope is null");
 			return;
 		}
+
 		
 		rememberProperty(context, scope, child.name, InitNodeScope(new NodeScopeInitializator(childScope)));
 	}
 
 	function rememberProperty(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:IInitializator) : Void {
 
+		/* TODO
 		if(scope.initializers.exists(attributeQName.localPart)) {
 			context.error(new PropertiesAnalyzerError(DUPLICATE));
 			return;
 		}
+		*/
 
-		scope.initializers.set(attributeQName.localPart, value);
+		scope.initializers.push(value);
+	}
+
+	function isInnerProperty(scope : NodeScope, child : MXMLNode) : Bool {
+		if(child.name.namespace == scope.context.node.name.namespace) {
+			if(scope.getFieldByName(child.name.localPart) != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

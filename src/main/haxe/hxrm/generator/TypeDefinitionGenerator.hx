@@ -1,5 +1,6 @@
 package hxrm.generator;
 
+import hxrm.generator.extensions.ChildrenGeneratorExtension;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
 import hxrm.generator.extensions.ConstructorGeneratorExtension;
@@ -23,7 +24,7 @@ class TypeDefinitionGenerator
 	
 	public function new() 
 	{
-		extensions = [new InitializersGeneratorExtension(this), new ConstructorGeneratorExtension(this)];
+		extensions = [new InitializersGeneratorExtension(this), new ConstructorGeneratorExtension(this), new ChildrenGeneratorExtension(this)];
 	}
 	
 	

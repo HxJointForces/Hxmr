@@ -59,6 +59,7 @@ class MXMLParser
 					parseCDATA(n, xmlNode, innerNode);
 				case Xml.Element:
 					parseChild(context, n, xmlNode, innerNode);
+				case Xml.Comment:
 				default: throw ("unknown node type: " + innerNode.nodeType);
 			}
 		}
@@ -88,6 +89,7 @@ class MXMLParser
 	
 	function parseAttributes(xmlNode:Xml, n:MXMLNode) {
 		for (attributeName in xmlNode.attributes()) {
+		
 			
 			var attributeQName = MXMLQNameUtils.fromQualifiedString(attributeName);
 			var value = xmlNode.get(attributeName);

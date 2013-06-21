@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ans:A generic:type="haxe.Timer" ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*" xmlns:hx="http://haxe.org/hxmr/" xmlns:generic="http://haxe.org/hxmr/generic">
+<ans:A generic:type="haxe.Timer" ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*" xmlns:generic="http://haxe.org/hxmr/generic">
 	
-	<hx:Script>
-		<![CDATA[
-			trace("Hello!");
-		]]>
-	</hx:Script>
-	
-	<deep:B generic:type="haxe.Utf8,haxe.Timer" xmlns:bnamespace="*" test="123" deep:prop="asValue">
-		<String />
-	</deep:B>
+	<deep:B id="myB" generic:type="haxe.Timer" test="123" deep:prop="asValue"/>
 	
 	<ans:innerString>
-		<String>
-			qweqwe
-		</String>
+		<String id="myString" />
 	</ans:innerString>
 </ans:A>

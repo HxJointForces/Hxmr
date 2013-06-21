@@ -4,7 +4,7 @@ package deep;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class B<T,K>
+class B<T>
 {
 	public var t:T;
 	

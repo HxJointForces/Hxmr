@@ -1,5 +1,7 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.parser.mxml.MXMLQName;
+import StringTools;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLNode;
@@ -10,6 +12,7 @@ using StringTools;
 enum TypeAnalyzerErrorType {
 	CANT_INSTANTIATE_INTERFACE;
 	CANT_INSTANTIATE_PRIVATE_CLASS;
+	ID_CANT_BE_NULL;
 }
 
 class TypeAnalyzerError extends NodeAnalyzerError {
@@ -36,6 +39,16 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		if(scope.classType == null) {
 			scope.classType = scope.context.getClassType(scope.type);
 		}
+
+		if (scope.classType.isInterface) {
+			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_INTERFACE));
+			return false;
+		}
+
+		if (scope.classType.isPrivate) {
+			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_PRIVATE_CLASS));
+			return false;
+		}
 		
 		if(scope.classFields == null) {
 			scope.classFields = new Map();
@@ -47,16 +60,8 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 				currentClassType = currentClassType.superClass != null ? currentClassType.superClass.t.get() : null;
 			}
 		}
-
-		if (scope.classType.isInterface) {
-			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_INTERFACE));
-			return false;
-		}
-
-		if (scope.classType.isPrivate) {
-			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_PRIVATE_CLASS));
-			return false;
-		}
+		
+		
 		
 		return false;
 	}

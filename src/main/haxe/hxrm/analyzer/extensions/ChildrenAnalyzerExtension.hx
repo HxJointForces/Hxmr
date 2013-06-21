@@ -1,5 +1,8 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.analyzer.initializers.NodeScopeInitializator;
+import hxrm.parser.mxml.MXMLQName;
+import hxrm.analyzer.initializers.NodeScopeInitializator;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import StringTools;
@@ -17,17 +20,15 @@ class ChildrenAnalyzerError extends NodeAnalyzerError {
 	}
 }
 
-class ChildrenExtension extends NodeAnalyzerExtensionBase {
+class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
-
-		if(scope.children == null) {
-			scope.children = [];
-		}
 		
-		if(scope.classFields == null) {
+		if(scope.initializers == null) {
 			return true;
 		}
+
+		scope.children = [];
 		
 		var node : MXMLNode = scope.context.node;
 
@@ -43,12 +44,10 @@ class ChildrenExtension extends NodeAnalyzerExtensionBase {
 		return false;
 	}
 
-	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
+	override function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
 	
-		if(child.name.namespace == scope.context.node.name.namespace) {
-			if(scope.getFieldByName(child.name.localPart) != null) {
-				return;
-			}
+		if(isInnerProperty(scope, child)) {
+			return;
 		}
 		
 		//TODO better typename checking
@@ -64,8 +63,11 @@ class ChildrenExtension extends NodeAnalyzerExtensionBase {
 			trace("childScope is null");
 			return;
 		}
+
+		var nodeScopeInitializer = new NodeScopeInitializator(childScope);
+		rememberProperty(context, scope, child.name, InitNodeScope(nodeScopeInitializer));
 		
-		scope.children.push(childScope);
+		scope.children.push(nodeScopeInitializer);
 	}
 
 

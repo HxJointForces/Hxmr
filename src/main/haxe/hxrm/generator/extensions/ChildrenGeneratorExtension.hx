@@ -1,59 +1,50 @@
 package hxrm.generator.extensions;
 
-import haxe.macro.Type.ClassField;
+import hxrm.analyzer.initializers.BindingInitializator;
+import hxrm.analyzer.initializers.NodeScopeInitializator;
 import haxe.macro.Expr;
 import hxrm.analyzer.NodeScope;
 
-class ChildrenGeneratorExtension extends GeneratorExtensionBase {
+class ChildrenGeneratorExtension extends InitializersGeneratorExtension {
 
 	override public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
 
-		if(getCtor(type) == null) {
+		if(scope.ctor == null) {
 			return true;
 		}
 
-		var defaultProperty : ClassField;
-		for(field in scope.classFields) {
+		var defaultProperty : String;
+		for(field in scope.context.node.classFields) {
 			if(!field.meta.has("hxmrDefaultProperty")) {
 				continue;
 			}
 
 			if(defaultProperty != null) {
-				//TODO use pos from base class!!!
-				//context.error(new ChildrenGeneratorExtension(DUPLICATE_DEFAULT_PROPERTY));
+				//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
 				return false;
 			}
 
-			defaultProperty = field;
+			defaultProperty = field.name;
 		}
 		
-		if(defaultProperty == null && scope.children.length > 0) {
+		if(defaultProperty == null && scope.context.node.children.length > 0) {
+
 			// TODO error default property not found
+			trace("default property not found");
 			return false;
 		}
+		
+		parseBindingInitializator(context, scope, new BindingInitializator(defaultProperty, "[]"));
 
-		//TODO this code should be rewriten because it doesn't seems to be ok
-		for (child in scope.children) {
-			var childExpr = generateChild(child, scope);
-			if (childExpr != null) {
-				//type.fields = ctorFields.concat(childExpr);
-			}
+		for(childInitializer in scope.context.node.children) {
+			var id : String = childInitializer.id;
+			var initializerId : String = generateInitializerName(id);
+			
+			var expr = macro $i { defaultProperty }.push($i {initializerId}());
+			
+			scope.ctorExprs.push(expr);
 		}
 
 		return false;
-	}
-
-	function generateChild(child:NodeScope, root:NodeScope):Array<Expr> {
-		return null;
-		
-		var res = [];
-
-		for (c in child.children) {
-			var genChild = generateChild(c, child);
-			if (genChild != null) res = res.concat(genChild);
-		}
-
-
-		return res.length > 0 ? res : null;
 	}
 }
