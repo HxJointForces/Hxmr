@@ -64,8 +64,9 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 			return;
 		}
 
-		var nodeScopeInitializer = new NodeScopeInitializator(childScope);
-		rememberProperty(context, scope, child.name, InitNodeScope(nodeScopeInitializer));
+		var innerChildId = scope.getFieldNameForNode(child);
+		var nodeScopeInitializer = new NodeScopeInitializator(innerChildId, childScope);
+		rememberProperty(context, scope, InitNodeScope(nodeScopeInitializer));
 		
 		scope.children.push(nodeScopeInitializer);
 	}
