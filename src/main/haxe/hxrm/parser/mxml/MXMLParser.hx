@@ -49,10 +49,17 @@ class MXMLParser
 		}
 		
 		var n = new MXMLNode();
+		
+		processNode(context, xmlNode, n);
+
+		return n;
+	}
+	
+	function processNode(context : HxmrContext, xmlNode : Xml, n : MXMLNode) : Void {
 		n.name = MXMLQNameUtils.fromQualifiedString(xmlNode.nodeName);
 
 		parseAttributes(xmlNode, n);
-		
+
 		for(innerNode in xmlNode.iterator()) {
 			switch(innerNode.nodeType) {
 				case Xml.PCData, Xml.CData:
@@ -63,8 +70,6 @@ class MXMLParser
 				default: throw ("unknown node type: " + innerNode.nodeType);
 			}
 		}
-
-		return n;
 	}
 	
 	function parseCDATA(n : MXMLNode, xmlNode : Xml, cDataNode : Xml) {
@@ -75,7 +80,7 @@ class MXMLParser
 	}
 	
 	function parseChild(context : HxmrContext, n:MXMLNode, xmlNode:Xml, c : Xml) {
-		var child : MXMLNode = parseNode(context, c);
+		var child : MXMLNode = new MXMLNode();
 		child.parentNode = n;
 		
 		for(key in n.namespaces.keys()) {
@@ -83,6 +88,7 @@ class MXMLParser
 				child.namespaces.set(key, n.namespaces.get(key));
 			}
 		}
+		processNode(context, c, child);
 		
 		n.children.push(child);
 	}

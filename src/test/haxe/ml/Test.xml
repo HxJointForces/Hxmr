@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ans:A ans:aString="1" xmlns:ans="*">
-
-	<B id="myB"  xmlns="deep.*" test="123" prop="asValue"/>
+<ans:A ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*" >
+	
+	<deep:B id="myB"  test="123" prop="asValue">
+		<deep:anotherB>
+			<deep:B>
+				<deep:anotherB>
+					<deep:B id="thirdB" test="100500" prop="thirdValue" />
+				</deep:anotherB>
+			</deep:B>
+		</deep:anotherB>
+	</deep:B>
 
 	<ans:innerString>Hello!</ans:innerString>
 	

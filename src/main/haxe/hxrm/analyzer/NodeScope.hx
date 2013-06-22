@@ -20,7 +20,7 @@ class NodeScope {
 
 	public var defaultProperty : String;
 	
-	public var initializers : Array<IInitializator>;
+	public var initializers : Map<String, IInitializator>;
 	
 	public var children : Array<FieldInitializator>;
 	

@@ -20,6 +20,9 @@ class QNameUtils {
 	}
 
 	public static function splitPackage(packageName : String) : Array<String> {
+		if(packageName == null) {
+			return [];
+		}
 		return StringTools.trim(packageName).split(QName.HAXE_ID_GLUE);
 	}
 

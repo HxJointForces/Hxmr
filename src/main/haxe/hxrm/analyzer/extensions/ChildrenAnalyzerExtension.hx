@@ -65,7 +65,8 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		var defaultPropertyNode : MXMLNode = new MXMLNode();
 		defaultPropertyNode.name = new MXMLQName("*", "Array");
 		var defaultPropertyNodeScope : NodeScope = analyzer.analyze(context, defaultPropertyNode);
-		scope.initializers.push(InitBinding(new BindingInitializator(scope.defaultProperty, defaultPropertyNodeScope)));
+		//TODO causes bugs
+		//scope.initializers.push(InitNodeScope(new FieldInitializator(scope.defaultProperty, defaultPropertyNodeScope, defaultPropertyNodeScope.type)));
 		
 		for (childNode in node.children) {
 			matchDefaultProperyChild(context, scope, defaultPropertyNodeScope, childNode);
@@ -96,7 +97,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 
 		var innerChildId = scope.getFieldNameForNode(child);
 		var nodeScopeInitializer = new FieldInitializator(innerChildId, childScope, childScope.type);
-		rememberProperty(context, scope, InitNodeScope(nodeScopeInitializer));
+		rememberProperty(context, scope, innerChildId, InitNodeScope(nodeScopeInitializer));
 
 		defaultPropertyNodeScope.children.push(nodeScopeInitializer);
 	}

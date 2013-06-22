@@ -52,13 +52,14 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		
 		if(scope.classFields == null) {
 			scope.classFields = new Map();
-			var currentClassType = scope.classType;
-			while (currentClassType != null) {
-				for (classField in currentClassType.fields.get()) {
-					scope.classFields.set(classField.name, classField);
-				}
-				currentClassType = currentClassType.superClass != null ? currentClassType.superClass.t.get() : null;
+		}
+
+		var currentClassType = scope.classType;
+		while (currentClassType != null) {
+			for (classField in currentClassType.fields.get()) {
+				scope.classFields.set(classField.name, classField);
 			}
+			currentClassType = currentClassType.superClass != null ? currentClassType.superClass.t.get() : null;
 		}
 		
 		
