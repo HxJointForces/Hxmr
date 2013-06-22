@@ -111,16 +111,16 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		var res : Expr = switch([fieldClassType.module, fieldClassType.name]) {
 			
 			case ["String", "String"]:
-				var value = getValue(scope, '"${initializator.value}"');
-				macro Std.string($value);
+				var value = getValue(scope, initializator.value);
+				macro $value;
 			
 			case ["Int", "Int"] | ["StdTypes", "Int"]:
 				var value = getValue(scope, initializator.value);
-				macro $value;
+				macro Std.parseInt($value);
 
 			case ["Float", "Float"] | ["StdTypes", "Float"]:
 				var value = getValue(scope, initializator.value);
-				macro $value;
+				macro Std.parseFloat($value);
 
 			case _:
 				var exprs : Array<Expr> = [];

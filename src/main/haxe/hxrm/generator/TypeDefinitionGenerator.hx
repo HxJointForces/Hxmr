@@ -67,7 +67,7 @@ class TypeDefinitionGenerator
 		
 		//TypeUtils.prettyPrintType(typeDefinition);
 		
-		trace("\n" + (new Printer()).printTypeDefinition(typeDefinition, true));
+		trace("\n" + (new Printer("   ")).printTypeDefinition(typeDefinition, true));
 		
 		return typeDefinition;
 	}
