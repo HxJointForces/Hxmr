@@ -12,6 +12,8 @@ class B//<T>
 	public var prop:String;
 	
 	public var anotherB : B;
+	
+	@hxmrDefaultProperty public var arrayOfB : Array<B>;
 
 	public function new()
 	{

@@ -4,9 +4,7 @@
 	<deep:B id="myB"  test="123" prop="asValue">
 		<deep:anotherB>
 			<deep:B>
-				<deep:anotherB>
-					<deep:B test="100500" prop="thirdValue" />
-				</deep:anotherB>
+				<deep:B test="100500" prop="thirdValue" />
 			</deep:B>
 		</deep:anotherB>
 	</deep:B>
