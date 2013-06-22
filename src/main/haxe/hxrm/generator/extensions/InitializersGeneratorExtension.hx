@@ -44,7 +44,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					parseFieldInitializator(context, scope, fieldName, initializator);
 				case InitBinding(initializator):
 			}
-			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
+			trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
 		for (fieldName in initializers.keys()) {
 			switch(initializers.get(fieldName)) {
@@ -53,7 +53,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 				case InitNodeScope(initializator):
 					parseBindingInitializator(context, scope, nodeScope, fieldName, initializator, exprs, ExprTools.toFieldExpr([forField, fieldName]));
 			}
-			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
+			trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
 	}
 
@@ -97,14 +97,20 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		if(fieldName == null) {
 			trace(initializator.value);
 		}
-		var fieldClassType = getBaseType(getFieldTypeByName(scope, nodeScope, initializator.fieldName));
+		var fieldClassType = getBaseType(getFieldTypeByName(scope, nodeScope, fieldName));
 		
 		var initFunction : Field;
 		var res : Expr = switch([fieldClassType.module, fieldClassType.name]) {
 			
 			case ["String", "String"]:
 				var value = getValue(scope, initializator.value);
-				macro $value;
+				if(initializator.fieldName != null) {
+					exprs.push(macro $i {initializator.fieldName} = $value);
+					macro $i {initializator.fieldName};
+				} else {
+
+					macro $value;
+				}
 			
 			case ["Int", "Int"] | ["StdTypes", "Int"]:
 				var value = getValue(scope, initializator.value);

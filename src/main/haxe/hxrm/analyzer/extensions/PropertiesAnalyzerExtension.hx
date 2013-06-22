@@ -60,7 +60,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(attributeQName.localPart, '"$value"')));
+		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, '"$value"')));
 	}
 
 	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
@@ -94,7 +94,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			
 			switch([qName.packageNameParts.length, qName.className]) {
 				case [0, "String"] | [0, "Int"] | [0, "Float"]:
-					rememberProperty(context, scope, innerChildId, InitNodeScope(new FieldInitializator(innerChildId, '"${innerChild.cdata}"', Context.getType(qName.className))));
+					rememberProperty(context, scope, child.name.localPart, InitNodeScope(new FieldInitializator(scope.getNodeId(innerChild), '"${innerChild.cdata}"', Context.getType(qName.className))));
 
 				case [_, _]:
 					var childScope : NodeScope = analyzer.analyze(context, innerChild);
@@ -108,21 +108,12 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			}
 			
 		} else if(hasCDATA) {
-			rememberProperty(context, scope, child.name.localPart, InitBinding(new BindingInitializator(child.name.localPart, '"${child.cdata}"')));
+			rememberProperty(context, scope, child.name.localPart, InitBinding(new BindingInitializator(null, '"${child.cdata}"')));
 		}
 	}
 
 	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator) : Void {
 
-		var propName : String = getInitializatorFieldName(value);
-		
-		for(initializator in scope.initializers) {
-			if(getInitializatorFieldName(initializator) == propName) {
-				context.error(new PropertiesAnalyzerError(DUPLICATE));
-				return;
-			}
-		}
-		
 		if(scope.initializers.exists(fieldName)) {
 			context.error(new PropertiesAnalyzerError(DUPLICATE));
 			return;
