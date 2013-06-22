@@ -44,7 +44,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					parseFieldInitializator(context, scope, fieldName, initializator);
 				case InitBinding(initializator):
 			}
-			trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
+			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
 		for (fieldName in initializers.keys()) {
 			switch(initializers.get(fieldName)) {
@@ -53,7 +53,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 				case InitNodeScope(initializator):
 					parseBindingInitializator(context, scope, nodeScope, fieldName, initializator, exprs, macro $i{forField}.$fieldName);
 			}
-			trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
+			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
 	}
 

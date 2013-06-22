@@ -1,5 +1,12 @@
+-cmd mkdir -p target/
+
+--next
+
 -cp src/main/haxe/
 -cp src/test/haxe/
 -D dump=pretty
--js bin/hxmr.js
 -main Main
+-neko target/hxmr.n
+
+--next
+-cmd neko target/hxmr.n

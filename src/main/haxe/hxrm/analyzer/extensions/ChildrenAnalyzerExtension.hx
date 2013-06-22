@@ -27,13 +27,11 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
-		scope.children = [];
+		if(scope.children == null) {
+			scope.children = [];
+		}
 		
 		var node : MXMLNode = scope.context.node;
-		
-		if(node.children.length == 0) {
-			return false;
-		}
 	
 		if(scope.initializers == null) {
 			return true;
@@ -44,22 +42,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 			return false;
 		}
 
-		for(field in scope.classFields) {
-			if(!field.meta.has("hxmrDefaultProperty")) {
-				continue;
-			}
-
-			if(scope.defaultProperty != null) {
-				//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
-				return false;
-			}
-
-			scope.defaultProperty = field.name;
-		}
-
-		if(scope.defaultProperty == null && scope.children.length > 0) {
-			// TODO error default property not found
-			trace("default property not found");
+		if(node.children.length == 0) {
 			return false;
 		}
 
@@ -67,10 +50,34 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		defaultPropertyNode.name = new MXMLQName("*", "Array");
 		var defaultPropertyNodeScope : NodeScope = analyzer.analyze(context, defaultPropertyNode);
 		//TODO causes bugs
-		//scope.initializers.push(InitNodeScope(new FieldInitializator(scope.defaultProperty, defaultPropertyNodeScope, defaultPropertyNodeScope.type)));
 		
 		for (childNode in node.children) {
 			matchDefaultProperyChild(context, scope, defaultPropertyNodeScope, childNode);
+		}
+		
+		if(defaultPropertyNodeScope.children.length > 0) {
+
+			for(field in scope.classFields) {
+				if(!field.meta.has("hxmrDefaultProperty")) {
+					continue;
+				}
+
+				if(scope.defaultProperty != null) {
+					//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
+					return false;
+				}
+
+				scope.defaultProperty = field.name;
+			}
+
+			if(scope.defaultProperty == null && node.children.length > 0) {
+				// TODO error default property not found
+				trace("default property not found");
+				return false;
+			}
+
+			rememberProperty(context, scope, scope.defaultProperty, InitBinding(new BindingInitializator(scope.defaultProperty, defaultPropertyNodeScope)));
+
 		}
 		
 		return false;
