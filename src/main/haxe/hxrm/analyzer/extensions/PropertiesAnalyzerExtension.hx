@@ -97,7 +97,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 					rememberProperty(context, scope, child.name.localPart, InitNodeScope(new FieldInitializator(scope.getNodeId(innerChild), '"${innerChild.cdata}"', Context.getType(qName.className))));
 
 				case [_, _]:
-					var childScope : NodeScope = analyzer.analyze(context, innerChild);
+					var childScope : NodeScope = analyzer.analyze(context, innerChild, scope);
 
 					if(childScope == null) {
 						//TODO logging?

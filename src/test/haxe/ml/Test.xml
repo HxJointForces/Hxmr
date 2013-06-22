@@ -5,7 +5,7 @@
 		<deep:anotherB>
 			<deep:B>
 				<deep:anotherB>
-					<deep:B id="thirdB" test="100500" prop="thirdValue" />
+					<deep:B test="100500" prop="thirdValue" />
 				</deep:anotherB>
 			</deep:B>
 		</deep:anotherB>

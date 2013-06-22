@@ -10,6 +10,8 @@ import haxe.macro.Type;
 
 class NodeScope {
 
+	public var parentScope : NodeScope;
+
 	public var context : AnalyzerContext;
 
 	public var typeName : QName;
@@ -44,13 +46,21 @@ class NodeScope {
 		
 		var qName = context.resolveQName(node.name);
 		
-		if(!fieldNamesSeek.exists(qName)) {
-			fieldNamesSeek.set(qName, 0);
+		var currentScope = this;
+		var currentFieldNamesSeek = fieldNamesSeek;
+		
+		while(currentScope.parentScope != null) {
+			currentScope = currentScope.parentScope;
+			currentFieldNamesSeek = currentScope.fieldNamesSeek;
 		}
 		
-		var seek : Int = fieldNamesSeek.get(qName);
+		if(!currentFieldNamesSeek.exists(qName)) {
+			currentFieldNamesSeek.set(qName, 0);
+		}
 		
-		fieldNamesSeek.set(qName, seek + 1);
+		var seek : Int = currentFieldNamesSeek.get(qName);
+
+		currentFieldNamesSeek.set(qName, seek + 1);
 		
 		return qName.packageNameParts.join("_") + "__" + qName.className.substr(0, 1).toLowerCase() + qName.className.substr(1) + Std.string(seek);
 	}

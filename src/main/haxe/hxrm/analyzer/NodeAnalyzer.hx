@@ -21,9 +21,10 @@ class NodeAnalyzer {
 		extensions = [new TypeExtension(this), new PropertiesAnalyzerExtension(this), new ScriptBlockExtension(this), new ChildrenAnalyzerExtension(this), new GenericTypeExtension(this)];
 	}
 
-	public function analyze(context : HxmrContext, node : MXMLNode) : NodeScope
+	public function analyze(context : HxmrContext, node : MXMLNode, ?parentScope : NodeScope) : NodeScope
 	{
 		var result : NodeScope = new NodeScope();
+		result.parentScope = parentScope;
 
 		result.context = new AnalyzerContext(node);
 		
