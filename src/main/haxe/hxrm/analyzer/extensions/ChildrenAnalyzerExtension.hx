@@ -27,16 +27,16 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
+		if(scope.initializers == null) {
+			return true;
+		}
+
 		if(scope.children == null) {
 			scope.children = [];
 		}
 		
 		var node : MXMLNode = scope.context.node;
-	
-		if(scope.initializers == null) {
-			return true;
-		}
-
+		
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
 			context.error(new ChildrenAnalyzerError(CDATA_WITH_INNER_TAGS));
 			return false;
