@@ -1,5 +1,7 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.analyzer.NodeScope;
+import hxrm.HxmrContext;
 import hxrm.HxmrContext.Pos;
 import haxe.macro.Context;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
@@ -20,19 +22,20 @@ class GenericTypeAnalyzerError extends NodeAnalyzerError {
 class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
-		var node : MXMLNode = scope.context.node;
-
-		var resolvedQName : QName = scope.context.resolveQName(node.name);
-
+		
 		if(scope.type == null) {
 			return true;
 		}
-
+		
+		var node : MXMLNode = scope.context.node;
+		
+		var resolvedQName : QName = scope.context.resolveQName(node.name);
+		
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
 			matchAttribute(context, scope, attributeQName, value);
 		}
-
+		
 		return false;
 	}
 

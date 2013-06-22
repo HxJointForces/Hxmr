@@ -1,5 +1,8 @@
 -cp src/main/haxe/
 -cp src/test/haxe/
 -D dump=pretty
--js bin/hxmr.js
+-neko bin/hxmr.n
 -main Main
+
+--next
+-cmd neko bin/hxmr.n
