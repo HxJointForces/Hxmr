@@ -88,7 +88,6 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 				return;
 			}
 			var innerChild : MXMLNode = child.children[0];
-			var innerChildId : String = scope.getFieldNameForNode(innerChild);
 			
 			var qName : QName = scope.context.resolveQName(innerChild.name);
 			
@@ -104,7 +103,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 						trace("childScope is null");
 						return;
 					}
-					rememberProperty(context, scope, child.name.localPart, InitNodeScope(new FieldInitializator(innerChildId, childScope, childScope.type)));
+					rememberProperty(context, scope, child.name.localPart, InitNodeScope(new FieldInitializator(scope.getFieldNameForNode(innerChild), childScope, childScope.type)));
 			}
 			
 		} else if(hasCDATA) {
