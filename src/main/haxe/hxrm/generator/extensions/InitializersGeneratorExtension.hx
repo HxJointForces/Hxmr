@@ -48,12 +48,12 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			var result = switch(initializatorEnum) {
 				case InitBinding(initializator):
 					fieldName = initializator.fieldName;
-					var fieldType = scope.context.node.context.getClassType(getFieldTypeByName(scope, fieldName));
+					var fieldType = getBaseType(getFieldTypeByName(scope, fieldName));
 					parseBindingInitializator(context, scope, fieldType, initializator);
 				
 				case InitNodeScope(initializator):
 					fieldName = initializator.fieldName;
-					var fieldType = scope.context.node.context.getClassType(getFieldTypeByName(scope, fieldName));
+					var fieldType = getBaseType(getFieldTypeByName(scope, fieldName));
 					parseBindingInitializator(context, scope, fieldType, initializator);
 			}
 			
