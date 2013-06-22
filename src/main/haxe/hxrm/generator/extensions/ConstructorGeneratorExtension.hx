@@ -8,9 +8,8 @@ import hxrm.generator.GeneratorScope;
 class ConstructorGeneratorExtension extends GeneratorExtensionBase {
 
 	override public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
-		if(scope.ctor == null) {
-			generateCtor(context, scope);
-		}
+		
+		if(scope.ctor == null) generateCtor(context, scope);
 		
 		return false;
 	}

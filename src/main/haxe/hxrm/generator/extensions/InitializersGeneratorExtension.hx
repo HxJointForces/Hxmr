@@ -49,9 +49,9 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		for (fieldName in initializers.keys()) {
 			switch(initializers.get(fieldName)) {
 				case InitBinding(initializator):
-					parseBindingInitializator(context, scope, nodeScope, fieldName, initializator, exprs, ExprTools.toFieldExpr([forField, fieldName]));
+					parseBindingInitializator(context, scope, nodeScope, fieldName, initializator, exprs, macro $i{forField}.$fieldName/*ExprTools.toFieldExpr([forField, fieldName])*/);
 				case InitNodeScope(initializator):
-					parseBindingInitializator(context, scope, nodeScope, fieldName, initializator, exprs, ExprTools.toFieldExpr([forField, fieldName]));
+					parseBindingInitializator(context, scope, nodeScope, fieldName, initializator, exprs, macro $i{forField}.$fieldName);
 			}
 			trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
@@ -199,8 +199,10 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 	
 	function getFieldType(field : Field) : Type {
 		return switch(field.kind) {
-			case FVar( type, expr ):
-				ComplexTypeTools.toType(type);
+			case FVar(type, _), FProp(_, _, type, _):
+				if (type != null) 
+					ComplexTypeTools.toType(type);
+				else null;
 			case _: throw "assert";
 		}
 	}
