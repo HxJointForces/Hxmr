@@ -5,6 +5,8 @@ import hxrm.analyzer.initializers.BindingInitializator;
 import hxrm.analyzer.initializers.FieldInitializator;
 import haxe.macro.Expr;
 import hxrm.analyzer.NodeScope;
+import hxrm.generator.GeneratorScope;
+import hxrm.HxmrContext;
 
 class ChildrenGeneratorExtension extends InitializersGeneratorExtension {
 
