@@ -48,13 +48,11 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			var result = switch(initializatorEnum) {
 				case InitBinding(initializator):
 					fieldName = initializator.fieldName;
-					var fieldType = getBaseType(getFieldTypeByName(scope, fieldName));
-					parseBindingInitializator(context, scope, fieldType, initializator);
+					parseBindingInitializator(context, scope, scope.context.node, initializator);
 				
 				case InitNodeScope(initializator):
 					fieldName = initializator.fieldName;
-					var fieldType = getBaseType(getFieldTypeByName(scope, fieldName));
-					parseBindingInitializator(context, scope, fieldType, initializator);
+					parseBindingInitializator(context, scope, scope.context.node, initializator);
 			}
 			
 			if(result.e != null) {
@@ -67,10 +65,6 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		}
 
 		return false;
-	}
-
-	function processScope(context : HxmrContext, scope : GeneratorScope, assignTarget : Expr) : Void {
-	
 	}
 
 	function parseFieldInitializator(context : HxmrContext, scope : GeneratorScope, initializator : FieldInitializator) : Field {
@@ -109,8 +103,9 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		}
 	}
 
-	function parseBindingInitializator(context:HxmrContext, scope:GeneratorScope, fieldClassType : BaseType, initializator : BindingInitializator) : {e : Expr, f : Field} {
+	function parseBindingInitializator(context:HxmrContext, scope:GeneratorScope, nodeScope : NodeScope, initializator : BindingInitializator) : {e : Expr, f : Field} {
 		var fieldName : String = initializator.fieldName;
+		var fieldClassType = getBaseType(getFieldTypeByName(scope, nodeScope, fieldName));
 		
 		var initFunction : Field;
 		var res : Expr = switch([fieldClassType.module, fieldClassType.name]) {
@@ -157,7 +152,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 							throw "assert";
 						}
 						
-						var result = parseBindingInitializator(context, scope, childFieldType, childInitializator);
+						var result = parseBindingInitializator(context, scope, initScope, childInitializator);
 		
 						if(result.e != null) {
 						
@@ -208,7 +203,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		return null;
 	}
 
-	function getFieldTypeByName(scope : GeneratorScope, fieldName : String) : Type {
+	function getFieldTypeByName(scope : GeneratorScope, nodeScope : NodeScope, fieldName : String) : Type {
 
 		for(field in scope.typeDefinition.fields) {
 			if(field.name == fieldName) {
@@ -216,7 +211,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			}
 		}
 
-		var field : ClassField = scope.context.node.getFieldByName(fieldName);
+		var field : ClassField = nodeScope.getFieldByName(fieldName);
 		return field.type;
 	}
 	

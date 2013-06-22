@@ -1,5 +1,6 @@
 package hxrm.generator;
 
+import haxe.macro.Printer;
 import hxrm.generator.extensions.ChildrenGeneratorExtension;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
@@ -65,6 +66,8 @@ class TypeDefinitionGenerator
 		}
 		
 		//TypeUtils.prettyPrintType(typeDefinition);
+		
+		trace("\n" + (new Printer()).printTypeDefinition(typeDefinition, true));
 		
 		return typeDefinition;
 	}
