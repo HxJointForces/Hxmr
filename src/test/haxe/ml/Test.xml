@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ans:A ans:aString="1" xmlns:ans="*">
-	
+
 	<B id="myB"  xmlns="deep.*" test="123" prop="asValue"/>
 
 	<ans:innerString>Hello!</ans:innerString>

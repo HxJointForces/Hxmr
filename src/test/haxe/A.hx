@@ -4,18 +4,15 @@ package ;
  * @author deep <system.grand@gmail.com>
  */
 import deep.B;
-class A//<T>
+class A
 {
-	
-	//public var a:T;
-	
 	public var aString:String;
 
 	public var innerString : String;
 
 	public var anotherInnerString : String;
 	
-	@hxmrDefaultProperty public var children : Array<B>;//<T>>;
+	@hxmrDefaultProperty public var children : Array<B>;
 
 	public function new()
 	{

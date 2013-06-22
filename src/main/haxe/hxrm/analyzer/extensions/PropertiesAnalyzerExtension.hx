@@ -97,11 +97,11 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			}
 
 			var innerChildId : String = scope.getFieldNameForNode(innerChild);
-			rememberProperty(context, scope, InitNodeScope(new FieldInitializator(innerChildId, '"${innerChild.cdata}"', childScope.type)));
+			rememberProperty(context, scope, InitNodeScope(new FieldInitializator(innerChildId, innerChild.cdata, childScope.type)));
 			rememberProperty(context, scope, InitBinding(new BindingInitializator(child.name.localPart, innerChildId)));
 			
 		} else if(hasCDATA) {
-			rememberProperty(context, scope, InitBinding(new BindingInitializator(child.name.localPart, '"${child.cdata}"')));
+			rememberProperty(context, scope, InitBinding(new BindingInitializator(child.name.localPart, child.cdata)));
 		}
 	}
 

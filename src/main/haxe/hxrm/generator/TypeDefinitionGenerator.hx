@@ -64,7 +64,7 @@ class TypeDefinitionGenerator
 			currentIterationExtensions = nextIterationExtensions;
 		}
 		
-		TypeUtils.prettyPrintType(typeDefinition);
+		//TypeUtils.prettyPrintType(typeDefinition);
 		
 		return typeDefinition;
 	}
