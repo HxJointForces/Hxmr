@@ -1,8 +1,13 @@
+#-cmd mkdir -p target
+
+#--next
+
 -cp src/main/haxe/
 -cp src/test/haxe/
 -D dump=pretty
--neko bin/hxmr.n
+-neko target/hxmr.n
 -main Main
 
 --next
--cmd neko bin/hxmr.n
+-cmd neko target/hxmr.n
+
