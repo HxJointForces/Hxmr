@@ -12,7 +12,7 @@ class MXMLQNameUtils {
 		}
 	}
 
-	public static function resolveNamespaceValue(node : MXMLNode, namespacePrefix : String) : String {
+	inline public static function resolveNamespaceValue(node : MXMLNode, namespacePrefix : String) : String {
 		return node.namespaces.get(StringTools.trim(namespacePrefix));
 	}
 }

@@ -5,6 +5,7 @@ import haxe.macro.TypeTools;
 import haxe.macro.Printer;
 import haxe.macro.ExprTools;
 import haxe.macro.Context;
+import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
 import haxe.macro.ComplexTypeTools;
 import hxrm.generator.GeneratorScope;

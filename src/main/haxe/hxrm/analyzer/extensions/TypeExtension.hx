@@ -1,11 +1,9 @@
 package hxrm.analyzer.extensions;
 
 import hxrm.parser.mxml.MXMLQName;
-import StringTools;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLNode;
-import hxrm.parser.mxml.MXMLQName;
 
 using StringTools;
 

@@ -1,4 +1,5 @@
 package hxrm.analyzer;
+
 class QName {
 
 	public static inline var HAXE_ID_GLUE : String = ".";

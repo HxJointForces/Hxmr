@@ -1,4 +1,6 @@
 package hxrm.analyzer;
+
+import hxrm.HxmrContext.Pos;
 import hxrm.parser.mxml.MXMLQNameUtils;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
@@ -6,7 +8,18 @@ import hxrm.parser.mxml.MXMLQName;
 import haxe.macro.Type.ClassType;
 import haxe.macro.Context;
 import haxe.macro.Type;
+import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 
+enum AnalyzerContextErrorType {
+	UNKNOWN_TYPE(type:String);
+}
+
+class AnalyzerContextError extends NodeAnalyzerError {
+	public function new(type : AnalyzerContextErrorType, ?pos : Pos) {
+		super(type, pos);
+	}
+}
+// TODO: inject hxmrContext here
 class AnalyzerContext {
 
 	public var node : MXMLNode;
@@ -20,7 +33,6 @@ class AnalyzerContext {
 			case TInst(t, params):
 				t.get();
 			case _:
-				trace("unsupported type: " + type);
 				throw "unsupported type: " + type;
 		}
 	}

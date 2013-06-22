@@ -1,6 +1,6 @@
 package hxrm.analyzer.extensions;
+
 import haxe.macro.Context;
-import hxrm.analyzer.initializers.IInitializator;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import haxe.macro.Type.ClassField;

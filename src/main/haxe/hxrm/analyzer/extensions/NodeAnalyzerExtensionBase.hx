@@ -1,4 +1,5 @@
 package hxrm.analyzer.extensions;
+
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext;

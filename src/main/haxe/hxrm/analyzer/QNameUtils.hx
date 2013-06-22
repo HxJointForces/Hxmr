@@ -1,8 +1,10 @@
 package hxrm.analyzer;
+
 import StringTools;
 import StringTools;
 import hxrm.analyzer.QName;
 import hxrm.analyzer.QName;
+
 class QNameUtils {
 
 	public static function fromHaxeTypeId(typeId : String) : QName {

@@ -2,7 +2,6 @@ package hxrm.analyzer.extensions;
 
 import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext;
-import hxrm.HxmrContext.Pos;
 import haxe.macro.Context;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLQNameUtils;
@@ -29,7 +28,7 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 		
 		var node : MXMLNode = scope.context.node;
 		
-		var resolvedQName : QName = scope.context.resolveQName(node.name);
+		//var resolvedQName : QName = scope.context.resolveQName(node.name);
 		
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
@@ -52,7 +51,7 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 
 		var typeParams = value.split(",").map(QNameUtils.fromHaxeTypeId);
 
-		trace(typeParams);
+		//trace(typeParams);
 
 		switch (scope.type) {
 			case TInst(t, params):
@@ -65,7 +64,7 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 				for (genericType in typeParams) {
 					genericTypes.push(Context.getType(genericType.toHaxeTypeId()));
 				}
-				trace(genericTypes);
+				//trace(genericTypes);
 				scope.type = TInst(t, genericTypes);
 			case _:
 		}

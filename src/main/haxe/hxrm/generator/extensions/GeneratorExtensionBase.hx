@@ -4,6 +4,7 @@ import haxe.macro.Expr;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
 import hxrm.generator.TypeDefinitionGenerator;
+import hxrm.HxmrContext;
 
 class GeneratorExtensionBase implements IGeneratorExtension {
 	

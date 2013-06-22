@@ -4,6 +4,7 @@ import hxrm.analyzer.NodeScope;
 import haxe.macro.Expr;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
+import hxrm.HxmrContext;
 
 class ConstructorGeneratorExtension extends GeneratorExtensionBase {
 
@@ -30,6 +31,4 @@ class ConstructorGeneratorExtension extends GeneratorExtensionBase {
 		scope.ctor = ctor;
 		scope.typeDefinition.fields.push(ctor);
 	}
-
-
 }

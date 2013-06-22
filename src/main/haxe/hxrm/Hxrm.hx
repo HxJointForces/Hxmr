@@ -16,6 +16,23 @@ using StringTools;
  */
 class Hxrm
 {
+	
+	// вызовется при холодной компиляции
+	macro public static function build():Expr {
+		
+		trace("init " + firstStart);
+		if (firstStart) {
+			firstStart = false;
+			typeDefinitionFactory = new HxrmTypeDefinitionFactory();
+
+			Context.registerModuleReuseCall(Context.getLocalClass().get().module, "hxrm.Hxrm.rebuild()");
+			//Context.onMacroContextReused(reuse);
+			Context.onTypeNotFound(onTypeNotFound);
+		}
+		
+		return {expr:EBlock([]), pos:Context.currentPos()}; // нулл или 0 не стоит. т.к. это конкретный тип, а так Untyped<0>
+	}
+	
 	#if macro
 	
 	private static var firstStart = true;
@@ -36,25 +53,7 @@ class Hxrm
 		}
 		Context.onTypeNotFound(onTypeNotFound);
 	}
-	#end
-
-	// вызовется при холодной компиляции
-	macro public static function build():Expr {
-		
-		trace("init " + firstStart);
-		if (firstStart) {
-			firstStart = false;
-			typeDefinitionFactory = new HxrmTypeDefinitionFactory();
-
-			Context.registerModuleReuseCall(Context.getLocalClass().get().module, "hxrm.Hxrm.rebuild()");
-			//Context.onMacroContextReused(reuse);
-			Context.onTypeNotFound(onTypeNotFound);
-		}
-		
-		return {expr:EBlock([]), pos:Context.currentPos()}; // нулл или 0 не стоит. т.к. это конкретный тип, а так Untyped<0>
-	}
 	
-	#if macro
 	static function onTypeNotFound(t:String):TypeDefinition {
 		
 		if (t.startsWith("haxe")) return null;

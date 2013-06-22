@@ -5,11 +5,9 @@ import hxrm.analyzer.initializers.BindingInitializator;
 import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.HxmrContext;
 import hxrm.parser.mxml.MXMLQName;
-import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import StringTools;
-import hxrm.analyzer.NodeScope;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQNameUtils;
 
