@@ -2,7 +2,6 @@ package hxrm.generator;
 
 import haxe.macro.Expr;
 import hxrm.analyzer.NodeScope;
-import hxrm.HxmrContext.Pos;
 
 /**
  * ...
