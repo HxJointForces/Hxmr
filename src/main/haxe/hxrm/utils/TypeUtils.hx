@@ -1,7 +1,12 @@
 package hxrm.utils;
+import haxe.macro.Type.ClassType;
 
 class TypeUtils {
 
+	inline static public function superType(ct:ClassType):ClassType {
+		return if (ct.superClass != null) ct.superClass.t.get(); else null;
+	}
+	
 	public static function prettyPrintType(type : Dynamic) : Void {
 		var result : String = "";
 		var i : Int = 0;

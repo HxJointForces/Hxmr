@@ -18,6 +18,11 @@ using StringTools;
  * ...
  * @author deep <system.grand@gmail.com>
  */
+
+class TypeDefinitionGeneratorError extends ContextError {
+	
+}
+ 
 class TypeDefinitionGenerator
 {
 	private var extensions : Array<IGeneratorExtension>;

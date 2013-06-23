@@ -1,10 +1,27 @@
 package hxrm.generator.extensions;
 
+import haxe.macro.Context;
+import haxe.macro.Type.ClassField;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Expr;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
+import hxrm.generator.TypeDefinitionGenerator.TypeDefinitionGeneratorError;
 import hxrm.HxmrContext;
+import hxrm.utils.TypeUtils;
+
+using hxrm.HxmrContext.PosTools;
+
+enum ConstructorGeneratorErrorType {
+	ARGUMENTS_IN_SUPER;
+}
+
+class ConstructorGeneratorError extends TypeDefinitionGeneratorError {
+	
+	public function new (type:ConstructorGeneratorErrorType, pos:Pos) {
+		super(type, pos);
+	}
+}
 
 class ConstructorGeneratorExtension extends GeneratorExtensionBase {
 
@@ -17,8 +34,26 @@ class ConstructorGeneratorExtension extends GeneratorExtensionBase {
 
 	function generateCtor(context:HxmrContext, scope:GeneratorScope)
 	{
-		var superCall = macro super();
-		scope.ctorExprs = [superCall];
+		var superCtor:ClassField = null;
+		var classType = scope.context.node.classType;
+		while (superCtor == null && classType != null) {
+			superCtor = classType.constructor != null ? classType.constructor.get() : null;
+			classType = TypeUtils.superType(classType);
+		}
+		
+		var superCall = if (superCtor == null) {
+				null;
+			} else {
+				switch (Context.typeof(Context.getTypedExpr(superCtor.expr()))) {
+					case TFun(args, _):
+						if (args.length > 0) // TODO: add support for super args?
+							context.error(new ConstructorGeneratorError(ARGUMENTS_IN_SUPER, scope.context.pos.positionToPos()));
+					case _:
+				}
+				macro super();
+			}
+		
+		scope.ctorExprs = superCall != null ? [superCall] : [];
 		
 		var ctor = {
 			name: "new",
