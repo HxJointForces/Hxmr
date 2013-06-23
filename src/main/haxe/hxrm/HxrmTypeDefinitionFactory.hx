@@ -1,5 +1,6 @@
 package hxrm;
 
+import haxe.macro.Context;
 import hxrm.HxmrContext.ContextError;
 import hxrm.utils.TypeUtils;
 import haxe.CallStack;
@@ -52,6 +53,8 @@ class HxrmTypeDefinitionFactory {
 			trace('xml file not found: $path'); // пока трейс. лучше убрать. пусть компилятор делает все сам
 			return null;
 		}
+		
+		Context.registerModuleDependency(Context.getLocalClass().get().module, path);
 
 		try {
 
