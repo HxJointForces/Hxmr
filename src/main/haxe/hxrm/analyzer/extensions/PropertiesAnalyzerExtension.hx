@@ -1,5 +1,6 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.analyzer.initializers.FieldInitializator;
 import haxe.macro.Context;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
@@ -80,35 +81,63 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA));
 			return;
 		}
-		
-		if(child.children.length > 0) {
-			// TODO ArrayInitializers
-			if(child.children.length > 1) {
-				context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
-				return;
-			}
-			var innerChild : MXMLNode = child.children[0];
-			
-			var qName : QName = scope.context.resolveQName(innerChild.name);
-			
-			switch([qName.packageNameParts.length, qName.className]) {
-				case [0, "String"] | [0, "Int"] | [0, "Float"]:
-					rememberProperty(context, scope, child.name.localPart, InitNodeScope(new FieldInitializator(scope.getNodeId(innerChild), '"${innerChild.cdata}"', Context.getType(qName.className))));
 
-				case [_, _]:
-					var childScope : NodeScope = analyzer.analyze(context, innerChild, scope);
-
-					if(childScope == null) {
-						//TODO logging?
-						trace("childScope is null");
-						return;
-					}
-					rememberProperty(context, scope, child.name.localPart, InitNodeScope(new FieldInitializator(scope.getFieldNameForNode(innerChild), childScope, childScope.type)));
-			}
-			
-		} else if(hasCDATA) {
-			rememberProperty(context, scope, child.name.localPart, InitBinding(new BindingInitializator(null, '"${child.cdata}"')));
+		var matchResult = matchValue(context, scope, child);
+		if(matchResult != null) {
+			rememberProperty(context, scope, child.name.localPart, matchResult);
 		}
+	}
+	
+	function matchValue(context : HxmrContext, scope:NodeScope, child:MXMLNode) : IInitializator {
+
+		if(child.cdata != null && child.cdata.length > 0) {
+			return InitBinding(new BindingInitializator(null, '"${child.cdata}"'));		
+		}
+
+		// TODO ArrayInitializers
+		if(child.children.length > 1) {
+			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
+			return null;
+		}
+		
+		if(child.children.length == 0) {
+			return null;
+		}
+		
+		var innerChild : MXMLNode = child.children[0];
+	
+		var qName : QName = scope.context.resolveQName(innerChild.name);
+
+		var id = scope.getNodeId(innerChild);
+		
+		var initializator : FieldInitializator = switch([qName.packageNameParts.length, qName.className]) {
+			case [0, "String"] | [0, "Int"] | [0, "Float"]:
+				new FieldInitializator(id, '"${innerChild.cdata}"', Context.getType(qName.className));
+			
+			case [0, "Array"]:
+				var childs : Array<IInitializator> = [];
+			
+				for(child in innerChild.children) {
+					var value = matchValue(context, scope, child);
+					if(value != null) {
+						childs.push(value);
+					}
+				}
+
+				new FieldInitializator(scope.getFieldNameForNode(innerChild), childs, Context.getType("Array"));
+			
+			case [_, _]:
+				var childScope : NodeScope = analyzer.analyze(context, innerChild, scope);
+
+				if(childScope == null) {
+					//TODO logging?
+					trace("childScope is null");
+					return null;
+				}
+				new FieldInitializator(scope.getFieldNameForNode(innerChild), childScope, childScope.type);
+		}
+		
+		return id == null ? InitBinding(initializator) : InitField(initializator);
 	}
 
 	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator) : Void {
@@ -124,7 +153,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 	function getInitializatorFieldName(value:IInitializator) : String {
 		return switch(value) {
 			case InitBinding(bindingInitializator): bindingInitializator.fieldName;
-			case InitNodeScope(nodeInitializator): nodeInitializator.fieldName;
+			case InitField(nodeInitializator): nodeInitializator.fieldName;
 		}
 	}
 

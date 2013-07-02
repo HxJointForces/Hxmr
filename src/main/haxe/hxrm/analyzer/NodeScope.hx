@@ -1,6 +1,5 @@
 package hxrm.analyzer;
 
-import StringTools;
 import haxe.ds.HashMap;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ans:A ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*" >
 	
-	<deep:B id="myB"  test="123" prop="asValue">
-		<deep:anotherB>
-			<deep:B>
-				<deep:B test="100500" prop="thirdValue" />
-			</deep:B>
-		</deep:anotherB>
-	</deep:B>
+	<ans:children>
+		<Array>
+			<deep:B id="myB"  test="123" prop="asValue"/>
+		</Array>
+	</ans:children>
 
 	<ans:innerString>Hello!</ans:innerString>
 	

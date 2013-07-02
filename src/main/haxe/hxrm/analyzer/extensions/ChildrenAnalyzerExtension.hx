@@ -44,69 +44,49 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 			return false;
 		}
 
-		var defaultPropertyNode : MXMLNode = new MXMLNode();
-		defaultPropertyNode.name = new MXMLQName("*", "Array");
-		var defaultPropertyNodeScope : NodeScope = analyzer.analyze(context, defaultPropertyNode);
-		//TODO causes bugs
-		
-		for (childNode in node.children) {
-			matchDefaultProperyChild(context, scope, defaultPropertyNodeScope, childNode);
-		}
-		
-		if(defaultPropertyNodeScope.children.length > 0) {
-
-			for(field in scope.classFields) {
-				if(!field.meta.has("hxmrDefaultProperty")) {
-					continue;
-				}
-
-				if(scope.defaultProperty != null) {
-					//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
-					return false;
-				}
-
-				scope.defaultProperty = field.name;
+		for(field in scope.classFields) {
+			if(!field.meta.has("hxmrDefaultProperty")) {
+				continue;
 			}
 
-			if(scope.defaultProperty == null && node.children.length > 0) {
-				// TODO error default property not found
-				trace("default property not found");
+			if(scope.defaultProperty != null) {
+				//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
 				return false;
 			}
 
-			rememberProperty(context, scope, scope.defaultProperty, InitBinding(new BindingInitializator(scope.defaultProperty, defaultPropertyNodeScope)));
+			scope.defaultProperty = field.name;
+		}
 
+		var setterArrayNode : MXMLNode = new MXMLNode();
+		setterArrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
+		
+		for (childNode in node.children) {
+			if(isInnerProperty(scope, childNode)) {
+				continue;
+			}
+
+			//TODO better typename checking
+			var resolveNamespaceValue = MXMLQNameUtils.resolveNamespaceValue(childNode, childNode.name.namespace);
+			if(StringTools.startsWith(resolveNamespaceValue, "http://")) {
+				continue;
+			}
+			setterArrayNode.children.push(childNode);
+		}
+		
+		if(scope.defaultProperty == null && setterArrayNode.children.length > 0) {
+			//TODO DEFAULT_PROPERTY_IS_NULL
+			trace("defaultPropertyIsNull");
+			return false;
+		}
+		
+		trace(scope.defaultProperty, setterArrayNode);
+		
+		var initializator = matchValue(context, scope, setterArrayNode);
+		
+		if(initializator != null) {
+			rememberProperty(context, scope, scope.defaultProperty, initializator);
 		}
 		
 		return false;
 	}
-
-	function matchDefaultProperyChild(context : HxmrContext, scope:NodeScope, defaultPropertyNodeScope : NodeScope, child:MXMLNode):Void {
-	
-		if(isInnerProperty(scope, child)) {
-			return;
-		}
-		
-		//TODO better typename checking
-		var resolveNamespaceValue = MXMLQNameUtils.resolveNamespaceValue(child, child.name.namespace);
-		if(StringTools.startsWith(resolveNamespaceValue, "http://")) {
-			return;
-		}
-		
-		var childScope : NodeScope = analyzer.analyze(context, child);
-		
-		if(childScope == null) {
-			//TODO logging?
-			trace("childScope is null");
-			return;
-		}
-
-		var innerChildId = scope.getFieldNameForNode(child);
-		var nodeScopeInitializer = new FieldInitializator(innerChildId, childScope, childScope.type);
-		rememberProperty(context, scope, innerChildId, InitNodeScope(nodeScopeInitializer));
-
-		defaultPropertyNodeScope.children.push(nodeScopeInitializer);
-	}
-
-
 }
