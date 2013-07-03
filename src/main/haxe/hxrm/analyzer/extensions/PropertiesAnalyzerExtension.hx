@@ -64,28 +64,29 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, '"$value"')));
 	}
 
-	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):Void {
+	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):IInitializator {
 	
 		if(!isInnerProperty(scope, child)) {
-			return;
+			return null;
 		}
 
 		if(child.attributes.iterator().hasNext()) {
 			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY));
-			return;
+			return null;
 		}
 
 		var hasCDATA = (child.cdata != null && child.cdata.length > 0);
 		
 		if((child.children.length > 1 && hasCDATA) || (child.children.length == 0 && !hasCDATA)) {
 			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA));
-			return;
+			return null;
 		}
 
 		var matchResult = matchValue(context, scope, child);
 		if(matchResult != null) {
 			rememberProperty(context, scope, child.name.localPart, matchResult);
 		}
+		return matchResult;
 	}
 	
 	function matchValue(context : HxmrContext, scope:NodeScope, child:MXMLNode) : IInitializator {
@@ -105,22 +106,29 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		var innerChild : MXMLNode = child.children[0];
-	
+		
 		var qName : QName = scope.context.resolveQName(innerChild.name);
 
 		var id = scope.getNodeId(innerChild);
 		
 		var initializator : FieldInitializator = switch([qName.packageNameParts.length, qName.className]) {
-			case [0, "String"] | [0, "Int"] | [0, "Float"]:
+			case [0, "String"]:
 				new FieldInitializator(id, '"${innerChild.cdata}"', Context.getType(qName.className));
+			case [0, "Int"]:
+				new FieldInitializator(id, Std.parseInt(innerChild.cdata), Context.getType(qName.className));
+			case [0, "Float"]:
+				new FieldInitializator(id, Std.parseFloat(innerChild.cdata), Context.getType(qName.className));
 			
 			case [0, "Array"]:
 				var childs : Array<IInitializator> = [];
 			
 				for(child in innerChild.children) {
-					var value = matchValue(context, scope, child);
+					var childScope : NodeScope = analyzer.analyze(context, child, scope);
+					var value = InitField(new FieldInitializator(scope.getFieldNameForNode(child), childScope, childScope.type));
 					if(value != null) {
 						childs.push(value);
+					} else {
+						trace("value null for child: " + child);
 					}
 				}
 

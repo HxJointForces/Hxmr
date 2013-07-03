@@ -1,8 +1,6 @@
 package hxrm.analyzer.extensions;
 
 import hxrm.analyzer.NodeScope;
-import hxrm.analyzer.initializers.BindingInitializator;
-import hxrm.analyzer.initializers.FieldInitializator;
 import hxrm.HxmrContext;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.HxmrContext.Pos;
@@ -13,6 +11,7 @@ import hxrm.parser.mxml.MXMLQNameUtils;
 
 enum ChildrenAnalyzerErrorType {
 	CDATA_WITH_INNER_TAGS;
+	DEFAULT_PROPERTY_IS_NULL;
 }
 
 class ChildrenAnalyzerError extends NodeAnalyzerError {
@@ -56,9 +55,9 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 
 			scope.defaultProperty = field.name;
 		}
-
-		var setterArrayNode : MXMLNode = new MXMLNode();
-		setterArrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
+		
+		var arrayNode : MXMLNode = new MXMLNode();
+		arrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
 		
 		for (childNode in node.children) {
 			if(isInnerProperty(scope, childNode)) {
@@ -70,16 +69,24 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 			if(StringTools.startsWith(resolveNamespaceValue, "http://")) {
 				continue;
 			}
-			setterArrayNode.children.push(childNode);
+
+			arrayNode.children.push(childNode);
 		}
 		
-		if(scope.defaultProperty == null && setterArrayNode.children.length > 0) {
-			//TODO DEFAULT_PROPERTY_IS_NULL
-			trace("defaultPropertyIsNull");
+		if(arrayNode.children.length == 0) {
 			return false;
 		}
 		
-		trace(scope.defaultProperty, setterArrayNode);
+		if(scope.defaultProperty == null) {
+			trace("defaultPropertyIsNull");
+			context.error(new ChildrenAnalyzerError(DEFAULT_PROPERTY_IS_NULL));
+			return false;
+		}
+
+
+		var setterArrayNode : MXMLNode = new MXMLNode();
+		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);
+		setterArrayNode.children.push(arrayNode);
 		
 		var initializator = matchValue(context, scope, setterArrayNode);
 		

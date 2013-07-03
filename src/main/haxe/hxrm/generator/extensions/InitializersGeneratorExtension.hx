@@ -122,7 +122,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 				var values : Array<Expr> = [];
 				for(childScope in cast(initializator.value, Array<Dynamic>)) {
 					var childInit : IInitializator = untyped childScope;
-					trace(childInit);
+					
 					var res = switch(childInit) {
 						case InitBinding(initializator):
 							parseBindingInitializator(context, scope, nodeScope, getBaseType(Context.getType("Dynamic")), initializator, exprs);
