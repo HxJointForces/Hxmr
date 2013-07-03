@@ -1,4 +1,5 @@
 package ;
+import hxrm.utils.TypeUtils;
 import hxrm.Hxrm;
 
 
@@ -19,7 +20,8 @@ class Main
 		var a = new ml.Test();
 		
 		trace(a.aString);
-		trace(a.children);
+		
+		TypeUtils.prettyPrintType(a.children);
 	}
 	
 }
