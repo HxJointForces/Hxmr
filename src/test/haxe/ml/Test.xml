@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ans:A ans:aString="1" xmlns:ans="*" xmlns:deep="deep.*" >
+<ans:A ans:aString="'1'" xmlns:ans="*" xmlns:deep="deep.*" xmlns:ml="ml.*" >
 	
-	<deep:B id="myB"  test="1" prop="asValue"/>
+	<deep:B id="myB"  test="1" length="1" prop="'asValue'"/>
 	
 	<deep:B test="2" />
+	<ml:Test2 id="test2" tets="'213'" />
 	
 	<deep:B test="3" />
 	
 	<deep:B test="4">
 		<deep:arrayOfB>
 			<Array>
-				<deep:B id="innerChildOfB4" test="41"/>
+				<deep:B id="innerChildOfB4" length="{var a=12; a++; Std.int(3.7) + myB.length;}" test="41"/>
 			</Array>
 		</deep:arrayOfB>
 	</deep:B>
@@ -19,9 +20,11 @@
 		<deep:B test="51" />
 	</deep:B>
 
-	<ans:innerString>Hello!</ans:innerString>
+	<ans:innerString>'Hello!'</ans:innerString>
 	
 	<ans:anotherInnerString>
-		<String id="myString">Hello again!</String>
+		<String id="myString">'Hello again!'</String>
 	</ans:anotherInnerString>
+	
+	<ans:innerInt><Int>12</Int></ans:innerInt>
 </ans:A>

@@ -21,7 +21,11 @@ class Main
 		
 		trace(a.aString);
 		
-		TypeUtils.prettyPrintType(a.children);
+		//TypeUtils.prettyPrintType(a); stack overflow!
+		//trace(a);
+		//trace(a.test2);
+		trace(a != null);
+		trace(a.test2);
 	}
 	
 }

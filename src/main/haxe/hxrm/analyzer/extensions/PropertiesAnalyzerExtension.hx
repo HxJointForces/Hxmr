@@ -2,6 +2,7 @@ package hxrm.analyzer.extensions;
 
 import hxrm.analyzer.initializers.FieldInitializator;
 import haxe.macro.Context;
+import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import haxe.macro.Type.ClassField;
@@ -61,7 +62,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			return;
 		}
 		
-		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, '"$value"')));
+		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, value)));
 	}
 
 	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):IInitializator {
@@ -92,7 +93,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 	function matchValue(context : HxmrContext, scope:NodeScope, child:MXMLNode) : IInitializator {
 
 		if(child.cdata != null && child.cdata.length > 0) {
-			return InitBinding(new BindingInitializator(null, '"${child.cdata}"'));		
+			return InitBinding(new BindingInitializator(null, child.cdata));
 		}
 
 		// TODO ArrayInitializers
@@ -111,15 +112,14 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 		var id = scope.getNodeId(innerChild);
 		
-		var initializator : FieldInitializator = switch([qName.packageNameParts.length, qName.className]) {
-			case [0, "String"]:
-				new FieldInitializator(id, '"${innerChild.cdata}"', Context.getType(qName.className));
-			case [0, "Int"]:
-				new FieldInitializator(id, Std.parseInt(innerChild.cdata), Context.getType(qName.className));
-			case [0, "Float"]:
-				new FieldInitializator(id, Std.parseFloat(innerChild.cdata), Context.getType(qName.className));
+		var initializator : FieldInitializator = switch(qName.toHaxeTypeId()) {
+			case "String":
+				new FieldInitializator(id, innerChild.cdata, scope.context.getType(qName));
+				
+			case "Int", "Float":
+				new FieldInitializator(id, innerChild.cdata, scope.context.getType(qName));
 			
-			case [0, "Array"]:
+			case "Array":
 				var childs : Array<IInitializator> = [];
 			
 				for(child in innerChild.children) {
@@ -134,7 +134,8 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 				new FieldInitializator(scope.getFieldNameForNode(innerChild), childs, Context.getType("Array"));
 			
-			case [_, _]:
+			case type:
+				trace("_ " + type);
 				var childScope : NodeScope = analyzer.analyze(context, innerChild, scope);
 
 				if(childScope == null) {

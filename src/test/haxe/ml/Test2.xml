@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<deep:B xmlns:ml="ml.*" xmlns:deep="deep.*" >
+	<deep:test><Int>100</Int></deep:test>
+	<!--<deep:aaa><ml:Test/></deep:aaa>-->
+	<!--<String id="wer">'Test'</String>-->
+	<deep:prop><String id="tets">'234'</String></deep:prop>
+</deep:B>

@@ -1,5 +1,7 @@
 package hxrm.analyzer.extensions;
 
+import hxrm.analyzer.NodeScope;
+import hxrm.HxmrContext;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;

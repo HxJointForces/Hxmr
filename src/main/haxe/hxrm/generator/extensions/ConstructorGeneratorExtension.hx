@@ -44,9 +44,9 @@ class ConstructorGeneratorExtension extends GeneratorExtensionBase {
 		var superCall = if (superCtor == null) {
 				null;
 			} else {
-				switch (Context.typeof(Context.getTypedExpr(superCtor.expr()))) {
-					case TFun(args, _):
-						if (args.length > 0) // TODO: add support for super args?
+				switch (Context.getTypedExpr(superCtor.expr()).expr) {
+					case EFunction(_, f):
+						if (f.args.length > 0) // TODO: add support for super args?
 							context.error(new ConstructorGeneratorError(ARGUMENTS_IN_SUPER, scope.context.pos.positionToPos()));
 					case _:
 				}

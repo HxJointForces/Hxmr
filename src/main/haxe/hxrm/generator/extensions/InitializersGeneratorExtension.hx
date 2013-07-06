@@ -6,6 +6,8 @@ import haxe.macro.TypeTools;
 import haxe.macro.Printer;
 import haxe.macro.ExprTools;
 import haxe.macro.Context;
+import hxrm.analyzer.QName;
+import hxrm.analyzer.QNameUtils;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
 import haxe.macro.ComplexTypeTools;
@@ -15,11 +17,11 @@ import haxe.macro.Context;
 import hxrm.analyzer.NodeScope;
 import hxrm.analyzer.initializers.FieldInitializator;
 import haxe.macro.Type.ClassField;
+import haxe.macro.Type.BaseType;
 import hxrm.analyzer.initializers.BindingInitializator;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 import haxe.macro.Expr.Position;
-import haxe.macro.Type;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
 
@@ -49,7 +51,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
 		for (fieldName in initializers.keys()) {
-			var fieldBaseType = getBaseType(getFieldTypeByName(scope, nodeScope, fieldName));
+			var fieldBaseType = getFieldTypeByName(scope, nodeScope, fieldName);
 			var res = switch(initializers.get(fieldName)) {
 				case InitBinding(initializator):
 					parseBindingInitializator(context, scope, nodeScope, fieldBaseType, initializator, exprs);
@@ -81,7 +83,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		scope.typeDefinition.fields.unshift(field);
 	}
 	
-	function getBaseType(type : Type) : BaseType {
+	function getBaseType(type : haxe.macro.Type) : BaseType {
 		if(type == null) {
 			throw "type is null!";
 		}
@@ -96,12 +98,12 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		}
 	}
 
-	function parseBindingInitializator(context:HxmrContext, scope:GeneratorScope, nodeScope : NodeScope, fieldClassType : BaseType, initializator : BindingInitializator, exprs : Array<Expr>) : Expr {
-
+	function parseBindingInitializator(context:HxmrContext, scope:GeneratorScope, nodeScope : NodeScope, fieldType : haxe.macro.Type, initializator : BindingInitializator, exprs : Array<Expr>) : Expr {
 		
-		return switch([fieldClassType.module, fieldClassType.name]) {
+		var fieldClassType = getBaseType(fieldType);
+		return switch(new QName(fieldClassType.module.split(QName.HAXE_ID_GLUE), fieldClassType.name).toHaxeTypeId()) {
 			
-			case ["String", "String"]:
+			case "String.String", "StdTypes.Int", "StdTypes.Float":
 				var value = getValue(scope, initializator.value);
 				if(initializator.fieldName != null) {
 					exprs.push(macro $i {initializator.fieldName} = $value);
@@ -110,26 +112,18 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					macro $value;
 				}
 			
-			case ["Int", "Int"] | ["StdTypes", "Int"]:
-				var value = getValue(scope, initializator.value);
-				macro Std.parseInt($value);
-
-			case ["Float", "Float"] | ["StdTypes", "Float"]:
-				var value = getValue(scope, initializator.value);
-				macro Std.parseFloat($value);
-			
-			case ["Array", "Array"]:
+			case "Array.Array":
 				var values : Array<Expr> = [];
 				for(childScope in cast(initializator.value, Array<Dynamic>)) {
 					var childInit : IInitializator = untyped childScope;
 					
 					var res = switch(childInit) {
 						case InitBinding(initializator):
-							parseBindingInitializator(context, scope, nodeScope, getBaseType(Context.getType("Dynamic")), initializator, exprs);
+							parseBindingInitializator(context, scope, nodeScope, Context.getType("Dynamic"), initializator, exprs);
 						
 						case InitField(initializator):
 							parseFieldInitializator(context, scope, initializator);
-							parseBindingInitializator(context, scope, nodeScope, getBaseType(Context.getType("Dynamic")), initializator, exprs);
+							parseBindingInitializator(context, scope, nodeScope, Context.getType("Dynamic"), initializator, exprs);
 					};
 					values.push(res);
 				}
@@ -138,7 +132,8 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					pos : Context.currentPos()
 				};
 
-			case _:
+			case t:
+				//trace("_ " + t);
 				var exprs : Array<Expr> = [];
 				var initScope : NodeScope = cast(initializator.value, NodeScope);
 
@@ -177,21 +172,22 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					})
 				}
 				scope.typeDefinition.fields.push(initFunction);
-	
+				
 				macro $i { initFunction.name }();
 		};
 	}
 
 	function getValue(scope : GeneratorScope, value : Dynamic) : Expr {
 		try {
-			return Context.parseInlineString(value, scope.context.pos);
+			return Context.parse(value, scope.context.pos);
 		} catch (e:Dynamic) {
-			throw " can't parse value: " + e;
+			trace(e);
+			//throw " can't parse value: " + e;
 		}
 		return null;
 	}
 
-	function getFieldTypeByName(scope : GeneratorScope, nodeScope : NodeScope, fieldName : String) : Type {
+	function getFieldTypeByName(scope : GeneratorScope, nodeScope : NodeScope, fieldName : String) : haxe.macro.Type {
 
 		var field : ClassField = nodeScope.getFieldByName(fieldName);
 		if(field != null)
@@ -208,7 +204,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		return null;
 	}
 	
-	function getFieldType(field : Field) : Type {
+	function getFieldType(field : Field) : haxe.macro.Type {
 		return switch(field.kind) {
 			case FVar(type, _), FProp(_, _, type, _):
 				if (type != null) 

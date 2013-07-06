@@ -62,7 +62,7 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 
 				var genericTypes = [];
 				for (genericType in typeParams) {
-					genericTypes.push(Context.getType(genericType.toHaxeTypeId()));
+					genericTypes.push(scope.context.getType(genericType));
 				}
 				//trace(genericTypes);
 				scope.type = TInst(t, genericTypes);

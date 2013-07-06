@@ -12,11 +12,13 @@ class A
 
 	public var anotherInnerString : String;
 	
+	public var innerInt:Int = 0;
+	
 	@hxmrDefaultProperty public var children : Array<B>;
 
 	public function new()
 	{
-
+		innerString = "start";
 	}
 	
 }

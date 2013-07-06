@@ -1,6 +1,7 @@
 package hxrm;
 
 #if macro
+import haxe.CallStack;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import neko.Lib;
@@ -51,8 +52,11 @@ class Hxrm
 		else {
 			typeDefinitionFactory.reset();
 		}
+		inProcess = new Map();
 		Context.onTypeNotFound(onTypeNotFound);
 	}
+	
+	static var inProcess:Map<String, Bool> = new Map<String, Bool>();
 	
 	static function onTypeNotFound(t:String):TypeDefinition {
 		
@@ -65,6 +69,13 @@ class Hxrm
 			//trace(Std.string(e));
 			return null;
 		}
+		if (inProcess.exists(t)) {
+			trace(CallStack.toString(CallStack.callStack()));
+			throw "overflow: " + t;
+			return null;
+		}
+		inProcess[t] = true;
+		
 		try {
 			return typeDefinitionFactory.createTypeDefinition(path, t);
 		} catch(e : Dynamic) {
