@@ -113,10 +113,8 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		var id = scope.getNodeId(innerChild);
 		
 		var initializator : FieldInitializator = switch(qName.toHaxeTypeId()) {
-			case "String":
-				new FieldInitializator(id, innerChild.cdata, scope.context.getType(qName));
 				
-			case "Int", "Float":
+			case "String", "Int", "Float":
 				new FieldInitializator(id, innerChild.cdata, scope.context.getType(qName));
 			
 			case "Array":

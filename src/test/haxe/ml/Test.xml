@@ -26,5 +26,5 @@
 		<String id="myString">'Hello again!'</String>
 	</ans:anotherInnerString>
 	
-	<ans:innerInt><Int>12</Int></ans:innerInt>
+	<ans:innerInt><Float>12</Float></ans:innerInt>
 </ans:A>
