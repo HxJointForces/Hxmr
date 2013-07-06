@@ -1,0 +1,10 @@
+{
+  "name": "hxmr",
+  "url": "https://github.com/HxJointForces/hxrm",
+  "license": "MIT",
+  "tags": [ "mxml", "flex", "cross", "HxJointForces" ],
+  "description": "flex must die",
+  "version": "0.0.1",
+  "releasenote": "Initial release",
+  "contributors": [ "HxJointForces" ]
+}

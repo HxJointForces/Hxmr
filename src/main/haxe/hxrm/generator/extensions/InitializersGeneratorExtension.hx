@@ -52,13 +52,12 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		}
 		for (fieldName in initializers.keys()) {
 			var fieldBaseType = getFieldTypeByName(scope, nodeScope, fieldName);
-			var res = switch(initializers.get(fieldName)) {
-				case InitBinding(initializator):
-					parseBindingInitializator(context, scope, nodeScope, fieldBaseType, initializator, exprs);
-				case InitField(initializator):
-					parseBindingInitializator(context, scope, nodeScope, fieldBaseType, initializator, exprs);
-			};
 			
+			var init = switch(initializers.get(fieldName)) {
+				case InitBinding(initializator): initializator;
+				case InitField(initializator): initializator;
+			};
+			var res = parseBindingInitializator(context, scope, nodeScope, fieldBaseType, init, exprs);
 			exprs.push(macro $i{forField}.$fieldName = $res);
 			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
 		}
