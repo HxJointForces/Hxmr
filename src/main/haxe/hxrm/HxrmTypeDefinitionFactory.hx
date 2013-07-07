@@ -54,7 +54,9 @@ class HxrmTypeDefinitionFactory {
 			return null;
 		}
 		
-		Context.registerModuleDependency(Context.getLocalClass().get().module, path);
+		var local = Context.getLocalClass();
+		if (local != null)
+			Context.registerModuleDependency(local.get().module, path);
 
 		try {
 
