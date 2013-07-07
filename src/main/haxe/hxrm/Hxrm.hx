@@ -9,6 +9,7 @@ import sys.FileSystem;
 import sys.io.File;
 
 using StringTools;
+using Lambda;
 #end
 
 /**
@@ -44,8 +45,8 @@ class Hxrm
 	// и тут самое интересное, со второго ребилда парсер уже не обнуляется :)
 	public static function rebuild() {
 		
-		trace("rebuild");
-		trace(typeDefinitionFactory);
+		//trace("rebuild");
+		//trace(typeDefinitionFactory);
 		if (typeDefinitionFactory == null) {
 			typeDefinitionFactory = new HxrmTypeDefinitionFactory();
 		}
@@ -53,20 +54,24 @@ class Hxrm
 			typeDefinitionFactory.reset();
 		}
 		inProcess = new Map();
+		nullTypes = new List<String>();
 		Context.onTypeNotFound(onTypeNotFound);
 	}
 	
 	static var inProcess:Map<String, Bool> = new Map<String, Bool>();
+	static var nullTypes:List<String> = new List<String>();
 	
 	static function onTypeNotFound(t:String):TypeDefinition {
 		
 		if (t.startsWith("haxe")) return null;
+		if (nullTypes.has(t)) return null;
 		//trace('onTypeNotFound $t');
 		var path = t.replace(".", "/") + ".xml";
 		try {
 			path = Context.resolvePath(path);
 		} catch(e : Dynamic) {
 			//trace(Std.string(e));
+			nullTypes.push(t);
 			return null;
 		}
 		if (inProcess.exists(t)) {
@@ -80,6 +85,7 @@ class Hxrm
 			return typeDefinitionFactory.createTypeDefinition(path, t);
 		} catch(e : Dynamic) {
 			trace(Std.string(e));
+			nullTypes.push(t);
 			return null;
 		}
 	}

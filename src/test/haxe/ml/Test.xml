@@ -11,7 +11,7 @@
 	<deep:B test="4">
 		<deep:arrayOfB>
 			<Array>
-				<deep:B id="innerChildOfB4" length="{var a=12; a++; Std.int(3.7) + myB.length;}" test="41"/>
+				<deep:B id="innerChildOfB4" length="1 + myB.length" test="41"/>
 			</Array>
 		</deep:arrayOfB>
 	</deep:B>
