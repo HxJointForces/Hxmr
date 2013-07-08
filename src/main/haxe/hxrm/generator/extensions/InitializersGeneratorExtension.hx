@@ -9,6 +9,7 @@ import haxe.macro.Context;
 import hxrm.analyzer.QName;
 import hxrm.analyzer.QNameUtils;
 import hxrm.HxmrContext;
+import hxrm.Hxrm;
 import hxrm.utils.TypeUtils;
 import haxe.macro.ComplexTypeTools;
 import hxrm.generator.GeneratorScope;
@@ -118,11 +119,11 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					
 					var res = switch(childInit) {
 						case InitBinding(initializator):
-							parseBindingInitializator(context, scope, nodeScope, Context.getType("Dynamic"), initializator, exprs);
+							parseBindingInitializator(context, scope, nodeScope, Hxrm.DYNAMIC_TYPE, initializator, exprs);
 						
 						case InitField(initializator):
 							parseFieldInitializator(context, scope, initializator);
-							parseBindingInitializator(context, scope, nodeScope, Context.getType("Dynamic"), initializator, exprs);
+							parseBindingInitializator(context, scope, nodeScope, Hxrm.DYNAMIC_TYPE, initializator, exprs);
 					};
 					values.push(res);
 				}

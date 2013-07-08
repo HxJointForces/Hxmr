@@ -18,11 +18,14 @@ using Lambda;
  */
 class Hxrm
 {
+
+	static public var DYNAMIC_TYPE;
 	
 	// вызовется при холодной компиляции
 	macro public static function build():Expr {
 		
 		trace("init " + firstStart);
+		DYNAMIC_TYPE = Context.getType("Dynamic");
 		if (firstStart) {
 			firstStart = false;
 			typeDefinitionFactory = new HxrmTypeDefinitionFactory();
@@ -47,6 +50,7 @@ class Hxrm
 		
 		//trace("rebuild");
 		//trace(typeDefinitionFactory);
+		DYNAMIC_TYPE = Context.getType("Dynamic");
 		if (typeDefinitionFactory == null) {
 			typeDefinitionFactory = new HxrmTypeDefinitionFactory();
 		}
