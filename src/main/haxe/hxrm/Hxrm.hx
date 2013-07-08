@@ -24,7 +24,7 @@ class Hxrm
 	// вызовется при холодной компиляции
 	macro public static function build():Expr {
 		
-		trace("init " + firstStart);
+		//trace("init " + firstStart);
 		DYNAMIC_TYPE = Context.getType("Dynamic");
 		if (firstStart) {
 			firstStart = false;

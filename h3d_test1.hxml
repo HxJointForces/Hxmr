@@ -5,7 +5,5 @@
 -main H3DTest1
 -lib h3d
 
--debug
--D fdb
 --times
 #-D dump=pretty

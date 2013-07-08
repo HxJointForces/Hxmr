@@ -34,7 +34,6 @@ class TypeDefinitionGenerator
 	
 	
 	public function write(context : HxmrContext, nodeScope:NodeScope, type:String, file:String):TypeDefinition {
-		trace('write:$type');
 
 		var pos : Position = Context.makePosition( { min:0, max:0, file:file } );
 		var qName : QName = QNameUtils.fromHaxeTypeId(type);
@@ -71,7 +70,9 @@ class TypeDefinitionGenerator
 		
 		//TypeUtils.prettyPrintType(typeDefinition);
 		
+		#if debug
 		trace("\n" + (new Printer("   ")).printTypeDefinition(typeDefinition, true));
+		#end
 		
 		return typeDefinition;
 	}

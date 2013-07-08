@@ -7,10 +7,15 @@
 	'">
 	
 	<h:Label text="'Hello, world!'" classes="['lbl']" />
-	<h:Button text="'Button 1'" classes="['redBtn']" />
-	<h:Button text="'Button 2'" />
-	<h:Button text="'Button 3'" />
-	<h:Button text="'Button 4'" />
 	
+	<h:Button text="'Button 1'" classes="['redBtn']" />
+	<h:Box layout="h2d.css.Defs.Layout.Horizontal">
+		<h:Button text="'Button 2'" />
+		
+		<h:Box layout="h2d.css.Defs.Layout.Vertical">
+			<h:Button text="'Button 3'" />
+			<h:Button text="'Button 4'" />
+		</h:Box>
+	</h:Box>
 	
 </h:Box>
