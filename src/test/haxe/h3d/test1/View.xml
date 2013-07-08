@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<h:Box xmlns:h="h2d.comp.*" layout=" h2d.css.Defs.Layout.Vertical"
-	xmlns:view="*"
-	inlineCss="'
+<h:Box xmlns:h="h2d.comp.*" layout="Vertical"
+	xmlns:view="*">
+	<h:inlineCss>
+		<![CDATA['
 		.redBtn {border : 1px solid red;} 
 		.redBtn:hover {border : 1px solid #990000;}
 		.lbl {font-size:26px;}
-	'">
+		']]>
+	</h:inlineCss>
 	
 	<h:Label text="'Hello, world!'" classes="['lbl']" />
 	
 	<h:Button text="'Button 1'" classes="['redBtn']" />
-	<h:Box layout="h2d.css.Defs.Layout.Horizontal">
+	<h:Box layout="Horizontal">
 		<h:Button text="'Button 2'" />
 		
-		<h:Box layout="h2d.css.Defs.Layout.Vertical">
+		<h:Box layout="Vertical">
 			<h:Button text="'Button 3'" />
 			<h:Button text="'Button 4'" />
 		</h:Box>
