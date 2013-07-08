@@ -56,7 +56,7 @@ class HxmrContext {
 	}
 
 	public function error(err : ContextError) : Void {
-		trace("\n" + CallStack.callStack().join("\n") + "\n" + err);
+		trace("\n" + CallStack.toString(CallStack.callStack()) + "\n" + err);
 		errors.push(err);
 	}
 }

@@ -96,7 +96,7 @@ class HxrmTypeDefinitionFactory {
 		} catch (e:Dynamic) {
 			//Lib.rethrow(e); // Interp.Runtime(_)
 			trace(e);
-			trace(CallStack.exceptionStack().join("\n"));
+			trace(CallStack.toString(CallStack.exceptionStack()));
 		}
 		
 		return null;
