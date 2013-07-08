@@ -103,16 +103,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 		var fieldClassType = getBaseType(fieldType);
 		return switch(new QName(fieldClassType.module.split(QName.HAXE_ID_GLUE), fieldClassType.name).toHaxeTypeId()) {
 			
-			case "String.String", "StdTypes.Int", "StdTypes.Float":
-				var value = getValue(scope, initializator.value);
-				if(initializator.fieldName != null) {
-					exprs.push(macro $i {initializator.fieldName} = $value);
-					macro $i {initializator.fieldName};
-				} else {
-					macro $value;
-				}
-			
-			case "Array.Array":
+			case "Array.Array" if (Std.is(initializator.value, Array)):
 				var values : Array<Expr> = [];
 				for(childScope in cast(initializator.value, Array<Dynamic>)) {
 					var childInit : IInitializator = untyped childScope;
@@ -131,6 +122,15 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					expr : EArrayDecl(values),
 					pos : Context.currentPos()
 				};
+				
+			case "String.String", "StdTypes.Int", "StdTypes.Float", "Array.Array":
+				var value = getValue(scope, initializator.value);
+				if(initializator.fieldName != null) {
+					exprs.push(macro $i {initializator.fieldName} = $value);
+					macro $i {initializator.fieldName};
+				} else {
+					macro $value;
+				}
 
 			case t:
 				//trace("_ " + t);
