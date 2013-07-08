@@ -18,4 +18,7 @@
 		</h:Box>
 	</h:Box>
 	
+	<h:Checkbox checked="true" id="cb1" />
+	<h:Checkbox checked="!cb1.checked"/>
+	
 </h:Box>

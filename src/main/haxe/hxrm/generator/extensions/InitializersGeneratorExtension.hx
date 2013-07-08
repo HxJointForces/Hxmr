@@ -125,7 +125,8 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					pos : Context.currentPos()
 				};
 				
-			case "String.String", "StdTypes.Int", "StdTypes.Float", "Array.Array":
+			case "String.String", "StdTypes.Bool", "StdTypes.Int",
+				 "StdTypes.Single", "StdTypes.Float", "Array.Array":
 				var value = getValue(scope, initializator.value);
 				if(initializator.fieldName != null) {
 					exprs.push(macro $i {initializator.fieldName} = $value);
@@ -144,7 +145,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 				}
 				
 			case t:
-				//trace("_ " + t + " " + fieldClassType);
+				//trace("_ " + t + " " + fieldClassType + " " + Type.getClass(initializator.value));
 				var exprs : Array<Expr> = [];
 				var initScope : NodeScope = cast(initializator.value, NodeScope);
 
