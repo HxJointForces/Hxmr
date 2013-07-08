@@ -2,6 +2,7 @@
 
 #--next
 
+-cp ../xml176/src/main/haxe
 -cp src/main/haxe/
 -cp src/test/haxe/first
 -D dump=pretty

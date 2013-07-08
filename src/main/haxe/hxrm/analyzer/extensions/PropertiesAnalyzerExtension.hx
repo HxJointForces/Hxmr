@@ -37,7 +37,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		var node : MXMLNode = scope.context.node;
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(context, scope, attributeQName, value);
+			matchAttribute(context, scope, attributeQName, value, node.attributesPositions);
 		}
 		
 		for (childNode in node.children) {
@@ -47,7 +47,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		return false;
 	}
 
-	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
+	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String, attributesPositions:Map<MXMLQName, Pos>):Void {
 
 		if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
 			return;
@@ -58,7 +58,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		if(scope.getFieldByName(attributeQName.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD));
+			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD, attributesPositions.get(attributeQName)));
 			return;
 		}
 		
@@ -72,14 +72,14 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 
 		if(child.attributes.iterator().hasNext()) {
-			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY));
+			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY, child.position));
 			return null;
 		}
 
 		var hasCDATA = (child.cdata != null && child.cdata.length > 0);
 		
 		if((child.children.length > 1 && hasCDATA) || (child.children.length == 0 && !hasCDATA)) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA));
+			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA, child.position));
 			return null;
 		}
 
@@ -98,7 +98,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 		// TODO ArrayInitializers
 		if(child.children.length > 1) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
+			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE, child.position));
 			return null;
 		}
 		
@@ -150,6 +150,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator) : Void {
 
 		if(scope.initializers.exists(fieldName)) {
+			// TODO find pos
 			context.error(new PropertiesAnalyzerError(DUPLICATE));
 			return;
 		}

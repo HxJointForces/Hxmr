@@ -7,20 +7,22 @@
     <groupId>com.github.HxJointForces</groupId>
     <artifactId>Hxmr</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>swf</packaging>
+    <packaging>har</packaging>
 
     <build>
-        <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
+        <sourceDirectory>src/main/haxe</sourceDirectory>
+        <testSourceDirectory>src/test/haxe</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>com.tenderowls.opensource</groupId>
                 <artifactId>haxemojos-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0.0-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <swfVersion>10</swfVersion>
-                    <main>Main</main>
+                    <targets>
+                        <target>neko</target>
+                        <target>swf</target>
+                    </targets>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -39,35 +41,33 @@
             </plugin>
         </plugins>
     </build>
-	
-	<pluginRepositories>
-	    <pluginRepository>
-	        <id>yelbota-dropbox-repo</id>
-	        <url>http://dl.dropbox.com/u/36020926/maven/</url>
-	        <snapshots><enabled>false</enabled></snapshots>
-	        <releases><enabled>true</enabled></releases>
-	    </pluginRepository>
-	    <pluginRepository>
-	        <id>oss</id>
-	        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-	        <snapshots><enabled>true</enabled></snapshots>
-	        <releases><enabled>true</enabled></releases>
-	    </pluginRepository>
-	</pluginRepositories>
 
-	<repositories>
-	    <repository>
-	        <id>yelbota-dropbox-repo</id>
-	        <url>http://dl.dropbox.com/u/36020926/maven/</url>
-	        <snapshots><enabled>false</enabled></snapshots>
-	        <releases><enabled>true</enabled></releases>
-	    </repository>
-	    <repository>
-	        <id>oss</id>
-	        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-	        <snapshots><enabled>true</enabled></snapshots>
-	        <releases><enabled>true</enabled></releases>
-	    </repository>
-	</repositories>
+    <dependencies>
+        <dependency>
+            <groupId>com.tenderowls.opensource</groupId>
+            <artifactId>xml176</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>har</type>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>haxemojos-repository</id>
+            <url>http://repo.haxemojos.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>haxemojos-repository</id>
+            <url>http://repo.haxemojos.org/content/groups/public/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 
 </project>

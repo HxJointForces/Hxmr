@@ -32,13 +32,13 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 		
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(context, scope, attributeQName, value);
+			matchAttribute(context, scope, attributeQName, value, node.attributesPositions);
 		}
 		
 		return false;
 	}
 
-	function matchAttribute(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:String):Void {
+	function matchAttribute(context : HxmrContext, scope : NodeScope, attributeQName:MXMLQName, value:String, attributesPositions:Map<MXMLQName, Pos>):Void {
 
 		if(attributeQName.localPart != "type") {
 			return;
@@ -56,7 +56,7 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 		switch (scope.type) {
 			case TInst(t, params):
 				if (params.length != typeParams.length) {
-					context.error(new GenericTypeAnalyzerError(INCORRECT_TYPE_PARAMS_COUNT));
+					context.error(new GenericTypeAnalyzerError(INCORRECT_TYPE_PARAMS_COUNT, attributesPositions.get(attributeQName)));
 					return;
 				}
 

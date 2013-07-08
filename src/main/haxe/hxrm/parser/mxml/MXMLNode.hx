@@ -1,24 +1,30 @@
 package hxrm.parser.mxml;
 
+import hxrm.HxmrContext.Pos;
 import haxe.ds.HashMap;
+
 class MXMLNode
 {
-	// нужно везде вписать FilePos, как только мы сможем получать эту информацию
+	public var position:Pos;
+
 	public var name:MXMLQName;
+
 	public var namespaces:Map<String, String>;
-	
+
+	public var attributesPositions:Map<MXMLQName, Pos>;
+
 	public var attributes:HashMap<MXMLQName, String>;
-	
+
 	public var children:Array<MXMLNode>;
-	
-	public var parentNode : MXMLNode;
-	
-	public var cdata : String;
-	
+
+	public var parentNode:MXMLNode;
+
+	public var cdata:String;
+
 	public function new() 
 	{
 		attributes = new HashMap();
-		
+		attributesPositions = new Map<MXMLQName, Pos>();
 		namespaces = new Map();
 		namespaces.set(MXMLQName.ASTERISK, MXMLQName.ASTERISK);
 		

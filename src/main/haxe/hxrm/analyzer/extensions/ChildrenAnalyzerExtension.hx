@@ -35,7 +35,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		var node : MXMLNode = scope.context.node;
 		
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
-			context.error(new ChildrenAnalyzerError(CDATA_WITH_INNER_TAGS));
+			context.error(new ChildrenAnalyzerError(CDATA_WITH_INNER_TAGS, node.position));
 			return false;
 		}
 
@@ -79,7 +79,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		
 		if(scope.defaultProperty == null) {
 			trace("defaultPropertyIsNull");
-			context.error(new ChildrenAnalyzerError(DEFAULT_PROPERTY_IS_NULL));
+			context.error(new ChildrenAnalyzerError(DEFAULT_PROPERTY_IS_NULL, node.position));
 			return false;
 		}
 
