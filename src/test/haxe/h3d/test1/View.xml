@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <h:Box xmlns:h="h2d.comp.*" layout=" h2d.css.Defs.Layout.Vertical"
+	xmlns:view="*"
 	inlineCss="'
 		.redBtn {border : 1px solid red;} 
 		.redBtn:hover {border : 1px solid #990000;}
@@ -18,7 +19,12 @@
 		</h:Box>
 	</h:Box>
 	
-	<h:Checkbox checked="true" id="cb1" />
-	<h:Checkbox checked="!cb1.checked"/>
+	<view:CheckboxView />
+	<view:CheckboxView />
+	
+	<h:Label text="'foo'" />
+	<h:Label text="'bar'" />
+	
+	<h:Checkbox />
 	
 </h:Box>

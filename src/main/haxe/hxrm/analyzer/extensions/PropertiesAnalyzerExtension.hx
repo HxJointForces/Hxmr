@@ -13,7 +13,7 @@ import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 
 enum PropertiesAnalyzerErrorType {
-	UNKNOWN_FIELD;
+	UNKNOWN_FIELD(name:String);
 	VALUE_MUST_BE_NODE_OR_CDATA;
 	VALUE_MUST_BE_ONE_NODE;
 	ATTRIBUTES_IN_PROPERTY;
@@ -58,7 +58,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		if(scope.getFieldByName(attributeQName.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD));
+			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD(attributeQName.localPart)));
 			return;
 		}
 		
