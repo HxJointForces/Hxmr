@@ -35,9 +35,10 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 	
 		var node : MXMLNode = scope.context.node;
+		var poses = node.attributesPositions;
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(context, scope, attributeQName, value, node.attributesPositions);
+			matchAttribute(context, scope, attributeQName, value, poses.get(attributeQName));
 		}
 		
 		for (childNode in node.children) {
@@ -47,7 +48,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		return false;
 	}
 
-	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String, attributesPositions:Map<MXMLQName, Pos>):Void {
+	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String, pos:Pos):Void {
 
 		if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
 			return;
@@ -58,11 +59,11 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		if(scope.getFieldByName(attributeQName.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD, attributesPositions.get(attributeQName)));
+			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD, pos));
 			return;
 		}
 		
-		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, value)));
+		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, value)), pos);
 	}
 
 	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):IInitializator {
@@ -85,7 +86,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 		var matchResult = matchValue(context, scope, child);
 		if(matchResult != null) {
-			rememberProperty(context, scope, child.name.localPart, matchResult);
+			rememberProperty(context, scope, child.name.localPart, matchResult, child.position);
 		}
 		return matchResult;
 	}
@@ -147,11 +148,10 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		return id == null ? InitBinding(initializator) : InitField(initializator);
 	}
 
-	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator) : Void {
+	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator, pos:Pos) : Void {
 
 		if(scope.initializers.exists(fieldName)) {
-			// TODO find pos
-			context.error(new PropertiesAnalyzerError(DUPLICATE));
+			context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
 			return;
 		}
 

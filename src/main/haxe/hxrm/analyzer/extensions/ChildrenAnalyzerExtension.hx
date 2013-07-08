@@ -91,7 +91,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		var initializator = matchValue(context, scope, setterArrayNode);
 		
 		if(initializator != null) {
-			rememberProperty(context, scope, scope.defaultProperty, initializator);
+			rememberProperty(context, scope, scope.defaultProperty, initializator, node.position);
 		}
 		
 		return false;
