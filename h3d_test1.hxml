@@ -1,0 +1,11 @@
+-cp src/main/haxe/
+-cp src/test/haxe/h3d/test1
+-swf target/h3d_test1.swf
+-swf-version 11.5
+-main H3DTest1
+-lib h3d
+
+-debug
+-D fdb
+--times
+#-D dump=pretty

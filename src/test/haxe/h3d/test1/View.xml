@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<h:Box xmlns:h="h2d.comp.*" layout=" h2d.css.Defs.Layout.Vertical"
+	inlineCss="'
+		.redBtn {border : 1px solid red;} 
+		.redBtn:hover {border : 1px solid #990000;}
+		.lbl {font-size:26px;}
+	'">
+	
+	<h:Label text="'Hello, world!'" classes="['lbl']" />
+	<h:Button text="'Button 1'" classes="['redBtn']" />
+	<h:Button text="'Button 2'" />
+	<h:Button text="'Button 3'" />
+	<h:Button text="'Button 4'" />
+	
+	
+</h:Box>

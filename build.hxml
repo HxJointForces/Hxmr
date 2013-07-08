@@ -3,11 +3,10 @@
 #--next
 
 -cp src/main/haxe/
--cp src/test/haxe/
+-cp src/test/haxe/first
 -D dump=pretty
 -neko target/hxmr.n
 -main Main
 
 --next
 -cmd neko target/hxmr.n
-

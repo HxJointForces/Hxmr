@@ -88,13 +88,15 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 			throw "type is null!";
 		}
 		return switch(type) {
-			case TAbstract( t, params ):
+			case TAbstract( t, _ ):
 				t.get();
-			case TInst(t, parsms):
+			case TInst(t, _):
 				t.get();
 			case TDynamic(t):
 				getBaseType(t);
-			case _: throw "assert" + type;
+			case TEnum(t, _):
+				t.get();
+			case _: throw "unknown base type of: " + type;
 		}
 	}
 
@@ -132,8 +134,17 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 					macro $value;
 				}
 
+			case _ if (fieldType.getName() == "TEnum"): 
+				var value = getValue(scope, initializator.value);
+				if(initializator.fieldName != null) {
+					exprs.push(macro $i {initializator.fieldName} = $value);
+					macro $i {initializator.fieldName};
+				} else {
+					macro $value;
+				}
+				
 			case t:
-				//trace("_ " + t);
+				//trace("_ " + t + " " + fieldClassType);
 				var exprs : Array<Expr> = [];
 				var initScope : NodeScope = cast(initializator.value, NodeScope);
 
