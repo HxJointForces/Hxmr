@@ -160,7 +160,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
             }
         }
 
-        topScope.fields.push(field);
+        topScope.fields.unshift(field);
         rememberProperty(context, topScope, field.name, value, pos);
     }
 
