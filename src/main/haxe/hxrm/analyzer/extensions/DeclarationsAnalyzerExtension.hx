@@ -28,10 +28,6 @@ class DeclarationsAnalyzerExtension extends PropertiesAnalyzerExtension {
 
         for(valueNode in declarationNode.children)
         {
-            //var matchResult = matchValue(context, scope, child);
-
-            //scope.fields.push(matchResult);
-
             //TODO remove code duplicates
             var qName : QName = scope.context.resolveQName(valueNode.name);
 
