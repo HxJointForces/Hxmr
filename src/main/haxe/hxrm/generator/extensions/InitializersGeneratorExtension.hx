@@ -74,9 +74,8 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 
             case InitNodeScope(itor):
                 var exprs : Array<Expr> = [];
-                var initScope : NodeScope = cast(itor.value, NodeScope);
 
-                generateInitFunction(context, scope, fieldName, initScope, exprs);
+                generateInitFunction(context, scope, fieldName, itor.value, exprs);
 
                 var initFunctionName = generateInitializerName(fieldName);
                 macro $i { initFunctionName } ();
