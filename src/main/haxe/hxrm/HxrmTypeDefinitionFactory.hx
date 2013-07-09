@@ -67,7 +67,7 @@ class HxrmTypeDefinitionFactory {
 			}
 			
 			#if debug
-			trace("\n" + node);
+			//trace("\n" + node);
 			#end
 			
 			var scope : NodeScope = analyzer.analyze(context, node);

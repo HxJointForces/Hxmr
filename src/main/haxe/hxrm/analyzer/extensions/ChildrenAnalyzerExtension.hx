@@ -28,10 +28,6 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 			return true;
 		}
 
-		if(scope.children == null) {
-			scope.children = [];
-		}
-		
 		var node : MXMLNode = scope.context.node;
 		
 		if(node.children.length > 0 && node.cdata != null && node.cdata.length > 0) {
@@ -82,7 +78,6 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 			context.error(new ChildrenAnalyzerError(DEFAULT_PROPERTY_IS_NULL, node.position));
 			return false;
 		}
-
 
 		var setterArrayNode : MXMLNode = new MXMLNode();
 		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);

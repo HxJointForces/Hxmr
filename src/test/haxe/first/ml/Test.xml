@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ans:A ans:aString="'1'" xmlns:ans="*" xmlns:deep="deep.*" xmlns:ml="ml.*" >
-	
+<ans:A ans:aString="'1'" xmlns:ans="*" xmlns:hx="http://haxe.org/hxmr/" xmlns:deep="deep.*" xmlns:ml="ml.*" >
+
+    <hx:Declarations>
+        <String id="myDeclatedString">'Declarations string'</String>
+        <String>'Declarations string'</String>
+        <String>'Declarations string'</String>
+        <deep:B id="declatedB"/>
+        <ml:Test2 tets="'declated Test2'" />
+    </hx:Declarations>
+    
 	<deep:B id="myB"  test="1" length="1" prop="'asValue'"/>
 	
 	<deep:B test="2" />
-	<ml:Test2 id="test2" tets="'213'" />
 	
 	<deep:B test="3" />
+
+    <ml:Test2 id="test2" tets="'213'" />
 	
 	<deep:B test="4">
 		<deep:arrayOfB>
 			<Array>
-				<deep:B id="innerChildOfB4" length="1 + myB.length" test="41"/>
+				<deep:B id="innerChildOfB4" length="1" test="41"/>
 			</Array>
 		</deep:arrayOfB>
 	</deep:B>

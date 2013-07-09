@@ -1,10 +1,11 @@
 package hxrm.generator;
 
+import hxrm.generator.extensions.InitializersGeneratorExtension;
 import haxe.macro.Printer;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
 import hxrm.generator.extensions.ConstructorGeneratorExtension;
-import hxrm.generator.extensions.InitializersGeneratorExtension;
+//import hxrm.generator.extensions.InitializersGeneratorExtension;
 import hxrm.generator.extensions.IGeneratorExtension;
 import hxrm.analyzer.QNameUtils;
 import hxrm.analyzer.NodeScope;
@@ -29,7 +30,10 @@ class TypeDefinitionGenerator
 	
 	public function new() 
 	{
-		extensions = [new InitializersGeneratorExtension(this), new ConstructorGeneratorExtension(this)];
+		extensions = [];
+        //extensions.push(new InitializersGeneratorExtension(this));
+        extensions.push(new ConstructorGeneratorExtension(this));
+        extensions.push(new InitializersGeneratorExtension(this));
 	}
 	
 	
@@ -71,7 +75,7 @@ class TypeDefinitionGenerator
 		//TypeUtils.prettyPrintType(typeDefinition);
 		
 		#if debug
-		trace("\n" + (new Printer("   ")).printTypeDefinition(typeDefinition, true));
+		//trace("\n" + (new Printer("   ")).printTypeDefinition(typeDefinition, true));
 		#end
 		
 		return typeDefinition;
