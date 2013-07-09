@@ -17,7 +17,8 @@ enum PropertiesAnalyzerErrorType {
 	VALUE_MUST_BE_NODE_OR_CDATA;
 	VALUE_MUST_BE_ONE_NODE;
 	ATTRIBUTES_IN_PROPERTY;
-	DUPLICATE;
+    DUPLICATE;
+    EMPTY_PROPERTY_INITIALIZER;
 }
 
 class PropertiesAnalyzerError extends NodeAnalyzerError {
@@ -29,15 +30,20 @@ class PropertiesAnalyzerError extends NodeAnalyzerError {
 class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
-	
-		if(scope.initializers == null) {
-			scope.initializers = new Map();
-		}
+
+        if(scope.initializers == null) {
+            scope.initializers = new Map();
+        }
+        
+        if(scope.fields == null) {
+            scope.fields = [];
+        }
 	
 		var node : MXMLNode = scope.context.node;
+		var poses = node.attributesPositions;
 		for (attributeQName in node.attributes.keys()) {
 			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(context, scope, attributeQName, value);
+			matchAttribute(context, scope, attributeQName, value, poses.get(attributeQName));
 		}
 		
 		for (childNode in node.children) {
@@ -47,7 +53,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		return false;
 	}
 
-	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String):Void {
+	function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String, pos:Pos):Void {
 
 		if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
 			return;
@@ -58,11 +64,11 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 		
 		if(scope.getFieldByName(attributeQName.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD(attributeQName.localPart)));
+			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD(attributeQName.localPart), pos));
 			return;
 		}
 		
-		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, value)));
+		rememberProperty(context, scope, attributeQName.localPart, InitBinding(new BindingInitializator(null, value)), pos);
 	}
 
 	function matchChild(context : HxmrContext, scope:NodeScope, child:MXMLNode):IInitializator {
@@ -72,41 +78,42 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 
 		if(child.attributes.iterator().hasNext()) {
-			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY));
+			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY, child.position));
 			return null;
 		}
 
 		var hasCDATA = (child.cdata != null && child.cdata.length > 0);
 		
 		if((child.children.length > 1 && hasCDATA) || (child.children.length == 0 && !hasCDATA)) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA));
+			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA, child.position));
 			return null;
 		}
 
-		var matchResult = matchValue(context, scope, child);
-		if(matchResult != null) {
-			rememberProperty(context, scope, child.name.localPart, matchResult);
-		}
+        var matchResult = if(child.cdata != null && child.cdata.length > 0) {
+            InitBinding(new BindingInitializator(null, child.cdata));
+        } else {
+            // TODO ArrayInitializers
+            if(child.children.length != 1) {
+                context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE, child.position));
+                return null;
+            }
+    
+            matchValue(context, scope, child.children[0]);
+        }
+
+        if(matchResult != null) {
+
+            switch(matchResult) {
+                case InitField(nodeInitializator):
+                    scope.fields.push(nodeInitializator);
+                case _:
+            }
+            rememberProperty(context, scope, child.name.localPart, matchResult, child.position);
+        }
 		return matchResult;
 	}
 	
-	function matchValue(context : HxmrContext, scope:NodeScope, child:MXMLNode) : IInitializator {
-
-		if(child.cdata != null && child.cdata.length > 0) {
-			return InitBinding(new BindingInitializator(null, child.cdata));
-		}
-
-		// TODO ArrayInitializers
-		if(child.children.length > 1) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE));
-			return null;
-		}
-		
-		if(child.children.length == 0) {
-			return null;
-		}
-		
-		var innerChild : MXMLNode = child.children[0];
+	function matchValue(context : HxmrContext, scope:NodeScope, innerChild:MXMLNode) : IInitializator {
 		
 		var qName : QName = scope.context.resolveQName(innerChild.name);
 
@@ -147,10 +154,10 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		return id == null ? InitBinding(initializator) : InitField(initializator);
 	}
 
-	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator) : Void {
+	function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IInitializator, pos:Pos) : Void {
 
 		if(scope.initializers.exists(fieldName)) {
-			context.error(new PropertiesAnalyzerError(DUPLICATE));
+			context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
 			return;
 		}
 

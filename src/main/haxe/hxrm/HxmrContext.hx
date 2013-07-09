@@ -23,6 +23,9 @@ class PosTools {
 }
 
 class ContextError {
+
+	inline static var newLineChar = "\n".code;
+
 	private var type:EnumValue;
 	private var pos:Pos;
 
@@ -32,13 +35,30 @@ class ContextError {
 	}
 	
 	public function nativeThrow(file:String) {
-		Context.error(
-			toString(), 
-			Context.makePosition( {
-				file:file,
-				min:pos.from,
-				max:pos.to != null ? pos.to : pos.from 
-			} )
+
+		// Find the line
+		// Wait then issue https://github.com/HaxeFoundation/haxe/issues/1979 will be fixed
+		var i = pos.from;
+	    var input = new haxe.io.BytesInput(sys.io.File.getBytes(file));
+		var frm = 0;
+		var lineNum = 1;
+
+		while (i-- > 0) {
+			if (input.readByte() == newLineChar) {
+				lineNum++;
+				frm = 0;
+				continue;
+			}
+			frm++;
+		}
+
+		var too = frm + (pos.to - pos.from);
+
+		Sys.stderr().writeString(file
+			+ ":" + lineNum
+		    + ": characters "+frm+"-"+too
+			+ " : " + toString()
+			+ "\n"
 		);
 	}
 	

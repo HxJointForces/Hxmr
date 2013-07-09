@@ -41,12 +41,12 @@ class TypeExtension extends NodeAnalyzerExtensionBase {
 		}
 
 		if (scope.classType.isInterface) {
-			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_INTERFACE));
+			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_INTERFACE, node.position));
 			return false;
 		}
 
 		if (scope.classType.isPrivate) {
-			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_PRIVATE_CLASS));
+			context.error(new TypeAnalyzerError(CANT_INSTANTIATE_PRIVATE_CLASS, node.position));
 			return false;
 		}
 		

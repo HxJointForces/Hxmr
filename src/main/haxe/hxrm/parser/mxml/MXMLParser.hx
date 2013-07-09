@@ -2,6 +2,7 @@ package hxrm.parser.mxml;
 
 import StringTools;
 import hxrm.HxmrContext;
+import com.tenderowls.xml176.Xml176Parser;
 
 using StringTools;
 
@@ -19,20 +20,23 @@ class ParserError extends ContextError {
 
 class MXMLParser
 {
+	var posInfos : Xml176Document;
+
 	public function new() {
 	}
 	
 	public function parse(context : HxmrContext, data:String):Null<MXMLNode> {
 		
-		var xml = null;
+		posInfos = null;
+
 		try {
-			xml = Xml.parse(data);
+			posInfos = Xml176Parser.parse(data);
 		} catch (e:Dynamic) {
 			context.error(new ParserError(UNKNOWN_DATA_FORMAT));
 			return null;
 		}
 		
-		return parseNode(context, xml);
+		return parseNode(context, posInfos.document);
 	}
 	
 	function parseNode(context : HxmrContext, xmlNode : Xml):Null<MXMLNode>  {
@@ -57,6 +61,7 @@ class MXMLParser
 	
 	function processNode(context : HxmrContext, xmlNode : Xml, n : MXMLNode) : Void {
 		n.name = MXMLQNameUtils.fromQualifiedString(xmlNode.nodeName);
+		n.position = posInfos.getNodePosition(xmlNode);
 
 		parseAttributes(xmlNode, n);
 
@@ -107,6 +112,7 @@ class MXMLParser
 					n.namespaces[attributeQName.localPart] = value;
 				case _:
 					n.attributes.set(attributeQName, value);
+					n.attributesPositions.set(attributeQName, posInfos.getAttrPosition(xmlNode, attributeName));
 			}
 		}
 	}
