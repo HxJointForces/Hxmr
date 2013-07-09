@@ -43,14 +43,10 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
 
 		// initializers
 		var initializers = nodeScope.initializers;
-		for (fieldName in initializers.keys()) {
-			switch(initializers.get(fieldName)) {
-				case InitField(initializator):
-					parseFieldInitializator(context, scope, initializator);
-				case InitBinding(initializator):
-			}
-			//trace("\n" + (new Printer("   ")).printTypeDefinition(scope.typeDefinition, true));
+		for (field in nodeScope.fields) {
+			parseFieldInitializator(context, scope, field);
 		}
+
 		for (fieldName in initializers.keys()) {
 			var fieldBaseType = getFieldTypeByName(scope, nodeScope, fieldName);
 			

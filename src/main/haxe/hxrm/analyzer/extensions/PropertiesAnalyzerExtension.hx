@@ -29,10 +29,14 @@ class PropertiesAnalyzerError extends NodeAnalyzerError {
 class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
-	
-		if(scope.initializers == null) {
-			scope.initializers = new Map();
-		}
+
+        if(scope.initializers == null) {
+            scope.initializers = new Map();
+        }
+        
+        if(scope.fields == null) {
+            scope.fields = [];
+        }
 	
 		var node : MXMLNode = scope.context.node;
 		var poses = node.attributesPositions;
@@ -85,7 +89,14 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 		}
 
 		var matchResult = matchValue(context, scope, child);
-		if(matchResult != null) {
+		
+        if(matchResult != null) {
+
+            switch(matchResult) {
+                case InitField(nodeInitializator):
+                    scope.fields.push(nodeInitializator);
+                case _:
+            }
 			rememberProperty(context, scope, child.name.localPart, matchResult, child.position);
 		}
 		return matchResult;
