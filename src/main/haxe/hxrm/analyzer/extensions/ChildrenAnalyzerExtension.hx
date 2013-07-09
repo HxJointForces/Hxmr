@@ -88,11 +88,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);
 		setterArrayNode.children.push(arrayNode);
 		
-		var initializator = matchValue(context, scope, setterArrayNode);
-		
-		if(initializator != null) {
-			rememberProperty(context, scope, scope.defaultProperty, initializator, node.position);
-		}
+		var initializator = matchChild(context, scope, setterArrayNode);
 		
 		return false;
 	}
