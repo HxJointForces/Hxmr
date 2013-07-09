@@ -17,7 +17,8 @@ enum PropertiesAnalyzerErrorType {
 	VALUE_MUST_BE_NODE_OR_CDATA;
 	VALUE_MUST_BE_ONE_NODE;
 	ATTRIBUTES_IN_PROPERTY;
-	DUPLICATE;
+    DUPLICATE;
+    EMPTY_PROPERTY_INITIALIZER;
 }
 
 class PropertiesAnalyzerError extends NodeAnalyzerError {
@@ -88,8 +89,18 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 			return null;
 		}
 
-		var matchResult = matchValue(context, scope, child);
-		
+        var matchResult = if(child.cdata != null && child.cdata.length > 0) {
+            InitBinding(new BindingInitializator(null, child.cdata));
+        } else {
+            // TODO ArrayInitializers
+            if(child.children.length != 1) {
+                context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE, child.position));
+                return null;
+            }
+    
+            matchValue(context, scope, child.children[0]);
+        }
+
         if(matchResult != null) {
 
             switch(matchResult) {
@@ -97,28 +108,12 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
                     scope.fields.push(nodeInitializator);
                 case _:
             }
-			rememberProperty(context, scope, child.name.localPart, matchResult, child.position);
-		}
+            rememberProperty(context, scope, child.name.localPart, matchResult, child.position);
+        }
 		return matchResult;
 	}
 	
-	function matchValue(context : HxmrContext, scope:NodeScope, child:MXMLNode) : IInitializator {
-
-		if(child.cdata != null && child.cdata.length > 0) {
-			return InitBinding(new BindingInitializator(null, child.cdata));
-		}
-
-		// TODO ArrayInitializers
-		if(child.children.length > 1) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE, child.position));
-			return null;
-		}
-		
-		if(child.children.length == 0) {
-			return null;
-		}
-		
-		var innerChild : MXMLNode = child.children[0];
+	function matchValue(context : HxmrContext, scope:NodeScope, innerChild:MXMLNode) : IInitializator {
 		
 		var qName : QName = scope.context.resolveQName(innerChild.name);
 
