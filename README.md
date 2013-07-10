@@ -4,7 +4,7 @@ About
 Hxmr is macro-based MXML replacement for Haxe. It allows you to code object model in declarative style using XML.
 Most common use case is UI markup. 
 
-Profit
+Benefits
 ====
 - Declarative style
 - Almost full Flex4 MXML specification support
@@ -69,4 +69,4 @@ Roadmap
 
 How to contibute
 ====
-We are opened for pull requests and contributions. Just stay hear http://sourceforge.net/adobe/flexsdk/wiki/MXML%202009/ specification:)
+We are opened for pull requests and contributions. Just stay near http://sourceforge.net/adobe/flexsdk/wiki/MXML%202009/ specification:)
