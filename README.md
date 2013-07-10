@@ -8,7 +8,7 @@ Profit
 ====
 - Declarative style
 - Almost full Flex4 MXML specification support
-- Bindings
+- Bindings ( https://github.com/HxJointForces/bindx )
 - Cross-platform
 - Сompile-time checks
 - No need to use Apache Flex, could be used for any kind of tasks, even not for UI.
