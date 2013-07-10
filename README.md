@@ -51,9 +51,15 @@ Example
 </h:Box>
 ```
 
-Result: https://dl.dropboxusercontent.com/u/1036911/HXJointForces/index.html
+Result:
+https://dl.dropboxusercontent.com/u/1036911/HXJointForces/index.html
 
-Pseudo-code generation result: https://gist.github.com/bsideup/5966687
+Pseudo-code generation result:
+https://gist.github.com/bsideup/5966687
+
+
+Also look at:
+https://github.com/HxJointForces/Hxmr/tree/master/src/test/haxe/first
 
 Roadmap
 ====
