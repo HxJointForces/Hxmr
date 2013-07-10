@@ -1,7 +1,7 @@
 #-cmd mkdir -p target
 
 #--next
-
+--times
 -cp ../xml176/src/main/haxe
 -cp src/main/haxe/
 -cp src/test/haxe/first
