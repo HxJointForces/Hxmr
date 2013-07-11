@@ -8,7 +8,7 @@ import h2d.comp.Label;
  * ...
  * @author deep <system.grand@gmail.com>
  */
-private typedef ViewType = CheckboxView; //{ cb:Checkbox, lbl:Label }
+private typedef ViewType = { cb:Checkbox, lbl:Label }
 
 class CheckBoxController
 {
