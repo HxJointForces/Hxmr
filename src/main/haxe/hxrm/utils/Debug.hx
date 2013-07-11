@@ -27,7 +27,7 @@ class Debug {
     */
     macro static public function print (e:Expr, ?cflag:Expr) : Expr {
         var debug : Bool = Context.defined('debug');
-        if( !debug ) return macro true;
+        if( !debug ) return macro {};
 
         switch (cflag.expr) {
             case EConst(CIdent(flag)):
@@ -41,7 +41,7 @@ class Debug {
                 );                
         }
 
-        return macro true;
+        return macro {};
     }//function print()
 
 /*******************************************************************************
