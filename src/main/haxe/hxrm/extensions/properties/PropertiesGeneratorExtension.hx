@@ -126,7 +126,7 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
                             pos : scope.context.pos
                         },
                         {
-                            expr : EConst(CIdent(null)),
+                            expr : EConst(CIdent("null")),
                             pos : scope.context.pos
                         }
                     ),
