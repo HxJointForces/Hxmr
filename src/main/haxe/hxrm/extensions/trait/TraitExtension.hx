@@ -149,7 +149,7 @@ class TraitExtension implements IHxmrExtension
 			case AccNo: "null";
 			case AccNormal: "default";
 			case AccCall: read ? "get" : "set";
-			case _: trace("! " + a); "default";
+			case _: throw ("assert: access = " + a);
 		}
 	}
 	
