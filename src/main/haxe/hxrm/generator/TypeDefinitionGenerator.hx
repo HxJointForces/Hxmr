@@ -26,16 +26,9 @@ class TypeDefinitionGeneratorError extends ContextError {
  
 class TypeDefinitionGenerator
 {
-	private var extensions : Array<IGeneratorExtension>;
-	
 	public function new() 
 	{
-		extensions = [];
-        //extensions.push(new InitializersGeneratorExtension(this));
-        extensions.push(new ConstructorGeneratorExtension(this));
-        extensions.push(new InitializersGeneratorExtension(this));
 	}
-	
 	
 	public function write(context : HxmrContext, nodeScope:NodeScope, type:String, file:String):TypeDefinition {
 
@@ -59,9 +52,9 @@ class TypeDefinitionGenerator
 		scope.context.pos = pos; //TODO remove
 		
 
-		var currentIterationExtensions = extensions;
+		var currentIterationExtensions = context.generatorExtensions.iterator();
 
-		while(currentIterationExtensions.length != 0) {
+		while(currentIterationExtensions.hasNext()) {
 			var nextIterationExtensions : Array<IGeneratorExtension> = [];
 
 			for(extension in currentIterationExtensions) {
@@ -69,7 +62,7 @@ class TypeDefinitionGenerator
 					nextIterationExtensions.push(extension);
 				}
 			}
-			currentIterationExtensions = nextIterationExtensions;
+			currentIterationExtensions = nextIterationExtensions.iterator();
 		}
 		
 		//TypeUtils.prettyPrintType(typeDefinition);

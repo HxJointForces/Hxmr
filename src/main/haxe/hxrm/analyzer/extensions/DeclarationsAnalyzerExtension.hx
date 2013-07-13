@@ -3,7 +3,7 @@ package hxrm.analyzer.extensions;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQNameUtils;
 
-class DeclarationsAnalyzerExtension extends PropertiesAnalyzerExtension {
+class DeclarationsAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
     override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
         var node : MXMLNode = scope.context.node;
@@ -34,9 +34,9 @@ class DeclarationsAnalyzerExtension extends PropertiesAnalyzerExtension {
             var type = scope.context.getType(qName);
             var fieldDescription = {name : scope.getFieldNameForNode(valueNode), type : type};
 
-            var value = matchValue(context, scope, valueNode);
-            
-            rememberField(context, scope, fieldDescription, value, valueNode.position);
+            var value = context.getExtension(PropertiesAnalyzerExtension).matchValue(context, scope, valueNode);
+
+            context.getExtension(PropertiesAnalyzerExtension).rememberField(context, scope, fieldDescription, value, valueNode.position);
         }
     }
 

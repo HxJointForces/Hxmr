@@ -1,5 +1,13 @@
 package hxrm;
 
+import hxrm.generator.extensions.InitializersGeneratorExtension;
+import hxrm.generator.extensions.ConstructorGeneratorExtension;
+import hxrm.analyzer.extensions.DeclarationsAnalyzerExtension;
+import hxrm.analyzer.extensions.GenericTypeExtension;
+import hxrm.analyzer.extensions.ChildrenAnalyzerExtension;
+import hxrm.analyzer.extensions.ScriptBlockExtension;
+import hxrm.analyzer.extensions.PropertiesAnalyzerExtension;
+import hxrm.analyzer.extensions.TypeExtension;
 import haxe.macro.Context;
 import hxrm.HxmrContext.ContextError;
 import hxrm.utils.Debug;
@@ -32,15 +40,26 @@ class HxrmTypeDefinitionFactory {
 	#end
 	
 	public function new() {
-		context = new HxmrContext();
-		
-		parser = new MXMLParser();
-		analyzer = new NodeAnalyzer();
-		tdWriter = new TypeDefinitionGenerator();
-		
-		#if debug
+
+        parser = new MXMLParser();
+        analyzer = new NodeAnalyzer();
+        tdWriter = new TypeDefinitionGenerator();
+
+        #if debug
 		p = new Printer();
-		#end
+        #end
+    
+		context = new HxmrContext(analyzer, tdWriter);
+        
+        context.addAnalyzerExtension(new TypeExtension());
+        context.addAnalyzerExtension(new PropertiesAnalyzerExtension());
+        context.addAnalyzerExtension(new ScriptBlockExtension());
+        context.addAnalyzerExtension(new ChildrenAnalyzerExtension());
+        context.addAnalyzerExtension(new GenericTypeExtension());
+        context.addAnalyzerExtension(new DeclarationsAnalyzerExtension());
+
+        context.addGeneratorExtension(new ConstructorGeneratorExtension());
+        context.addGeneratorExtension(new InitializersGeneratorExtension());
 	}
 	
 	public function reset() {

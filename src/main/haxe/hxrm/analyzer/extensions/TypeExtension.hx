@@ -7,8 +7,6 @@ import hxrm.HxmrContext.Pos;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLNode;
 
-using StringTools;
-
 enum TypeAnalyzerErrorType {
 	CANT_INSTANTIATE_INTERFACE;
 	CANT_INSTANTIATE_PRIVATE_CLASS;

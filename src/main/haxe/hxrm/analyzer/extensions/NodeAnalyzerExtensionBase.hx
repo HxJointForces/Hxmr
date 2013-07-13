@@ -6,10 +6,7 @@ import hxrm.HxmrContext;
 
 class NodeAnalyzerExtensionBase implements INodeAnalyzerExtension {
 
-	var analyzer : NodeAnalyzer;
-
-	public function new(analyzer : NodeAnalyzer) {
-		this.analyzer = analyzer;
+	public function new() {
 	}
 
 	public function analyze(context : HxmrContext, scope:NodeScope):Bool {

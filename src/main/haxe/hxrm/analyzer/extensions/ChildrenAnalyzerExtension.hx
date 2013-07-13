@@ -20,7 +20,7 @@ class ChildrenAnalyzerError extends NodeAnalyzerError {
 	}
 }
 
-class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
+class ChildrenAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
 	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
@@ -54,9 +54,10 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		
 		var arrayNode : MXMLNode = new MXMLNode();
 		arrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
-		
+
+        context.getExtension(PropertiesAnalyzerExtension);
 		for (childNode in node.children) {
-			if(isInnerProperty(scope, childNode)) {
+			if(context.getExtension(PropertiesAnalyzerExtension).isInnerProperty(scope, childNode)) {
 				continue;
 			}
 
@@ -83,7 +84,7 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);
 		setterArrayNode.children.push(arrayNode);
 		
-		matchChild(context, scope, setterArrayNode);
+		context.getExtension(PropertiesAnalyzerExtension).matchChild(context, scope, setterArrayNode);
 		
 		return false;
 	}
