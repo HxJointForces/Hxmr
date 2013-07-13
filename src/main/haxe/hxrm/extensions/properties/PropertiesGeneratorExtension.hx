@@ -1,7 +1,7 @@
 package hxrm.extensions.properties;
 
+import hxrm.extensions.properties.initializers.IItor;
 import hxrm.extensions.base.IGeneratorExtension;
-import hxrm.analyzer.initializers.IItor;
 import haxe.macro.Context;
 import haxe.macro.Type;
 import hxrm.HxmrContext;

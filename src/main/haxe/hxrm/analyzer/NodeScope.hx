@@ -1,6 +1,6 @@
 package hxrm.analyzer;
 
-import hxrm.analyzer.initializers.IItor;
+import hxrm.extensions.properties.initializers.IItor;
 import haxe.ds.HashMap;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;

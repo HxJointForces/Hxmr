@@ -1,9 +1,9 @@
 package hxrm.extensions.properties;
 
+import hxrm.extensions.properties.initializers.IItor;
+import hxrm.extensions.properties.initializers.Itor;
 import hxrm.extensions.base.INodeAnalyzerExtension;
 import hxrm.analyzer.QName;
-import hxrm.analyzer.initializers.IItor;
-import hxrm.analyzer.initializers.Itor;
 import haxe.macro.Type;
 import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext.Pos;
