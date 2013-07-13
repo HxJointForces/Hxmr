@@ -25,7 +25,7 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
 
 	public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
 
-		if(scope.ctor == null) {
+		if(scope.ctorExprs == null) {
 			return true;
 		}
 		
