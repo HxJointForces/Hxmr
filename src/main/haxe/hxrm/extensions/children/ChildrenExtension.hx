@@ -63,9 +63,10 @@ class ChildrenExtension implements IHxmrExtension {
 		var arrayNode : MXMLNode = new MXMLNode();
 		arrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
 
-        context.getExtension(PropertiesAnalyzerExtension);
-		for (childNode in node.children) {
-			if(context.getExtension(PropertiesExtension).analyzer.isInnerProperty(scope, childNode)) {
+        var PropertiesExtension = context.getExtension(PropertiesExtension);
+
+        for (childNode in node.children) {
+			if(PropertiesExtension.analyzer.isInnerProperty(scope, childNode)) {
 				continue;
 			}
 
@@ -92,7 +93,7 @@ class ChildrenExtension implements IHxmrExtension {
 		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);
 		setterArrayNode.children.push(arrayNode);
 		
-		context.getExtension(PropertiesExtension).analyzer.matchChild(context, scope, setterArrayNode);
+		PropertiesExtension.analyzer.matchChild(context, scope, setterArrayNode);
 		
 		return false;
 	}
