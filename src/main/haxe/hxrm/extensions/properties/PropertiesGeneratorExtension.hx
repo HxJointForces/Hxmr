@@ -97,8 +97,6 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
             }
         }
 
-        //exprs.push(macro if($i { fieldName } != null) return $i {fieldName});
-
         var builders : Array<Expr> = [];
         
         var ctor = {
@@ -112,8 +110,7 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
             pos : scope.context.pos
         }
 
-        var assignTarget = macro $i {fieldName};
-        builders.push(macro $assignTarget = ${ctor});
+        builders.push(macro $i {fieldName} = ${ctor});
 
         processScope(context, scope, initScope, builders, fieldName);
 
