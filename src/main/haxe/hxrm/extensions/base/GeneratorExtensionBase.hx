@@ -1,5 +1,6 @@
-package hxrm.generator.extensions;
+package hxrm.extensions.base;
 
+import hxrm.extensions.base.IGeneratorExtension;
 import hxrm.generator.GeneratorScope;
 import hxrm.HxmrContext;
 

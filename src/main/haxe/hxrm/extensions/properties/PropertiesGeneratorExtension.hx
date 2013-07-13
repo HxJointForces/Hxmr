@@ -1,5 +1,6 @@
-package hxrm.generator.extensions;
+package hxrm.extensions.properties;
 
+import hxrm.extensions.base.GeneratorExtensionBase;
 import hxrm.analyzer.initializers.IItor;
 import haxe.macro.Context;
 import haxe.macro.Type;
@@ -15,7 +16,7 @@ import haxe.macro.Expr.Position;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
 
-class InitializersGeneratorExtension extends GeneratorExtensionBase {
+class PropertiesGeneratorExtension extends GeneratorExtensionBase {
 
 	public override function generate(context:HxmrContext, scope:GeneratorScope):Bool {
 

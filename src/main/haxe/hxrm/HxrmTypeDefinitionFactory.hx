@@ -1,13 +1,14 @@
 package hxrm;
 
-import hxrm.generator.extensions.InitializersGeneratorExtension;
-import hxrm.generator.extensions.ConstructorGeneratorExtension;
-import hxrm.analyzer.extensions.DeclarationsAnalyzerExtension;
-import hxrm.analyzer.extensions.GenericTypeExtension;
-import hxrm.analyzer.extensions.ChildrenAnalyzerExtension;
-import hxrm.analyzer.extensions.ScriptBlockExtension;
-import hxrm.analyzer.extensions.PropertiesAnalyzerExtension;
-import hxrm.analyzer.extensions.TypeExtension;
+import hxrm.extensions.properties.PropertiesExtension;
+import hxrm.extensions.basicType.BasicTypeExtension;
+import hxrm.extensions.properties.PropertiesGeneratorExtension;
+import hxrm.extensions.basicType.BasicTypeGeneratorExtension;
+import hxrm.extensions.declarations.DeclarationsExtension;
+import hxrm.extensions.generic.GenericTypeExtension;
+import hxrm.extensions.children.ChildrenExtension;
+import hxrm.extensions.script.ScriptBlockExtension;
+import hxrm.extensions.properties.PropertiesAnalyzerExtension;
 import haxe.macro.Context;
 import hxrm.HxmrContext.ContextError;
 import hxrm.utils.Debug;
@@ -51,15 +52,20 @@ class HxrmTypeDefinitionFactory {
     
 		context = new HxmrContext(analyzer, tdWriter);
         
-        context.addAnalyzerExtension(new TypeExtension());
-        context.addAnalyzerExtension(new PropertiesAnalyzerExtension());
-        context.addAnalyzerExtension(new ScriptBlockExtension());
-        context.addAnalyzerExtension(new ChildrenAnalyzerExtension());
-        context.addAnalyzerExtension(new GenericTypeExtension());
-        context.addAnalyzerExtension(new DeclarationsAnalyzerExtension());
+        context.addExtension(new BasicTypeExtension());
+        context.addExtension(new PropertiesExtension());
+        context.addExtension(new DeclarationsExtension());
+        context.addExtension(new ChildrenExtension());
+        context.addExtension(new GenericTypeExtension());
+        
+        //context.addAnalyzerExtension(new PropertiesAnalyzerExtension());
+        //context.addAnalyzerExtension(new ScriptBlockExtension());
+        //context.addAnalyzerExtension(new ChildrenAnalyzerExtension());
+        //context.addAnalyzerExtension(new GenericTypeExtension());
+        //context.addAnalyzerExtension(new DeclarationsAnalyzerExtension());
 
-        context.addGeneratorExtension(new ConstructorGeneratorExtension());
-        context.addGeneratorExtension(new InitializersGeneratorExtension());
+        //context.addGeneratorExtension(new ConstructorGeneratorExtension());
+        //context.addGeneratorExtension(new InitializersGeneratorExtension());
 	}
 	
 	public function reset() {

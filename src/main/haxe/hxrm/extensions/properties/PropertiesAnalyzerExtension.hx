@@ -1,5 +1,7 @@
-package hxrm.analyzer.extensions;
+package hxrm.extensions.properties;
 
+import hxrm.analyzer.QName;
+import hxrm.extensions.base.NodeAnalyzerExtensionBase;
 import hxrm.analyzer.initializers.IItor;
 import hxrm.analyzer.initializers.Itor;
 import haxe.macro.Type;
@@ -11,73 +13,77 @@ import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
 
 enum PropertiesAnalyzerErrorType {
-	UNKNOWN_FIELD(name:String);
-	VALUE_MUST_BE_NODE_OR_CDATA;
-	VALUE_MUST_BE_ONE_NODE;
-	ATTRIBUTES_IN_PROPERTY;
+    UNKNOWN_FIELD(name:String);
+    VALUE_MUST_BE_NODE_OR_CDATA;
+    VALUE_MUST_BE_ONE_NODE;
+    ATTRIBUTES_IN_PROPERTY;
     DUPLICATE;
     EMPTY_PROPERTY_INITIALIZER;
 }
 
 class PropertiesAnalyzerError extends NodeAnalyzerError {
-	public function new(type : PropertiesAnalyzerErrorType, ?pos : Pos) {
-		super(type, pos);
-	}
+    public function new(type : PropertiesAnalyzerErrorType, ?pos : Pos) {
+        super(type, pos);
+    }
 }
 
 class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
-	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
-        
-		var node : MXMLNode = scope.context.node;
-		var poses = node.attributesPositions;
-		for (attributeQName in node.attributes.keys()) {
-			var value : String = node.attributes.get(attributeQName);
-			matchAttribute(context, scope, attributeQName, value, poses.get(attributeQName));
-		}
-		
-		for (childNode in node.children) {
-			matchChild(context, scope, childNode);
-		}
+    override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
+    
+        if(scope.classFields == null) {
+            return true;
+        }
 
-		return false;
-	}
+        var node : MXMLNode = scope.context.node;
+        var poses = node.attributesPositions;
+        for (attributeQName in node.attributes.keys()) {
+            var value : String = node.attributes.get(attributeQName);
+            matchAttribute(context, scope, attributeQName, value, poses.get(attributeQName));
+        }
 
-	public function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String, pos:Pos):Void {
+        for (childNode in node.children) {
+            matchChild(context, scope, childNode);
+        }
 
-		if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
-			return;
-		}
-		
-		if(attributeQName.localPart == "id") {
-			return;
-		}
-		
-		if(scope.getFieldByName(attributeQName.localPart) == null) {
-			context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD(attributeQName.localPart), pos));
-			return;
-		}
-		
-		rememberProperty(context, scope, attributeQName.localPart, InitValue(new Itor<Dynamic>(value)), pos);
-	}
+        return false;
+    }
+
+    public function matchAttribute(context : HxmrContext, scope:NodeScope, attributeQName:MXMLQName, value:String, pos:Pos):Void {
+
+        if(attributeQName.namespace != scope.context.node.name.namespace && attributeQName.namespace != MXMLQName.ASTERISK) {
+            return;
+        }
+
+        if(attributeQName.localPart == "id") {
+            return;
+        }
+
+        if(scope.getFieldByName(attributeQName.localPart) == null) {
+            context.error(new PropertiesAnalyzerError(UNKNOWN_FIELD(attributeQName.localPart), pos));
+            return;
+        }
+
+        rememberProperty(context, scope, attributeQName.localPart, InitValue(new Itor<Dynamic>(value)), pos);
+    }
 
     public function matchChild(context : HxmrContext, scope:NodeScope, setterNode:MXMLNode):Void {
-	
-		if(!isInnerProperty(scope, setterNode)) {
-			return;
-		}
 
-		if(setterNode.attributes.iterator().hasNext()) {
-			context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY, setterNode.position));
-			return;
-		}
+        if(!isInnerProperty(scope, setterNode)) {
+            return;
+        }
 
-		var hasCDATA = (setterNode.cdata != null && setterNode.cdata.length > 0);
-		
-		if((setterNode.children.length > 1 && hasCDATA) || (setterNode.children.length == 0 && !hasCDATA)) {
-			context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA, setterNode.position));
-			return null;
-		}
+        if(setterNode.attributes.iterator().hasNext()) {
+            context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY, setterNode.position));
+            return;
+        }
+
+        var hasCDATA = (setterNode.cdata != null && setterNode.cdata.length > 0);
+
+        if((setterNode.children.length > 1 && hasCDATA) || (setterNode.children.length == 0 && !hasCDATA)) {
+            context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_NODE_OR_CDATA, setterNode.position));
+            return null;
+        }
 
         var matchResult = if(setterNode.cdata != null && setterNode.cdata.length > 0) {
             InitValue(new Itor<Dynamic>(setterNode.cdata));
@@ -95,7 +101,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
         if(matchResult != null) {
             rememberProperty(context, scope, setterNode.name.localPart, matchResult, setterNode.position);
         }
-	}
+    }
 
     public function parseValue(context : HxmrContext, scope:NodeScope, valueNode : MXMLNode) : IItor {
         var qName : QName = scope.context.resolveQName(valueNode.name);
@@ -117,34 +123,34 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
     }
 
     public function matchValue(context : HxmrContext, scope:NodeScope, innerChild:MXMLNode) : IItor {
-		
+
         return switch(scope.context.resolveQName(innerChild.name).toHaxeTypeId()) {
 
             case "String", "Int", "Float":
                 InitValue(new Itor<Dynamic>(innerChild.cdata));
 
-			case "Array":
-				var childs : Array<{name : String, itor : IItor}> = [];
-			
-				for(child in innerChild.children) {
-					childs.push({name : scope.getFieldNameForNode(child), itor : parseValue(context, scope, child)});
-				}
+            case "Array":
+                var childs : Array<{name : String, itor : IItor}> = [];
+
+                for(child in innerChild.children) {
+                    childs.push({name : scope.getFieldNameForNode(child), itor : parseValue(context, scope, child)});
+                }
 
                 InitArray(new Itor<Array<{name : String, itor : IItor}>>(childs));
-			
-			case type:
-				//trace("_ " + type);
-				var childScope : NodeScope = context.analyzer.analyze(context, innerChild, scope);
 
-				if(childScope == null) {
-					//TODO logging?
-					trace("childScope is null");
-					return null;
-				}
+            case type:
+                //trace("_ " + type);
+                var childScope : NodeScope = context.analyzer.analyze(context, innerChild, scope);
+
+                if(childScope == null) {
+                    //TODO logging?
+                    trace("childScope is null");
+                    return null;
+                }
                 InitNodeScope(new Itor<NodeScope>(childScope));
-		}
-		
-	}
+        }
+
+    }
 
     public function rememberField(context : HxmrContext, scope : NodeScope, field : {name : String, type : Type}, value:IItor, pos:Pos) : Void {
 
@@ -152,7 +158,7 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
         while(topScope.parentScope != null) {
             topScope = topScope.parentScope;
         }
-    
+
         for(iterField in topScope.fields) {
             if(iterField.name == field.name) {
                 context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
@@ -166,20 +172,20 @@ class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
 
     public function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IItor, pos:Pos) : Void {
 
-		if(scope.initializers.exists(fieldName)) {
-			context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
-			return;
-		}
+        if(scope.initializers.exists(fieldName)) {
+            context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
+            return;
+        }
 
-		scope.initializers.set(fieldName, value);
-	}
+        scope.initializers.set(fieldName, value);
+    }
 
     public function isInnerProperty(scope : NodeScope, child : MXMLNode) : Bool {
-		if(child.name.namespace == scope.context.node.name.namespace) {
-			if(scope.getFieldByName(child.name.localPart) != null) {
-				return true;
-			}
-		}
-		return false;
-	}
+        if(child.name.namespace == scope.context.node.name.namespace) {
+            if(scope.getFieldByName(child.name.localPart) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

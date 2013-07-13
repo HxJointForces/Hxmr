@@ -1,6 +1,7 @@
 package hxrm.analyzer;
 
-import hxrm.analyzer.extensions.INodeAnalyzerExtension;
+import hxrm.extensions.base.IHxmrExtension;
+import hxrm.extensions.base.INodeAnalyzerExtension;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.HxmrContext;
 
@@ -20,10 +21,10 @@ class NodeAnalyzer {
 
 		result.context = new AnalyzerContext(node);
 		
-		var currentIterationExtensions = context.analyzerExtensions.iterator();
+		var currentIterationExtensions = context.extensions.iterator();
 
 		while(currentIterationExtensions.hasNext()) {
-			var nextIterationExtensions : Array<INodeAnalyzerExtension> = [];
+			var nextIterationExtensions : Array<IHxmrExtension> = [];
 			
 			for(extension in currentIterationExtensions) {
 				if(extension.analyze(context, result)) {

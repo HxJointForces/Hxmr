@@ -1,12 +1,13 @@
 package hxrm.generator;
 
-import hxrm.generator.extensions.InitializersGeneratorExtension;
+import hxrm.extensions.base.IHxmrExtension;
+import hxrm.extensions.properties.PropertiesGeneratorExtension;
 import haxe.macro.Printer;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
-import hxrm.generator.extensions.ConstructorGeneratorExtension;
+import hxrm.extensions.basicType.BasicTypeGeneratorExtension;
 //import hxrm.generator.extensions.InitializersGeneratorExtension;
-import hxrm.generator.extensions.IGeneratorExtension;
+import hxrm.extensions.base.IGeneratorExtension;
 import hxrm.analyzer.QNameUtils;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Context;
@@ -52,10 +53,10 @@ class TypeDefinitionGenerator
 		scope.context.pos = pos; //TODO remove
 		
 
-		var currentIterationExtensions = context.generatorExtensions.iterator();
+		var currentIterationExtensions = context.extensions.iterator();
 
 		while(currentIterationExtensions.hasNext()) {
-			var nextIterationExtensions : Array<IGeneratorExtension> = [];
+			var nextIterationExtensions : Array<IHxmrExtension> = [];
 
 			for(extension in currentIterationExtensions) {
 				if(extension.generate(context, scope)) {

@@ -1,10 +1,11 @@
 package hxrm;
 
+import hxrm.extensions.base.IHxmrExtension;
 import hxrm.generator.TypeDefinitionGenerator;
 import hxrm.analyzer.NodeAnalyzer;
 import hxrm.utils.TypeUtils;
-import hxrm.generator.extensions.IGeneratorExtension;
-import hxrm.analyzer.extensions.INodeAnalyzerExtension;
+import hxrm.extensions.base.IGeneratorExtension;
+import hxrm.extensions.base.INodeAnalyzerExtension;
 import haxe.CallStack;
 import EnumValue;
 import haxe.macro.Context;
@@ -80,6 +81,8 @@ class HxmrContext {
     
     public var generatorExtensions : Map<String, IGeneratorExtension>;
     
+    public var extensions : Map<String, IHxmrExtension>;
+    
     public var analyzer : NodeAnalyzer;
     public var generator : TypeDefinitionGenerator;
 	
@@ -89,6 +92,7 @@ class HxmrContext {
 		errors = [];
         analyzerExtensions = new Map();
         generatorExtensions = new Map();
+        extensions = new Map();
 	}
 
     public function addAnalyzerExtension(ext : INodeAnalyzerExtension) : Void {
@@ -98,11 +102,21 @@ class HxmrContext {
     public function addGeneratorExtension(ext : IGeneratorExtension) : Void {
         generatorExtensions.set(Type.getClassName(Type.getClass(ext)), ext);
     }
+
+    public function addExtension(ext : IHxmrExtension) : Void {
+        extensions.set(Type.getClassName(Type.getClass(ext)), ext);
+    }
     
     public function getExtension <T>(extType:Class<T>) : T {
         var extClassName = Type.getClassName(extType);
-        var analyzerExtension = analyzerExtensions.get(extClassName);
+        var extension = extensions.get(extClassName);
+
+        if(extension != null) {
+            return cast extension;
+        }
         
+        var analyzerExtension = analyzerExtensions.get(extClassName);
+
         if(analyzerExtension != null) {
             return cast analyzerExtension;
         }
