@@ -74,7 +74,7 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
                 }
                 {
                     expr : EArrayDecl(values),
-                pos : Context.currentPos()
+                    pos : Context.currentPos()
                 };
 
             case InitNodeScope(itor):
