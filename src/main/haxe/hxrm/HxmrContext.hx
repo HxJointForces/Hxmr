@@ -77,51 +77,25 @@ class HxmrContext {
 	
 	public var errors : Array<ContextError>;
 
-    public var analyzerExtensions : Map<String, INodeAnalyzerExtension>;
-    
-    public var generatorExtensions : Map<String, IGeneratorExtension>;
-    
     public var extensions : Map<String, IHxmrExtension>;
     
     public var analyzer : NodeAnalyzer;
+
     public var generator : TypeDefinitionGenerator;
 	
 	public function new(analyzer : NodeAnalyzer, generator : TypeDefinitionGenerator) {
         this.analyzer = analyzer;
         this.generator = generator;
 		errors = [];
-        analyzerExtensions = new Map();
-        generatorExtensions = new Map();
         extensions = new Map();
 	}
-
-    public function addAnalyzerExtension(ext : INodeAnalyzerExtension) : Void {
-        analyzerExtensions.set(Type.getClassName(Type.getClass(ext)), ext);
-    }
-
-    public function addGeneratorExtension(ext : IGeneratorExtension) : Void {
-        generatorExtensions.set(Type.getClassName(Type.getClass(ext)), ext);
-    }
 
     public function addExtension(ext : IHxmrExtension) : Void {
         extensions.set(Type.getClassName(Type.getClass(ext)), ext);
     }
     
     public function getExtension <T>(extType:Class<T>) : T {
-        var extClassName = Type.getClassName(extType);
-        var extension = extensions.get(extClassName);
-
-        if(extension != null) {
-            return cast extension;
-        }
-        
-        var analyzerExtension = analyzerExtensions.get(extClassName);
-
-        if(analyzerExtension != null) {
-            return cast analyzerExtension;
-        }
-
-        return cast generatorExtensions.get(extClassName);
+        return cast extensions.get(Type.getClassName(extType));
     }
 
 	public function error(err : ContextError) : Void {
