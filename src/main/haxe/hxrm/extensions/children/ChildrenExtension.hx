@@ -100,6 +100,17 @@ class ChildrenExtension implements IHxmrExtension {
 
     // return true if it needs one more iteration
     public function generate(context:HxmrContext, scope:GeneratorScope) : Bool {
+    
+        if(scope.itorExprs == null) {
+            return true;
+        }
+        
+        //TODO remove
+
+        var myBItors = scope.itorExprs.get("myB");
+        if(myBItors != null) {
+           myBItors.push(macro trace("yo"));
+        }
         return false;
     }
 }

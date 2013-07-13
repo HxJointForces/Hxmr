@@ -28,6 +28,12 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
 		if(scope.ctorExprs == null) {
 			return true;
 		}
+        
+        scope.itorExprs = new Map();
+
+        for (field in scope.context.node.fields) {
+            parseFieldInitializator(context, scope, field.name, field.type);
+        }
 		
 		processScope(context, scope, scope.context.node, scope.ctorExprs, "this");
 
@@ -36,12 +42,7 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
 
 	function processScope(context : HxmrContext, scope : GeneratorScope, nodeScope : NodeScope, exprs : Array<Expr>, forField : String) : Void {
 
-        for (field in nodeScope.fields) {
-            parseFieldInitializator(context, scope, field.name, field.type);
-        }
-
         for (fieldName in nodeScope.initializers.keys()) {
-
             var res = parseBindingInitializator(context, scope, nodeScope, fieldName, nodeScope.initializers.get(fieldName), exprs);
             exprs.push(macro $i{forField}.$fieldName = $res);
         }
@@ -98,19 +99,21 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
         }
 
         var builders : Array<Expr> = [];
+
+        scope.itorExprs.set(fieldName, builders);
         
         var ctor = {
             expr : ENew({
                     name : initScope.typeName.className,
                     pack : initScope.typeName.packageNameParts,
-                    params : []
+                    params : [] // TODO ctor params
                 },
                 []
             ),
             pos : scope.context.pos
         }
 
-        builders.push(macro $i {fieldName} = ${ctor});
+        var ctor = macro $i {fieldName} = ${ctor};
 
         processScope(context, scope, initScope, builders, fieldName);
 
@@ -130,7 +133,12 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
                     pos : scope.context.pos
                 },
                 {
-                    expr : EBlock(builders),
+                    expr : EBlock([ctor,
+                        {
+                            expr : EBlock(builders),
+                            pos : scope.context.pos
+                        }
+                    ]),
                     pos : scope.context.pos
                 },
                 null
@@ -172,23 +180,6 @@ class PropertiesGeneratorExtension implements IGeneratorExtension {
 
     inline function generateInitializerName(fieldName : String) : String {
         return "init_" + fieldName;
-    }
-
-    function getBaseType(type : haxe.macro.Type) : BaseType {
-        if(type == null) {
-            throw "type is null!";
-        }
-        return switch(type) {
-            case TAbstract( t, _ ):
-                t.get();
-            case TInst(t, _):
-                t.get();
-            case TDynamic(t):
-                getBaseType(t);
-            case TEnum(t, _):
-                t.get();
-            case _: throw "unknown base type of: " + type;
-        }
     }
 
 }

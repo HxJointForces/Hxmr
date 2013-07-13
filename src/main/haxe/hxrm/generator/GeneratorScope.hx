@@ -13,7 +13,10 @@ class GeneratorScope {
 	public var typeDefinition:TypeDefinition;
 	
 	public var ctor:Field;
+
 	public var ctorExprs:Array<Expr>;
+    
+    public var itorExprs : Map<String, Array<Expr>>;
 	
 	public function new(tp:TypeDefinition) {
 		
