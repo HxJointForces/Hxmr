@@ -4,7 +4,6 @@ import hxrm.extensions.properties.PropertiesExtension;
 import hxrm.generator.GeneratorScope;
 import hxrm.extensions.base.IHxmrExtension;
 import hxrm.extensions.properties.PropertiesAnalyzerExtension;
-import hxrm.extensions.base.NodeAnalyzerExtensionBase;
 import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext;
 import hxrm.parser.mxml.MXMLQName;

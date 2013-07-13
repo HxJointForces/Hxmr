@@ -1,6 +1,6 @@
 package hxrm.extensions.basicType;
 
-import hxrm.extensions.base.GeneratorExtensionBase;
+import hxrm.extensions.base.IGeneratorExtension;
 import haxe.macro.Context;
 import haxe.macro.Type.ClassField;
 import hxrm.analyzer.NodeScope;
@@ -24,9 +24,13 @@ class ConstructorGeneratorError extends TypeDefinitionGeneratorError {
 	}
 }
 
-class BasicTypeGeneratorExtension extends GeneratorExtensionBase {
+class BasicTypeGeneratorExtension implements IGeneratorExtension {
 
-	override public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
+    public function new() {
+
+    }
+
+	public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
 		
 		if(scope.ctor == null) generateCtor(context, scope);
 		

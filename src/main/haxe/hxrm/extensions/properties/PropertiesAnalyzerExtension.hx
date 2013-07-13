@@ -1,7 +1,7 @@
 package hxrm.extensions.properties;
 
+import hxrm.extensions.base.INodeAnalyzerExtension;
 import hxrm.analyzer.QName;
-import hxrm.extensions.base.NodeAnalyzerExtensionBase;
 import hxrm.analyzer.initializers.IItor;
 import hxrm.analyzer.initializers.Itor;
 import haxe.macro.Type;
@@ -27,9 +27,13 @@ class PropertiesAnalyzerError extends NodeAnalyzerError {
     }
 }
 
-class PropertiesAnalyzerExtension extends NodeAnalyzerExtensionBase {
+class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
 
-    override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
+    public function new() {
+    
+    }
+
+    public function analyze(context : HxmrContext, scope:NodeScope):Bool {
     
         if(scope.classFields == null) {
             return true;
