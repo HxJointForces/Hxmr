@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<h:Box xmlns:h="h2d.comp.*" xmlns:rh="h2d.*"
-	xmlns:view="*" xmlns:hx="http://haxe.org/hxmr/"
+<h:Box xmlns:h="h2d.comp.*" xmlns:hx="http://haxe.org/hxmr/trait"
+	hx:trait="CheckBoxViewTrait"
 	layout="h2d.css.Defs.Layout.Horizontal">
-	
-	<hx:Declarations>
-		<view:CheckBoxController view="this" />
-	</hx:Declarations>
 	
 	<h:Checkbox id="cb" />
 	<h:Label id="lbl" text="'Checkbox'" />

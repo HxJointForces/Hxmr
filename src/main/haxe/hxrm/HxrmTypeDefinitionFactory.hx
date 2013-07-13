@@ -10,6 +10,7 @@ import hxrm.extensions.children.ChildrenExtension;
 import hxrm.extensions.script.ScriptBlockExtension;
 import hxrm.extensions.properties.PropertiesAnalyzerExtension;
 import haxe.macro.Context;
+import hxrm.extensions.trait.TraitExtension;
 import hxrm.HxmrContext.ContextError;
 import hxrm.utils.Debug;
 import hxrm.utils.TypeUtils;
@@ -57,6 +58,7 @@ class HxrmTypeDefinitionFactory {
         context.addExtension(new DeclarationsExtension());
         context.addExtension(new ChildrenExtension());
         context.addExtension(new GenericTypeExtension());
+        context.addExtension(new TraitExtension());
         
         //context.addAnalyzerExtension(new PropertiesAnalyzerExtension());
         //context.addAnalyzerExtension(new ScriptBlockExtension());

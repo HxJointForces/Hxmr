@@ -6,7 +6,6 @@ import haxe.macro.Printer;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
 import hxrm.extensions.basicType.BasicTypeGeneratorExtension;
-//import hxrm.generator.extensions.InitializersGeneratorExtension;
 import hxrm.extensions.base.IGeneratorExtension;
 import hxrm.analyzer.QNameUtils;
 import hxrm.analyzer.NodeScope;

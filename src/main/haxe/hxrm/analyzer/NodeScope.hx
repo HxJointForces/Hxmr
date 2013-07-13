@@ -27,6 +27,8 @@ class NodeScope {
 	private var fieldNamesSeek : HashMap<QName, Int>;
     
     private var fieldNames : Map<MXMLNode, String>;
+	
+	public var traits:Array<ClassType>;
 
 	public function new() {
 		fieldNamesSeek = new HashMap();
@@ -34,6 +36,7 @@ class NodeScope {
 
         initializers = new Map();
         fields = [];
+		traits = [];
 	}
 	
 	public function getNodeId(node : MXMLNode) : String {
