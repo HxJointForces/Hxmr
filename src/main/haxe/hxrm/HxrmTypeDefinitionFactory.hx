@@ -1,5 +1,10 @@
 package hxrm;
 
+import hxrm.extensions.properties.PropertiesExtension;
+import hxrm.extensions.basicType.BasicTypeExtension;
+import hxrm.extensions.declarations.DeclarationsExtension;
+import hxrm.extensions.generic.GenericTypeExtension;
+import hxrm.extensions.children.ChildrenExtension;
 import haxe.macro.Context;
 import hxrm.HxmrContext.ContextError;
 import hxrm.utils.Debug;
@@ -32,15 +37,22 @@ class HxrmTypeDefinitionFactory {
 	#end
 	
 	public function new() {
-		context = new HxmrContext();
-		
-		parser = new MXMLParser();
-		analyzer = new NodeAnalyzer();
-		tdWriter = new TypeDefinitionGenerator();
-		
-		#if debug
+
+        parser = new MXMLParser();
+        analyzer = new NodeAnalyzer();
+        tdWriter = new TypeDefinitionGenerator();
+
+        #if debug
 		p = new Printer();
-		#end
+        #end
+    
+		context = new HxmrContext(analyzer, tdWriter);
+        
+        context.addExtension(new BasicTypeExtension());
+        context.addExtension(new PropertiesExtension());
+        context.addExtension(new DeclarationsExtension());
+        context.addExtension(new ChildrenExtension());
+        context.addExtension(new GenericTypeExtension());
 	}
 	
 	public function reset() {
@@ -77,10 +89,6 @@ class HxrmTypeDefinitionFactory {
 				return null;
 			}
 			
-			#if bsideup
-				TypeUtils.prettyPrintType(scope);
-			#end
-	
 			var typeDefinition : TypeDefinition = tdWriter.write(context, scope, type, path);
 
 			if(checkErrors(path)) {

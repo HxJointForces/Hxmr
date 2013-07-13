@@ -1,12 +1,13 @@
 package hxrm.generator;
 
-import hxrm.generator.extensions.InitializersGeneratorExtension;
+import hxrm.extensions.base.IHxmrExtension;
+import hxrm.extensions.properties.PropertiesGeneratorExtension;
 import haxe.macro.Printer;
 import hxrm.HxmrContext;
 import hxrm.utils.TypeUtils;
-import hxrm.generator.extensions.ConstructorGeneratorExtension;
+import hxrm.extensions.basicType.BasicTypeGeneratorExtension;
 //import hxrm.generator.extensions.InitializersGeneratorExtension;
-import hxrm.generator.extensions.IGeneratorExtension;
+import hxrm.extensions.base.IGeneratorExtension;
 import hxrm.analyzer.QNameUtils;
 import hxrm.analyzer.NodeScope;
 import haxe.macro.Context;
@@ -26,16 +27,9 @@ class TypeDefinitionGeneratorError extends ContextError {
  
 class TypeDefinitionGenerator
 {
-	private var extensions : Array<IGeneratorExtension>;
-	
 	public function new() 
 	{
-		extensions = [];
-        //extensions.push(new InitializersGeneratorExtension(this));
-        extensions.push(new ConstructorGeneratorExtension(this));
-        extensions.push(new InitializersGeneratorExtension(this));
 	}
-	
 	
 	public function write(context : HxmrContext, nodeScope:NodeScope, type:String, file:String):TypeDefinition {
 
@@ -59,17 +53,17 @@ class TypeDefinitionGenerator
 		scope.context.pos = pos; //TODO remove
 		
 
-		var currentIterationExtensions = extensions;
+		var currentIterationExtensions = context.extensions.iterator();
 
-		while(currentIterationExtensions.length != 0) {
-			var nextIterationExtensions : Array<IGeneratorExtension> = [];
+		while(currentIterationExtensions.hasNext()) {
+			var nextIterationExtensions : Array<IHxmrExtension> = [];
 
 			for(extension in currentIterationExtensions) {
 				if(extension.generate(context, scope)) {
 					nextIterationExtensions.push(extension);
 				}
 			}
-			currentIterationExtensions = nextIterationExtensions;
+			currentIterationExtensions = nextIterationExtensions.iterator();
 		}
 		
 		//TypeUtils.prettyPrintType(typeDefinition);

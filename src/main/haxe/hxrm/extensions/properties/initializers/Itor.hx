@@ -1,4 +1,4 @@
-package hxrm.analyzer.initializers;
+package hxrm.extensions.properties.initializers;
 
 class Itor<T> {
     public var value : T;

@@ -1,5 +1,11 @@
 package hxrm;
 
+import hxrm.extensions.base.IHxmrExtension;
+import hxrm.generator.TypeDefinitionGenerator;
+import hxrm.analyzer.NodeAnalyzer;
+import hxrm.utils.TypeUtils;
+import hxrm.extensions.base.IGeneratorExtension;
+import hxrm.extensions.base.INodeAnalyzerExtension;
 import haxe.CallStack;
 import EnumValue;
 import haxe.macro.Context;
@@ -70,10 +76,27 @@ class ContextError {
 class HxmrContext {
 	
 	public var errors : Array<ContextError>;
+
+    public var extensions : Map<String, IHxmrExtension>;
+    
+    public var analyzer : NodeAnalyzer;
+
+    public var generator : TypeDefinitionGenerator;
 	
-	public function new() {
+	public function new(analyzer : NodeAnalyzer, generator : TypeDefinitionGenerator) {
+        this.analyzer = analyzer;
+        this.generator = generator;
 		errors = [];
+        extensions = new Map();
 	}
+
+    public function addExtension(ext : IHxmrExtension) : Void {
+        extensions.set(Type.getClassName(Type.getClass(ext)), ext);
+    }
+    
+    public function getExtension <T>(extType:Class<T>) : T {
+        return cast extensions.get(Type.getClassName(extType));
+    }
 
 	public function error(err : ContextError) : Void {
 		trace("\n" + CallStack.toString(CallStack.callStack()) + "\n" + err);

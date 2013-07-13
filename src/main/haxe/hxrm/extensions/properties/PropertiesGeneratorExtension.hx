@@ -1,6 +1,7 @@
-package hxrm.generator.extensions;
+package hxrm.extensions.properties;
 
-import hxrm.analyzer.initializers.IItor;
+import hxrm.extensions.properties.initializers.IItor;
+import hxrm.extensions.base.IGeneratorExtension;
 import haxe.macro.Context;
 import haxe.macro.Type;
 import hxrm.HxmrContext;
@@ -15,9 +16,13 @@ import haxe.macro.Expr.Position;
 import hxrm.generator.GeneratorContext;
 import hxrm.generator.GeneratorScope;
 
-class InitializersGeneratorExtension extends GeneratorExtensionBase {
+class PropertiesGeneratorExtension implements IGeneratorExtension {
 
-	public override function generate(context:HxmrContext, scope:GeneratorScope):Bool {
+    public function new() {
+
+    }
+
+	public function generate(context:HxmrContext, scope:GeneratorScope):Bool {
 
 		if(scope.ctor == null) {
 			return true;
@@ -69,7 +74,7 @@ class InitializersGeneratorExtension extends GeneratorExtensionBase {
                 }
                 {
                     expr : EArrayDecl(values),
-                pos : Context.currentPos()
+                    pos : Context.currentPos()
                 };
 
             case InitNodeScope(itor):

@@ -1,4 +1,6 @@
-package hxrm.analyzer.initializers;
+package hxrm.extensions.properties.initializers;
+
+import hxrm.analyzer.NodeScope;
 
 enum IItor {
     InitValue(itor:Itor<Dynamic>);

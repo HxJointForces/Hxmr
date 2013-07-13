@@ -1,5 +1,9 @@
-package hxrm.analyzer.extensions;
+package hxrm.extensions.children;
 
+import hxrm.extensions.properties.PropertiesExtension;
+import hxrm.generator.GeneratorScope;
+import hxrm.extensions.base.IHxmrExtension;
+import hxrm.extensions.properties.PropertiesAnalyzerExtension;
 import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext;
 import hxrm.parser.mxml.MXMLQName;
@@ -20,9 +24,13 @@ class ChildrenAnalyzerError extends NodeAnalyzerError {
 	}
 }
 
-class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
+class ChildrenExtension implements IHxmrExtension {
 
-	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
+    public function new() {
+    
+    }
+
+	public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
 		if(scope.initializers == null) {
 			return true;
@@ -54,9 +62,11 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		
 		var arrayNode : MXMLNode = new MXMLNode();
 		arrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
-		
-		for (childNode in node.children) {
-			if(isInnerProperty(scope, childNode)) {
+
+        var PropertiesExtension = context.getExtension(PropertiesExtension);
+
+        for (childNode in node.children) {
+			if(PropertiesExtension.analyzer.isInnerProperty(scope, childNode)) {
 				continue;
 			}
 
@@ -83,8 +93,13 @@ class ChildrenAnalyzerExtension extends PropertiesAnalyzerExtension {
 		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);
 		setterArrayNode.children.push(arrayNode);
 		
-		matchChild(context, scope, setterArrayNode);
+		PropertiesExtension.analyzer.matchChild(context, scope, setterArrayNode);
 		
 		return false;
 	}
+
+    // return true if it needs one more iteration
+    public function generate(context:HxmrContext, scope:GeneratorScope) : Bool {
+        return false;
+    }
 }
