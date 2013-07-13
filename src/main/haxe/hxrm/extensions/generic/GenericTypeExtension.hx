@@ -1,8 +1,10 @@
-package hxrm.analyzer.extensions;
+package hxrm.extensions.generic;
 
+import hxrm.generator.GeneratorScope;
+import hxrm.extensions.base.IHxmrExtension;
+import hxrm.analyzer.QNameUtils;
 import hxrm.analyzer.NodeScope;
 import hxrm.HxmrContext;
-import haxe.macro.Context;
 import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import hxrm.parser.mxml.MXMLQNameUtils;
 import hxrm.parser.mxml.MXMLQName;
@@ -18,9 +20,13 @@ class GenericTypeAnalyzerError extends NodeAnalyzerError {
 	}
 }
 
-class GenericTypeExtension extends NodeAnalyzerExtensionBase {
+class GenericTypeExtension implements IHxmrExtension {
 
-	override public function analyze(context : HxmrContext, scope:NodeScope):Bool {
+    public function new() {
+    
+    }
+
+	public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 		
 		if(scope.type == null) {
 			return true;
@@ -69,5 +75,10 @@ class GenericTypeExtension extends NodeAnalyzerExtensionBase {
 			case _:
 		}
 	}
+
+    // return true if it needs one more iteration
+    public function generate(context:HxmrContext, scope:GeneratorScope) : Bool {
+        return false;
+    }
 
 }
