@@ -1,10 +1,9 @@
 package hxrm.analyzer;
 
+import hxrm.analyzer.initializers.IItor;
 import haxe.ds.HashMap;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
-import hxrm.analyzer.initializers.FieldInitializator;
-import hxrm.analyzer.initializers.IInitializator;
 import haxe.macro.Type;
 
 class NodeScope {
@@ -21,16 +20,20 @@ class NodeScope {
 
 	public var defaultProperty : String;
 
-    public var initializers : Map<String, IInitializator>;
+    public var initializers : Map<String, IItor>;
 
-    public var fields : Array<FieldInitializator>;
-	
-	public var children : Array<FieldInitializator>;
+    public var fields : Array<{name : String, type : Type}>;
 	
 	private var fieldNamesSeek : HashMap<QName, Int>;
+    
+    private var fieldNames : Map<MXMLNode, String>;
 
 	public function new() {
 		fieldNamesSeek = new HashMap();
+        fieldNames = new Map();
+
+        initializers = new Map();
+        fields = [];
 	}
 	
 	public function getNodeId(node : MXMLNode) : String {
@@ -44,6 +47,11 @@ class NodeScope {
 		if(id != null) {
 			return id;
 		}
+        
+        var generatedId = fieldNames.get(node);
+        if(generatedId != null) {
+            return generatedId;
+        }
 		
 		var qName = context.resolveQName(node.name);
 		
@@ -62,8 +70,11 @@ class NodeScope {
 		var seek : Int = currentFieldNamesSeek.get(qName);
 
 		currentFieldNamesSeek.set(qName, seek + 1);
-		
-		return qName.packageNameParts.join("_") + "__" + qName.className.substr(0, 1).toLowerCase() + qName.className.substr(1) + Std.string(seek);
+
+        generatedId = qName.packageNameParts.join("_") + "__" + qName.className.substr(0, 1).toLowerCase() + qName.className.substr(1) + Std.string(seek);
+        
+        fieldNames.set(node, generatedId);
+        return generatedId;
 	}
 
 	inline public function getFieldByName(name : String) : ClassField {

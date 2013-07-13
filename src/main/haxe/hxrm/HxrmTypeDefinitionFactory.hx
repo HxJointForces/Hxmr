@@ -2,6 +2,7 @@ package hxrm;
 
 import haxe.macro.Context;
 import hxrm.HxmrContext.ContextError;
+import hxrm.utils.Debug;
 import hxrm.utils.TypeUtils;
 import haxe.CallStack;
 import hxrm.analyzer.NodeAnalyzer;
@@ -67,7 +68,7 @@ class HxrmTypeDefinitionFactory {
 			}
 			
 			#if debug
-			trace("\n" + node);
+			//trace("\n" + node);
 			#end
 			
 			var scope : NodeScope = analyzer.analyze(context, node);
@@ -85,12 +86,9 @@ class HxrmTypeDefinitionFactory {
 			if(checkErrors(path)) {
 				return null;
 			}
-				
-			#if debug  
-			// TODO: print to file on demand
-			trace(p.printTypeDefinition(typeDefinition, true));
-			#end
-
+			
+			Debug.print(p.printTypeDefinition(typeDefinition, true));
+			
 			return typeDefinition;
 
 		} catch (e:Dynamic) {
