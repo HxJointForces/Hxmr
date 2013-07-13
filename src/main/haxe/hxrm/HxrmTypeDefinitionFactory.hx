@@ -89,10 +89,6 @@ class HxrmTypeDefinitionFactory {
 				return null;
 			}
 			
-			#if bsideup
-				TypeUtils.prettyPrintType(scope);
-			#end
-	
 			var typeDefinition : TypeDefinition = tdWriter.write(context, scope, type, path);
 
 			if(checkErrors(path)) {
