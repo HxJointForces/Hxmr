@@ -1,5 +1,6 @@
 package hxrm;
 
+import hxrm.extensions.fields.FieldsExtension;
 import hxrm.extensions.properties.PropertiesExtension;
 import hxrm.extensions.basicType.BasicTypeExtension;
 import hxrm.extensions.declarations.DeclarationsExtension;
@@ -53,6 +54,7 @@ class HxrmTypeDefinitionFactory {
         context.addExtension(new DeclarationsExtension());
         context.addExtension(new ChildrenExtension());
         context.addExtension(new GenericTypeExtension());
+        context.addExtension(new FieldsExtension());
 	}
 	
 	public function reset() {
