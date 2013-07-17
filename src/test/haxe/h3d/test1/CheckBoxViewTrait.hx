@@ -18,19 +18,18 @@ interface CheckBoxViewTrait extends ITrait
 		super.onAlloc();
 		
 		cb.onChange = this.onChange;
-		
-		Reflect.setField(this, "checked", cb.checked);
 	}
 	
-	public var checked(default, set):Bool;
+	public var checked(get, set):Bool;
 	
-	private function set_checked(value:Bool):Bool {
-		return cb.checked = value;
-	}
+	private function get_checked():Bool return cb.checked;
+	private function set_checked(v:Bool):Bool return cb.checked = v;
 	
-	public dynamic function onChange(b:Bool):Void {
-		
-	}
+	public var label(get, set):String;
+	
+	private function get_label():String return lbl.text;
+	private function set_label(v:String):String return lbl.text = v;
 	
 	
+	public dynamic function onChange(b:Bool):Void {}
 }

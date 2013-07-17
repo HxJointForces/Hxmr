@@ -36,6 +36,7 @@ class H3DTest1
 		
 		var view = new CheckBoxView();
 		scene.addChild(view);
+		view.label = "CB label";
 		view.onChange = function (v) {
 			trace(v ? "on" : "off");
 		}
