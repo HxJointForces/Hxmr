@@ -14,23 +14,22 @@ interface CheckBoxViewTrait extends ITrait
 {
 
 	
-	override private function sync(ctx:RenderContext):Void {
-		super.sync(ctx);
-		trace(ctx);
+	override private function onAlloc():Void {
+		super.onAlloc();
+		
+		cb.onChange = this.onChange;
+		
+		Reflect.setField(this, "checked", cb.checked);
 	}
 	
-	public function test():Void {
-		//super.scaleX = 1;
-		var t = new Interactive(10, 10);
-		t.cursor = Cursor.Button;
-		//trace(Engine.getCurrent().mem.stats());
-		t.backgroundColor = 0xFFFF0000;
-		this.addChild(t);
+	public var checked(default, set):Bool;
+	
+	private function set_checked(value:Bool):Bool {
+		return cb.checked = value;
 	}
 	
-	
-	static private function is<T:Interactive>(a:T):Bool {
-		return true;
+	public dynamic function onChange(b:Bool):Void {
+		
 	}
 	
 	

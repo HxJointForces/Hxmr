@@ -17,11 +17,6 @@ class CheckBoxController
 	function set_view(v:ViewType):ViewType {
 		this.view = v;
 		
-		v.cb.onChange = function (s:Bool) {
-			v.lbl.text = s ? "Checked" : "Unchecked";
-		}
-		
-		v.cb.onChange(v.cb.checked);
 		return v;
 	}
 	
