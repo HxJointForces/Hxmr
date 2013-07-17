@@ -4,6 +4,7 @@ import hxrm.analyzer.initializers.IItor;
 import haxe.ds.HashMap;
 import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
+import haxe.macro.Expr;
 import haxe.macro.Type;
 
 class NodeScope {
@@ -28,7 +29,7 @@ class NodeScope {
     
     private var fieldNames : Map<MXMLNode, String>;
 	
-	public var traits:Array<QName>;
+	public var traits:Array<TypePath>;
 
 	public function new() {
 		fieldNamesSeek = new HashMap();

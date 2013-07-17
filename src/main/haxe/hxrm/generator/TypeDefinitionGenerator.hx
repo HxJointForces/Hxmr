@@ -13,6 +13,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 import hxrm.analyzer.QName;
+import traits.Trait;
 
 using StringTools;
 /**
@@ -26,6 +27,7 @@ class TypeDefinitionGeneratorError extends ContextError {
  
 class TypeDefinitionGenerator
 {
+
 	public function new() 
 	{
 	}
@@ -35,6 +37,7 @@ class TypeDefinitionGenerator
 		var pos : Position = Context.makePosition( { min:0, max:0, file:file } );
 		var qName : QName = QNameUtils.fromHaxeTypeId(type);
 		
+		var interfaces = [];
 		var typeDefinition : TypeDefinition =  {
 			pack: qName.packageNameParts,
 			name: qName.className,
@@ -42,7 +45,7 @@ class TypeDefinitionGenerator
 			meta: [],
 			params: [],
 			isExtern: false,
-			kind: TDClass(getTypePath(nodeScope.type), null, false),
+			kind: TDClass(getTypePath(nodeScope.type), interfaces, false),
 			fields:[]
 		}
 		
@@ -50,6 +53,7 @@ class TypeDefinitionGenerator
 		
 		scope.context = new GeneratorContext(nodeScope);
 		scope.context.pos = pos; //TODO remove
+		scope.interfaces = interfaces;
 		
 
 		var currentIterationExtensions = context.extensions.iterator();
@@ -75,7 +79,7 @@ class TypeDefinitionGenerator
 	}
 	
 	public function cleanCache():Void {
-		
+		Trait.clearCache(); // TODO
 	}
 
 	function getTypePath(t:Type):TypePath {

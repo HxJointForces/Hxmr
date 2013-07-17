@@ -1,3 +1,4 @@
+-cp haxe-traits/src
 -cp xml176/src/main/haxe
 -cp src/main/haxe/
 -cp src/test/haxe/h3d/test1

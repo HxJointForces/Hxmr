@@ -1,29 +1,25 @@
 package ;
+
 import h2d.Interactive;
-import hxrm.extensions.trait.IHXMRTrait;
+import h2d.RenderContext;
+import traits.ITrait;
 
 /**
  * ...
  * @author deep <system.grand@gmail.com>
  */
-interface CheckBoxViewTrait extends IHXMRTrait
+interface CheckBoxViewTrait extends ITrait
 {
 
-	/*public var cb2:Int = 10;
 	
-	public var i(default, set):Int = 10;
+	/*override private function sync(ctx:RenderContext):Void {
+		super.sync(ctx);
+		trace(ctx);
+	}*/
 	
-	inline function set_i(v) {
-		return i = v;
-	}
-	
-	static var ABC:String = "abc";
-	
-	static inline var CC = true;*/
-	
-	public static function test() {
-		super.x = 0;
-		new Interactive(10, 10);
+	public function test():Void {
+		super.scaleX = 1;
+		//new Interactive(10, 10);
 	}
 	
 }

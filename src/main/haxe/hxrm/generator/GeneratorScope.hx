@@ -15,6 +15,8 @@ class GeneratorScope {
 	public var ctor:Field;
 	public var ctorExprs:Array<Expr>;
 	
+	public var interfaces:Array<TypePath>;
+	
 	public function new(tp:TypeDefinition) {
 		
 		this.typeDefinition = tp;
