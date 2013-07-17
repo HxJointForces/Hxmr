@@ -1,5 +1,7 @@
 package ;
 
+import h2d.comp.Button;
+import h2d.comp.Checkbox;
 import h2d.Interactive;
 import h2d.RenderContext;
 import h3d.Engine;
@@ -16,6 +18,10 @@ interface CheckBoxViewTrait extends ITrait
 	
 	override private function onAlloc():Void {
 		super.onAlloc();
+		
+		try {
+			var c:Checkbox = cb;
+		} catch (e:Button) {}
 		
 		cb.onChange = this.onChange;
 	}

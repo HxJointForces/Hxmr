@@ -8,7 +8,8 @@
 -lib h3d
 -lib hxsl
 
--debug
+#-debug
+--no-traces
 --times
--D dump=pretty
+#-D dump=pretty
 #-D dump=pretty
