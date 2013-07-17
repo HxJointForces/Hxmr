@@ -1,13 +1,15 @@
 package ;
+import h2d.Interactive;
+import hxrm.extensions.trait.IHXMRTrait;
 
 /**
  * ...
  * @author deep <system.grand@gmail.com>
  */
-class CheckBoxViewTrait
+interface CheckBoxViewTrait extends IHXMRTrait
 {
 
-	public var cb2:Int = 10;
+	/*public var cb2:Int = 10;
 	
 	public var i(default, set):Int = 10;
 	
@@ -17,10 +19,11 @@ class CheckBoxViewTrait
 	
 	static var ABC:String = "abc";
 	
-	static inline var CC = true;
+	static inline var CC = true;*/
 	
 	public static function test() {
-		trace("tada");
+		super.x = 0;
+		new Interactive(10, 10);
 	}
 	
 }

@@ -36,7 +36,7 @@ class H3DTest1
 		
 		var view = new CheckBoxView();
 		scene.addChild(view);
-		CheckBoxView.test();
+		//CheckBoxView.test();
 		
 		Lib.current.addEventListener(Event.ENTER_FRAME, function (_) {
 			engine.render(scene);

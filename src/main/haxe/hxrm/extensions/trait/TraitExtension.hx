@@ -66,10 +66,14 @@ class TraitExtension implements IHxmrExtension
 			return;
 		}
 
-		scope.traits = value.split(",").map(QNameUtils.fromHaxeTypeId).map(scope.context.getType).map(scope.context.getClassType);
+		scope.traits = value.split(",").map(QNameUtils.fromHaxeTypeId);
+		trace(scope.traits);
 		
 		for (trait in scope.traits) {
-			if (trait.constructor != null)
+			var type = scope.context.getType(trait);
+			trace(type);
+			
+			/*if (trait.constructor != null)
 				context.error(new TraitAnalyzerError(TRAIT_WITH_CTOR(trait.name), PosTools.positionToPos(trait.pos)));
 			
 			if (trait.isInterface)
@@ -80,13 +84,14 @@ class TraitExtension implements IHxmrExtension
 				
 			if (trait.superClass != null)
 				context.error(new TraitAnalyzerError(TRAIT_EXTENDS_CLASS(trait.name), PosTools.positionToPos(trait.pos)));
+			*/
 		}
 		
 	}
 
     public function generate(context:HxmrContext, scope:GeneratorScope) : Bool {
 		
-		for (trait in scope.context.node.traits) {
+		/*for (trait in scope.context.node.traits) {
 			
 			for (field in trait.fields.get())
 				scope.typeDefinition.fields.push(getField(field));
@@ -96,7 +101,7 @@ class TraitExtension implements IHxmrExtension
 				f.access.push(AStatic);
 				scope.typeDefinition.fields.push(f);
 			}
-		}
+		}*/
 		
 		return false;
 	}

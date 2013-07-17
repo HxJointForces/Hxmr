@@ -7,6 +7,12 @@ import hxrm.analyzer.QName;
 
 class QNameUtils {
 
+	public static function fromModuleAndName(module:String, name:String):QName {
+		var module = splitPackage(module);
+		if (module.length > 0 && module[module.length - 1] == name) module.pop();
+		return new QName(module, name);
+	}
+	
 	public static function fromHaxeTypeId(typeId : String) : QName {
 		var parts : Array<String> = splitPackage(StringTools.trim(typeId));
 		var localName : String = parts.pop();
