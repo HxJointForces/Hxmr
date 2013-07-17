@@ -6,8 +6,9 @@
 -swf-version 11.5
 -main H3DTest1
 -lib h3d
+-lib hxsl
 
 -debug
 --times
-#-D dump=pretty
+-D dump=pretty
 #-D dump=pretty

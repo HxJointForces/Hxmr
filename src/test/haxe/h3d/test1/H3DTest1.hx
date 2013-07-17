@@ -36,7 +36,6 @@ class H3DTest1
 		
 		var view = new CheckBoxView();
 		scene.addChild(view);
-		view.scaleX = 2;
 		view.test();
 		//CheckBoxView.test();
 		
