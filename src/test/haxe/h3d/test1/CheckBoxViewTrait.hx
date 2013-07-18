@@ -21,7 +21,7 @@ interface CheckBoxViewTrait extends ITrait
 		
 		try {
 			var c:Checkbox = cb;
-		} catch (e:Button) {}
+		} catch (e:Button) { }
 		
 		cb.onChange = this.onChange;
 	}
