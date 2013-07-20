@@ -60,10 +60,9 @@ class FieldsAnalyzerExtension implements INodeAnalyzerExtension {
             case _: false;
         }
         if(hasOwnField) {
-            var field = {name : scope.getFieldNameForNode(valueNode), type : getFieldType(context, scope, valueNode)};
-
-            rememberField(context, scope.getTopScope(), field, valueNode.position);
-            context.getExtension(PropertiesExtension).analyzer.rememberProperty(context, scope.getTopScope(), field.name, value, valueNode.position);
+            var fieldName = scope.getFieldNameForNode(valueNode);
+            rememberField(context, scope.getTopScope(), fieldName, getFieldType(context, scope, valueNode), valueNode.position);
+            context.getExtension(PropertiesExtension).analyzer.rememberProperty(context, scope.getTopScope(), fieldName, value, valueNode.position);
         }
 
         switch(value) {
@@ -94,16 +93,18 @@ class FieldsAnalyzerExtension implements INodeAnalyzerExtension {
         }
     }
 
-    function rememberField(context : HxmrContext, scope : NodeScope, field : FieldDeclaration, pos:Pos) : Void {
+    function rememberField(context : HxmrContext, scope : NodeScope, fieldName : String, fieldType : ComplexType, pos:Pos) : Void {
 
-        for(iterField in scope.fields) {
-            if(iterField.name == field.name) {
-                //context.error(new FieldsAnalyzerError(DUPLICATE(field.name), pos));
-                return;
-            }
+        if(scope.fields == null) {
+            scope.fields = new Map();
+        }
+        
+        if(scope.fields.exists(fieldName)) {
+            //context.error(new FieldsAnalyzerError(DUPLICATE(field.name), pos));
+            return;
         }
 
-        scope.fields.unshift(field);
+        scope.fields.set(fieldName, fieldType);
     }
 
 }

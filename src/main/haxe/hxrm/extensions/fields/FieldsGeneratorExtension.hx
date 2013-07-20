@@ -19,8 +19,8 @@ class FieldsGeneratorExtension implements IGeneratorExtension {
 
 	function processScope(context : HxmrContext, scope : GeneratorScope, nodeScope : NodeScope, exprs : Array<Expr>) : Void {
 
-        for (field in nodeScope.fields) {
-            parseFieldInitializator(context, scope, field.name, field.type);
+        for (fieldName in nodeScope.fields.keys()) {
+            parseFieldInitializator(context, scope, fieldName, nodeScope.fields.get(fieldName));
         }
     }
 
