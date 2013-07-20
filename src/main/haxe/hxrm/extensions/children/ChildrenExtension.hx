@@ -1,5 +1,6 @@
 package hxrm.extensions.children;
 
+import hxrm.extensions.fields.FieldsExtension;
 import hxrm.extensions.properties.PropertiesExtension;
 import hxrm.generator.GeneratorScope;
 import hxrm.extensions.base.IHxmrExtension;
@@ -32,7 +33,7 @@ class ChildrenExtension implements IHxmrExtension {
 
 	public function analyze(context : HxmrContext, scope:NodeScope):Bool {
 
-		if(scope.initializers == null) {
+		if(scope.initializers == null || scope.getTopScope().fields == null) {
 			return true;
 		}
 
@@ -47,26 +48,27 @@ class ChildrenExtension implements IHxmrExtension {
 			return false;
 		}
 
-		for(field in scope.classFields) {
+        var defaultProperty;
+        for(field in scope.classFields) {
 			if(!field.meta.has("hxmrDefaultProperty")) {
 				continue;
 			}
 
-			if(scope.defaultProperty != null) {
+			if(defaultProperty != null) {
 				//TODO DUPLICATE_DEFAULT_PROPERTY with use pos from base class!!!
 				return false;
 			}
 
-			scope.defaultProperty = field.name;
+			defaultProperty = field.name;
 		}
 		
 		var arrayNode : MXMLNode = new MXMLNode();
 		arrayNode.name = new MXMLQName(MXMLQName.ASTERISK, "Array");
 
-        var PropertiesExtension = context.getExtension(PropertiesExtension);
+        var propertiesExtension = context.getExtension(PropertiesExtension);
 
         for (childNode in node.children) {
-			if(PropertiesExtension.analyzer.isInnerProperty(scope, childNode)) {
+			if(propertiesExtension.analyzer.isInnerProperty(scope, childNode)) {
 				continue;
 			}
 
@@ -83,18 +85,20 @@ class ChildrenExtension implements IHxmrExtension {
 			return false;
 		}
 		
-		if(scope.defaultProperty == null) {
+		if(defaultProperty == null) {
 			trace("defaultPropertyIsNull");
 			context.error(new ChildrenAnalyzerError(DEFAULT_PROPERTY_IS_NULL, node.position));
 			return false;
 		}
 
 		var setterArrayNode : MXMLNode = new MXMLNode();
-		setterArrayNode.name = new MXMLQName(node.name.namespace, scope.defaultProperty);
+		setterArrayNode.name = new MXMLQName(node.name.namespace, defaultProperty);
 		setterArrayNode.children.push(arrayNode);
 		
-		PropertiesExtension.analyzer.matchChild(context, scope, setterArrayNode);
-		
+        var value = propertiesExtension.analyzer.matchChild(context, scope.getTopScope(), setterArrayNode);
+        if(value != null){
+            context.getExtension(FieldsExtension).analyzer.parseValueForField(context, scope, value);
+        }
 		return false;
 	}
 

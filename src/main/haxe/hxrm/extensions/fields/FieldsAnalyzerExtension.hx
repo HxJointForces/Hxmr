@@ -1,5 +1,6 @@
 package hxrm.extensions.fields;
 
+import hxrm.utils.TypeUtils;
 import hxrm.extensions.properties.PropertiesExtension;
 import haxe.macro.Context;
 import hxrm.extensions.properties.initializers.IItor;
@@ -36,6 +37,9 @@ class FieldsAnalyzerExtension implements INodeAnalyzerExtension {
         if(scope.initializers == null) {
             return true;
         }
+        
+        trace(scope.context.node);
+        TypeUtils.prettyPrintType(scope.initializers);
 
         for (value in scope.initializers.iterator()) {
             parseValueForField(context, scope, value);
@@ -44,7 +48,8 @@ class FieldsAnalyzerExtension implements INodeAnalyzerExtension {
         return false;
     }
     
-    public function parseValueForField(context : HxmrContext, scope : NodeScope, value : IItor) {
+    public function parseValueForField(context : HxmrContext, scope1 : NodeScope, value : IItor) {
+        var topScope : NodeScope = scope1.getTopScope();
         var valueNode : MXMLNode = switch(value) {
             case InitValue(itor): itor.node;
             case InitArray(itor): itor.node;
@@ -54,22 +59,22 @@ class FieldsAnalyzerExtension implements INodeAnalyzerExtension {
             return;
         }
         var hasOwnField : Bool = switch(value) {
-            case InitValue(itor) if(scope.getNodeId(valueNode) != null): true;
-            case InitArray(itor) if(scope.getNodeId(valueNode) != null): true;
+            case InitValue(itor) if(topScope.getNodeId(valueNode) != null): true;
+            case InitArray(itor) if(topScope.getNodeId(valueNode) != null): true;
             case InitNodeScope(itor): true;
             case _: false;
         }
         if(hasOwnField) {
-            var fieldName = scope.getFieldNameForNode(valueNode);
-            rememberField(context, scope.getTopScope(), fieldName, getFieldType(context, scope, valueNode), valueNode.position);
-            context.getExtension(PropertiesExtension).analyzer.rememberProperty(context, scope.getTopScope(), fieldName, value, valueNode.position);
+            var fieldName = topScope.getFieldNameForNode(valueNode);
+            rememberField(context, topScope, fieldName, getFieldType(context, topScope, valueNode), valueNode.position);
+            context.getExtension(PropertiesExtension).analyzer.rememberProperty(context, topScope, fieldName, value, valueNode.position);
         }
 
         switch(value) {
             case InitArray(itor):
                 for(child in itor.value) {
                     var value = child.itor;
-                    parseValueForField(context, scope, value);
+                    parseValueForField(context, topScope, value);
                 }
             case _:
         }
@@ -100,7 +105,7 @@ class FieldsAnalyzerExtension implements INodeAnalyzerExtension {
         }
         
         if(scope.fields.exists(fieldName)) {
-            //context.error(new FieldsAnalyzerError(DUPLICATE(field.name), pos));
+            context.error(new FieldsAnalyzerError(DUPLICATE(fieldName), pos));
             return;
         }
 

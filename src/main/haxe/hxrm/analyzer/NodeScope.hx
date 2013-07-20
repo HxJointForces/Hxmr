@@ -19,8 +19,6 @@ class NodeScope {
 
 	public var classFields:Map<String, ClassField>;
 
-	public var defaultProperty : String;
-
     public var initializers : Map<String, IItor>;
 
     public var fields : Map<String, ComplexType>;

@@ -17,7 +17,7 @@ enum PropertiesAnalyzerErrorType {
     VALUE_MUST_BE_NODE_OR_CDATA;
     VALUE_MUST_BE_ONE_NODE;
     ATTRIBUTES_IN_PROPERTY;
-    DUPLICATE(name:String);
+    DUPLICATE_ASSIGN(name:String);
     EMPTY_PROPERTY_INITIALIZER;
 }
 
@@ -75,15 +75,15 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
         rememberProperty(context, scope, attributeQName.localPart, InitValue(new Itor<Dynamic>(value, null)), pos);
     }
 
-    public function matchChild(context : HxmrContext, scope:NodeScope, setterNode:MXMLNode):Void {
+    public function matchChild(context : HxmrContext, scope:NodeScope, setterNode:MXMLNode):IItor {
 
         if(!isInnerProperty(scope, setterNode)) {
-            return;
+            return null;
         }
 
         if(setterNode.attributes.iterator().hasNext()) {
             context.error(new PropertiesAnalyzerError(ATTRIBUTES_IN_PROPERTY, setterNode.position));
-            return;
+            return null;
         }
 
         var hasCDATA = (setterNode.cdata != null && setterNode.cdata.length > 0);
@@ -109,6 +109,7 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
         if(matchResult != null) {
             rememberProperty(context, scope, setterNode.name.localPart, matchResult, setterNode.position);
         }
+        return matchResult;
     }
 
     public function matchValue(context : HxmrContext, scope:NodeScope, innerChild:MXMLNode) : IItor {
@@ -143,7 +144,7 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
     public function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IItor, pos:Pos) : Void {
 
         if(scope.initializers.exists(fieldName)) {
-            //context.error(new PropertiesAnalyzerError(DUPLICATE(fieldName), pos));
+            context.error(new PropertiesAnalyzerError(DUPLICATE_ASSIGN(fieldName), pos));
             return;
         }
 

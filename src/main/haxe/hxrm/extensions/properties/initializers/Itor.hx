@@ -12,6 +12,7 @@ class Itor<T> {
     }
 
     public function toString() : String {
-        return 'Itor(value = "$value")';
+        var valueTypeName : String = Type.getClassName(Type.getClass(value));
+        return 'Itor(value = "$valueTypeName")';
     }
 }
