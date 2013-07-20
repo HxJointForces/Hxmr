@@ -1,5 +1,6 @@
 package hxrm.extensions.declarations;
 
+import hxrm.extensions.fields.FieldsExtension;
 import hxrm.extensions.properties.PropertiesExtension;
 import hxrm.generator.GeneratorScope;
 import hxrm.extensions.base.IHxmrExtension;
@@ -15,6 +16,11 @@ class DeclarationsExtension implements IHxmrExtension {
     }
 
     public function analyze(context : HxmrContext, scope:NodeScope):Bool {
+    
+        if(scope.initializers == null || scope.getTopScope().fields == null) {
+            return true;
+        }
+    
         var node : MXMLNode = scope.context.node;
         
         for (child in node.children) {
@@ -43,7 +49,7 @@ class DeclarationsExtension implements IHxmrExtension {
         for(valueNode in declarationNode.children)
         {
             var value = context.getExtension(PropertiesExtension).analyzer.matchValue(context, scope, valueNode);
-            context.getExtension(PropertiesExtension).analyzer.parseValueForField(context, scope, value);
+            context.getExtension(FieldsExtension).analyzer.parseValueForField(context, scope, value);
         }
     }
 
