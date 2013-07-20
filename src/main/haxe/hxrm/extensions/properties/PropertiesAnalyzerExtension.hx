@@ -70,7 +70,7 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
             return;
         }
 
-        rememberProperty(context, scope, attributeQName.localPart, InitValue(new Itor<Dynamic>(value)), pos);
+        rememberProperty(context, scope, attributeQName.localPart, InitValue(new Itor<Dynamic>(value, null)), pos);
     }
 
     public function matchChild(context : HxmrContext, scope:NodeScope, setterNode:MXMLNode):Void {
@@ -92,7 +92,7 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
         }
 
         var matchResult = if(setterNode.cdata != null && setterNode.cdata.length > 0) {
-            InitValue(new Itor<Dynamic>(setterNode.cdata));
+            InitValue(new Itor<Dynamic>(setterNode.cdata, setterNode));
         } else {
             if(setterNode.children.length != 1) {
                 context.error(new PropertiesAnalyzerError(VALUE_MUST_BE_ONE_NODE, setterNode.position));
@@ -101,18 +101,23 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
 
             var valueNode = setterNode.children[0];
 
-            parseValue(context, scope, valueNode);
+            var value = matchValue(context, scope, valueNode);
+
+            parseValueForField(context, scope, value);
+            value;
         }
 
         if(matchResult != null) {
             rememberProperty(context, scope, setterNode.name.localPart, matchResult, setterNode.position);
         }
     }
-
-    public function parseValue(context : HxmrContext, scope:NodeScope, valueNode : MXMLNode) : IItor {
-
-        var value = matchValue(context, scope, valueNode);
-
+    
+    public function parseValueForField(context : HxmrContext, scope : NodeScope, value : IItor) {
+        var valueNode : MXMLNode = switch(value) {
+            case InitValue(itor): itor.node;
+            case InitArray(itor): itor.node;
+            case InitNodeScope(itor): itor.node;
+        }
         var hasOwnField : Bool = switch(value) {
             case InitValue(itor) if(scope.getNodeId(valueNode) != null): true;
             case InitArray(itor) if(scope.getNodeId(valueNode) != null): true;
@@ -125,24 +130,14 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
             rememberField(context, scope.getTopScope(), field, valueNode.position);
             rememberProperty(context, scope.getTopScope(), field.name, value, valueNode.position);
         }
-        return value;
-    }
-    
-    public function getFieldType(context : HxmrContext, scope : NodeScope, valueNode : MXMLNode) : ComplexType {
-        var qName : QName = scope.context.resolveQName(valueNode.name);
-        return switch(scope.context.resolveQName(valueNode.name).toHaxeTypeId()){
-            case "Array":
-                TPath({
-                    pack : [],
-                    name : "Array",
-                    params : [TPType(TPath({
-                        pack : [],
-                        name : "Dynamic",
-                        params : []}
-                    ))]}
-                );
+
+        switch(value) {
+            case InitArray(itor):
+                for(child in itor.value) {
+                    var value = child.itor;
+                    parseValueForField(context, scope, value);
+                }
             case _:
-                Context.toComplexType(scope.context.getType(qName));
         }
     }
 
@@ -151,16 +146,16 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
         return switch(scope.context.resolveQName(innerChild.name).toHaxeTypeId()) {
 
             case "String", "Int", "Float":
-                InitValue(new Itor<Dynamic>(innerChild.cdata));
+                InitValue(new Itor<Dynamic>(innerChild.cdata, innerChild));
 
             case "Array":
                 var childs : Array<{name : String, itor : IItor}> = [];
 
                 for(child in innerChild.children) {
-                    childs.push({name : scope.getFieldNameForNode(child), itor : parseValue(context, scope, child)});
+                    childs.push({name : scope.getFieldNameForNode(child), itor : matchValue(context, scope, child)});
                 }
 
-                InitArray(new Itor<Array<{name : String, itor : IItor}>>(childs));
+                InitArray(new Itor<Array<{name : String, itor : IItor}>>(childs, innerChild));
 
             case type:
                 //trace("_ " + type);
@@ -171,9 +166,26 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
                     trace("childScope is null");
                     return null;
                 }
-                InitNodeScope(new Itor<NodeScope>(childScope));
+                InitNodeScope(new Itor<NodeScope>(childScope, innerChild));
         }
+    }
 
+    public function getFieldType(context : HxmrContext, scope : NodeScope, valueNode : MXMLNode) : ComplexType {
+        var qName : QName = scope.context.resolveQName(valueNode.name);
+        return switch(scope.context.resolveQName(valueNode.name).toHaxeTypeId()){
+            case "Array":
+                TPath({
+                    pack : [],
+                    name : "Array",
+                    params : [TPType(TPath({
+                        pack : [],
+                        name : "Dynamic",
+                        params : []
+                    }))]
+                });
+            case _:
+                Context.toComplexType(scope.context.getType(qName));
+        }
     }
 
     function rememberField(context : HxmrContext, scope : NodeScope, field : FieldDeclaration, pos:Pos) : Void {

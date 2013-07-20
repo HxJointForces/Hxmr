@@ -42,7 +42,8 @@ class DeclarationsExtension implements IHxmrExtension {
 
         for(valueNode in declarationNode.children)
         {
-            context.getExtension(PropertiesExtension).analyzer.parseValue(context, scope, valueNode);
+            var value = context.getExtension(PropertiesExtension).analyzer.matchValue(context, scope, valueNode);
+            context.getExtension(PropertiesExtension).analyzer.parseValueForField(context, scope, value);
         }
     }
 
