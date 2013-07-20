@@ -38,7 +38,6 @@ class NodeScope {
 		fieldNamesSeek = new HashMap();
         fieldNames = new Map();
 
-        initializers = new Map();
         fields = [];
 	}
     

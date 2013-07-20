@@ -1,6 +1,5 @@
 package hxrm.extensions.properties;
 
-import haxe.macro.Context;
 import hxrm.extensions.properties.initializers.IItor;
 import hxrm.extensions.properties.initializers.Itor;
 import hxrm.extensions.base.INodeAnalyzerExtension;
@@ -12,14 +11,13 @@ import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import haxe.macro.Type.ClassField;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
-import haxe.macro.Expr;
 
 enum PropertiesAnalyzerErrorType {
     UNKNOWN_FIELD(name:String);
     VALUE_MUST_BE_NODE_OR_CDATA;
     VALUE_MUST_BE_ONE_NODE;
     ATTRIBUTES_IN_PROPERTY;
-    DUPLICATE;
+    DUPLICATE(name:String);
     EMPTY_PROPERTY_INITIALIZER;
 }
 
@@ -39,6 +37,10 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
     
         if(scope.classFields == null) {
             return true;
+        }
+        
+        if(scope.initializers == null) {
+            scope.initializers = new Map();
         }
 
         var node : MXMLNode = scope.context.node;
@@ -101,43 +103,11 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
 
             var valueNode = setterNode.children[0];
 
-            var value = matchValue(context, scope, valueNode);
-
-            parseValueForField(context, scope, value);
-            value;
+            matchValue(context, scope, valueNode);
         }
 
         if(matchResult != null) {
             rememberProperty(context, scope, setterNode.name.localPart, matchResult, setterNode.position);
-        }
-    }
-    
-    public function parseValueForField(context : HxmrContext, scope : NodeScope, value : IItor) {
-        var valueNode : MXMLNode = switch(value) {
-            case InitValue(itor): itor.node;
-            case InitArray(itor): itor.node;
-            case InitNodeScope(itor): itor.node;
-        }
-        var hasOwnField : Bool = switch(value) {
-            case InitValue(itor) if(scope.getNodeId(valueNode) != null): true;
-            case InitArray(itor) if(scope.getNodeId(valueNode) != null): true;
-            case InitNodeScope(itor): true;
-            case _: false;
-        }
-        if(hasOwnField) {
-            var field = {name : scope.getFieldNameForNode(valueNode), type : getFieldType(context, scope, valueNode)};
-
-            rememberField(context, scope.getTopScope(), field, valueNode.position);
-            rememberProperty(context, scope.getTopScope(), field.name, value, valueNode.position);
-        }
-
-        switch(value) {
-            case InitArray(itor):
-                for(child in itor.value) {
-                    var value = child.itor;
-                    parseValueForField(context, scope, value);
-                }
-            case _:
         }
     }
 
@@ -170,40 +140,10 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
         }
     }
 
-    public function getFieldType(context : HxmrContext, scope : NodeScope, valueNode : MXMLNode) : ComplexType {
-        var qName : QName = scope.context.resolveQName(valueNode.name);
-        return switch(scope.context.resolveQName(valueNode.name).toHaxeTypeId()){
-            case "Array":
-                TPath({
-                    pack : [],
-                    name : "Array",
-                    params : [TPType(TPath({
-                        pack : [],
-                        name : "Dynamic",
-                        params : []
-                    }))]
-                });
-            case _:
-                Context.toComplexType(scope.context.getType(qName));
-        }
-    }
-
-    function rememberField(context : HxmrContext, scope : NodeScope, field : FieldDeclaration, pos:Pos) : Void {
-
-        for(iterField in scope.fields) {
-            if(iterField.name == field.name) {
-                context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
-                return;
-            }
-        }
-
-        scope.fields.unshift(field);
-    }
-
     public function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IItor, pos:Pos) : Void {
 
         if(scope.initializers.exists(fieldName)) {
-            context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
+            //context.error(new PropertiesAnalyzerError(DUPLICATE(fieldName), pos));
             return;
         }
 
