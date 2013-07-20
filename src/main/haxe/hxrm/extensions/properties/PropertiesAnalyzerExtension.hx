@@ -1,5 +1,6 @@
 package hxrm.extensions.properties;
 
+import haxe.macro.Context;
 import hxrm.extensions.properties.initializers.IItor;
 import hxrm.extensions.properties.initializers.Itor;
 import hxrm.extensions.base.INodeAnalyzerExtension;
@@ -11,6 +12,7 @@ import hxrm.analyzer.NodeAnalyzer.NodeAnalyzerError;
 import haxe.macro.Type.ClassField;
 import hxrm.parser.mxml.MXMLNode;
 import hxrm.parser.mxml.MXMLQName;
+import haxe.macro.Expr;
 
 enum PropertiesAnalyzerErrorType {
     UNKNOWN_FIELD(name:String);
@@ -108,22 +110,40 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
     }
 
     public function parseValue(context : HxmrContext, scope:NodeScope, valueNode : MXMLNode) : IItor {
-        var qName : QName = scope.context.resolveQName(valueNode.name);
-
-        var type = scope.context.getType(qName);
-        var fieldDescription = {name : scope.getFieldNameForNode(valueNode), type : type};
 
         var value = matchValue(context, scope, valueNode);
 
-        switch(value) {
-            case InitValue(itor), InitArray(itor):
-                if(scope.getNodeId(valueNode) != null) {
-                    rememberField(context, scope, fieldDescription, value, valueNode.position);
-                }
-            case InitNodeScope(itor):
-                rememberField(context, scope, fieldDescription, value, valueNode.position);
+        var hasOwnField : Bool = switch(value) {
+            case InitValue(itor) if(scope.getNodeId(valueNode) != null): true;
+            case InitArray(itor) if(scope.getNodeId(valueNode) != null): true;
+            case InitNodeScope(itor): true;
+            case _: false;
+        }
+        if(hasOwnField) {
+            var field = {name : scope.getFieldNameForNode(valueNode), type : getFieldType(context, scope, valueNode)};
+
+            rememberField(context, scope.getTopScope(), field, valueNode.position);
+            rememberProperty(context, scope.getTopScope(), field.name, value, valueNode.position);
         }
         return value;
+    }
+    
+    public function getFieldType(context : HxmrContext, scope : NodeScope, valueNode : MXMLNode) : ComplexType {
+        var qName : QName = scope.context.resolveQName(valueNode.name);
+        return switch(scope.context.resolveQName(valueNode.name).toHaxeTypeId()){
+            case "Array":
+                TPath({
+                    pack : [],
+                    name : "Array",
+                    params : [TPType(TPath({
+                        pack : [],
+                        name : "Dynamic",
+                        params : []}
+                    ))]}
+                );
+            case _:
+                Context.toComplexType(scope.context.getType(qName));
+        }
     }
 
     public function matchValue(context : HxmrContext, scope:NodeScope, innerChild:MXMLNode) : IItor {
@@ -156,22 +176,16 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
 
     }
 
-    public function rememberField(context : HxmrContext, scope : NodeScope, field : {name : String, type : Type}, value:IItor, pos:Pos) : Void {
+    function rememberField(context : HxmrContext, scope : NodeScope, field : {name : String, type : ComplexType}, pos:Pos) : Void {
 
-        var topScope : NodeScope = scope;
-        while(topScope.parentScope != null) {
-            topScope = topScope.parentScope;
-        }
-
-        for(iterField in topScope.fields) {
+        for(iterField in scope.fields) {
             if(iterField.name == field.name) {
                 context.error(new PropertiesAnalyzerError(DUPLICATE, pos));
                 return;
             }
         }
 
-        topScope.fields.unshift(field);
-        rememberProperty(context, topScope, field.name, value, pos);
+        scope.fields.unshift(field);
     }
 
     public function rememberProperty(context : HxmrContext, scope : NodeScope, fieldName : String, value:IItor, pos:Pos) : Void {

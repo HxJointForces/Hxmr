@@ -1,5 +1,6 @@
 package hxrm.analyzer;
 
+import haxe.macro.Expr.ComplexType;
 import hxrm.extensions.properties.initializers.IItor;
 import haxe.ds.HashMap;
 import hxrm.parser.mxml.MXMLQName;
@@ -22,7 +23,7 @@ class NodeScope {
 
     public var initializers : Map<String, IItor>;
 
-    public var fields : Array<{name : String, type : Type}>;
+    public var fields : Array<{name : String, type : ComplexType}>;
 	
 	private var fieldNamesSeek : HashMap<QName, Int>;
     
@@ -35,6 +36,14 @@ class NodeScope {
         initializers = new Map();
         fields = [];
 	}
+    
+    public function getTopScope() : NodeScope {
+        var topScope : NodeScope = this;
+        while(topScope.parentScope != null) {
+            topScope = topScope.parentScope;
+        }
+        return topScope;
+    }
 	
 	public function getNodeId(node : MXMLNode) : String {
 		return node.attributes.get(new MXMLQName(MXMLQName.ASTERISK, "id"));

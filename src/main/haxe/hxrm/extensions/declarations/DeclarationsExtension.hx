@@ -42,15 +42,7 @@ class DeclarationsExtension implements IHxmrExtension {
 
         for(valueNode in declarationNode.children)
         {
-            //TODO remove code duplicates
-            var qName : QName = scope.context.resolveQName(valueNode.name);
-
-            var type = scope.context.getType(qName);
-            var fieldDescription = {name : scope.getFieldNameForNode(valueNode), type : type};
-
-            var value = context.getExtension(PropertiesExtension).analyzer.matchValue(context, scope, valueNode);
-
-            context.getExtension(PropertiesExtension).analyzer.rememberField(context, scope, fieldDescription, value, valueNode.position);
+            context.getExtension(PropertiesExtension).analyzer.parseValue(context, scope, valueNode);
         }
     }
 

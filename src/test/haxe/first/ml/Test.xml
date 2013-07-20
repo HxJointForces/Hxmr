@@ -19,7 +19,7 @@
 	
 	<deep:B test="4">
 		<deep:arrayOfB>
-			<Array>
+			<Array id="arr">
 				<deep:B id="innerChildOfB4" length="1" test="41"/>
 			</Array>
 		</deep:arrayOfB>
