@@ -7,6 +7,11 @@ import hxrm.parser.mxml.MXMLQName;
 import hxrm.parser.mxml.MXMLNode;
 import haxe.macro.Type;
 
+typedef FieldDeclaration = {
+    name : String,
+    type : ComplexType
+}
+
 class NodeScope {
 
 	public var parentScope : NodeScope;
@@ -23,7 +28,7 @@ class NodeScope {
 
     public var initializers : Map<String, IItor>;
 
-    public var fields : Array<{name : String, type : ComplexType}>;
+    public var fields : Array<FieldDeclaration>;
 	
 	private var fieldNamesSeek : HashMap<QName, Int>;
     

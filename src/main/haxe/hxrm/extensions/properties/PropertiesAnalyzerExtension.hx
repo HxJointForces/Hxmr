@@ -176,7 +176,7 @@ class PropertiesAnalyzerExtension implements INodeAnalyzerExtension {
 
     }
 
-    function rememberField(context : HxmrContext, scope : NodeScope, field : {name : String, type : ComplexType}, pos:Pos) : Void {
+    function rememberField(context : HxmrContext, scope : NodeScope, field : FieldDeclaration, pos:Pos) : Void {
 
         for(iterField in scope.fields) {
             if(iterField.name == field.name) {
